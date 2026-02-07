@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Why SV1 Is Weak: Plaintext by Design</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0B0F19;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B0F19;
+            color: #F3F4F6;
+            overflow: hidden;
+        }
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(30, 41, 59, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 2rem 3rem 1rem 3rem;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+            background-color: rgba(11, 15, 25, 0.9);
+        }
+        .main-content {
+            display: flex;
+            flex: 1;
+            position: relative;
+            z-index: 10;
+            padding: 2rem 3rem;
+            gap: 3rem;
+        }
+        .diagram-col {
+            flex: 1;
+            background-color: rgba(17, 24, 39, 0.6);
+            border-radius: 1rem;
+            border: 1px solid rgba(55, 65, 81, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .text-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #EF4444; /* Changed to red for vulnerability theme */
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        .mono-text {
+            font-family: 'Roboto Mono', monospace;
+        }
+        .bullet-point {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: #D1D5DB;
+        }
+        .bullet-icon {
+            color: #F87171;
+            margin-right: 1rem;
+            margin-top: 0.25rem;
+            font-size: 1.25rem;
+        }
+        .code-snippet {
+            background-color: #1F2937;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9em;
+            color: #FCA5A5;
+            border: 1px solid #374151;
+        }
+        /* Network Diagram Elements */
+        .node {
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            z-index: 2;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+        .miner-node {
+            background-color: #1E293B;
+            border: 2px solid #60A5FA;
+            left: 80px;
+        }
+        .pool-node {
+            background-color: #1E293B;
+            border: 2px solid #A78BFA;
+            right: 80px;
+        }
+        .eavesdropper-node {
+            width: 80px;
+            height: 80px;
+            background-color: #450a0a;
+            border: 2px dashed #EF4444;
+            left: 50%;
+            top: 25%;
+            transform: translateX(-50%);
+            z-index: 5;
+        }
+        .connection-line {
+            position: absolute;
+            height: 4px;
+            background-color: #4B5563;
+            top: 50%;
+            left: 180px;
+            right: 180px;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+        .eye-icon {
+            color: #EF4444;
+            font-size: 2rem;
+            animation: pulse 2s infinite;
+        }
+        .data-stream {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40%;
+            height: 40px;
+            z-index: 4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(31, 41, 55, 0.9);
+            border: 1px solid #EF4444;
+            border-radius: 4px;
+        }
+        .stream-text {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.75rem;
+            color: #FCA5A5;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .dashed-line {
+            position: absolute;
+            width: 2px;
+            height: 80px;
+            border-left: 2px dashed #EF4444;
+            left: 50%;
+            top: 38%;
+            z-index: 3;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 0.5; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="bg-grid"></div>
+<!-- Header -->
+<div class="header">
+<h1>Why SV1 Is Weak: Plaintext by Design</h1>
+<div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
+<div class="absolute bottom-0 left-12 w-96 h-1 bg-red-500"></div>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<!-- Left Column: Network Diagram -->
+<div class="diagram-col">
+<!-- Nodes -->
+<div class="node miner-node">
+<i class="fas fa-microchip text-3xl text-blue-400 mb-2"></i>
+<span class="text-xs font-bold text-gray-300">MINER</span>
+</div>
+<div class="node pool-node">
+<i class="fas fa-server text-3xl text-purple-400 mb-2"></i>
+<span class="text-xs font-bold text-gray-300">POOL</span>
+</div>
+<!-- Eavesdropper -->
+<div class="node eavesdropper-node">
+<i class="fas fa-eye eye-icon"></i>
+<span class="text-[10px] text-red-400 font-bold mt-1">SNIFFER</span>
+</div>
+<!-- Connections -->
+<div class="connection-line"></div>
+<div class="dashed-line"></div>
+<!-- Intercepted Data -->
+<div class="data-stream">
+<span class="stream-text">"params": ["user", "pass"]</span>
+</div>
+<!-- Labels -->
+<div class="absolute bottom-4 left-4 text-xs text-gray-500 font-mono">
+                    PROTOCOL: JSON-RPC over TCP
+                </div>
+<div class="absolute bottom-4 right-4 text-xs text-red-500 font-mono font-bold">
+                    STATUS: UNENCRYPTED
+                </div>
+</div>
+<!-- Right Column: Bullet Points -->
+<div class="text-col">
+<h2>2012 Design Limitations</h2>
+<div class="bullet-point">
+<i class="fas fa-history bullet-icon"></i>
+<div>
+<p class="font-bold text-gray-200">Historical Context</p>
+<p class="text-gray-400 text-base mt-1">
+                            Designed to replace <span class="code-snippet">getwork</span> for efficiency, not security. Encryption was an afterthought in the early ASIC era.
+                        </p>
+</div>
+</div>
+<div class="bullet-point">
+<i class="fas fa-user-secret bullet-icon"></i>
+<div>
+<p class="font-bold text-gray-200">Total Eavesdropping</p>
+<p class="text-gray-400 text-base mt-1">
+                            Passive observers can read:
+                            <br/><span class="text-sm text-red-300">• Worker credentials (user/pass)</span>
+<br/><span class="text-sm text-red-300">• Incoming jobs &amp; difficulty</span>
+<br/><span class="text-sm text-red-300">• Submitted shares (proof of work)</span>
+</p>
+</div>
+</div>
+<div class="bullet-point">
+<i class="fas fa-pen-to-square bullet-icon"></i>
+<div>
+<p class="font-bold text-gray-200">Tampering &amp; Identity Risks</p>
+<p class="text-gray-400 text-base mt-1">
+                            Attackers can modify jobs on the fly.
+                            <br/>Miners cannot verify they are talking to the real pool (No Authentication).
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

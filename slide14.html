@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Attack 2: Time-Segment Reconnect</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&amp;family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #0B1120;
+            color: #F8FAFC;
+        }
+        .mono-font {
+            font-family: 'Roboto Mono', monospace;
+        }
+        .bg-grid {
+            background-image: linear-gradient(rgba(30, 41, 59, 0.5) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        /* Diagram Specifics */
+        .node-box {
+            fill: #1E293B;
+            stroke: #3B82F6;
+            stroke-width: 2;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+        }
+        .attacker-box {
+            fill: #1E293B;
+            stroke: #EF4444;
+            stroke-width: 2;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+        }
+        .flow-line-legit {
+            stroke: #3B82F6;
+            stroke-width: 3;
+            marker-end: url(#arrowhead-blue);
+        }
+        .flow-line-attack {
+            stroke: #EF4444;
+            stroke-width: 3;
+            marker-end: url(#arrowhead-red);
+            stroke-dasharray: 8,4;
+        }
+        .time-marker {
+            stroke: #64748B;
+            stroke-width: 1;
+            stroke-dasharray: 4,4;
+        }
+        .text-title {
+            font-family: 'Inter', sans-serif;
+            fill: #F8FAFC;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .text-label {
+            font-family: 'Roboto Mono', monospace;
+            fill: #94A3B8;
+            font-size: 11px;
+        }
+        .segment-label {
+            font-family: 'Roboto Mono', monospace;
+            font-weight: bold;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body class="relative flex flex-col justify-between">
+<!-- Background -->
+<div class="absolute inset-0 z-0 bg-grid opacity-20"></div>
+<!-- Header -->
+<header class="relative z-10 px-16 pt-10 pb-4 flex items-end justify-between border-b border-gray-800">
+<div>
+<div class="flex items-center space-x-3 mb-2">
+<span class="px-2 py-1 text-xs font-bold text-red-900 bg-red-500 rounded mono-font">EXPLOITATION</span>
+<span class="text-xs text-gray-500 mono-font">// ATTACK MODEL 02</span>
+</div>
+<h1 class="text-3xl font-black tracking-tight text-white uppercase">
+                Time-Segment <span class="text-red-500">Reconnect Attack</span>
+</h1>
+</div>
+<div class="text-right">
+<p class="text-gray-400 text-sm max-w-md text-right mono-font">
+                Alternating miner connections to steal hashrate in short windows
+            </p>
+</div>
+</header>
+<!-- Main Diagram Area -->
+<main class="relative z-10 flex-1 w-full h-full flex items-center justify-center p-8">
+<div class="w-full h-full relative glass-panel rounded-xl">
+<svg height="100%" preserveaspectratio="xMidYMid meet" viewbox="0 0 1152 480" width="100%">
+<defs>
+<marker id="arrowhead-blue" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon fill="#3B82F6" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+<marker id="arrowhead-red" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon fill="#EF4444" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+</defs>
+<!-- Timeline Axis -->
+<line stroke="#475569" stroke-width="2" x1="100" x2="1050" y1="420" y2="420"></line>
+<polygon fill="#475569" points="1050 420, 1040 415, 1040 425"></polygon>
+<text class="text-label" fill="#94A3B8" x="1060" y="425">TIME</text>
+<!-- Time Segments -->
+<!-- Segment 1: Legit -->
+<line class="time-marker" x1="150" x2="150" y1="50" y2="430"></line>
+<text class="segment-label" fill="#3B82F6" x="250" y="445">T0 - T1 (Normal)</text>
+<!-- Segment 2: Attack -->
+<line class="time-marker" x1="450" x2="450" y1="50" y2="430"></line>
+<text class="segment-label" fill="#EF4444" x="550" y="445">T1 - T2 (Attack)</text>
+<!-- Segment 3: Legit -->
+<line class="time-marker" x1="750" x2="750" y1="50" y2="430"></line>
+<text class="segment-label" fill="#3B82F6" x="850" y="445">T2 - T3 (Normal)</text>
+<line class="time-marker" x1="1050" x2="1050" y1="50" y2="430"></line>
+<!-- Connection States Visualization -->
+<!-- LEFT: Miner Node -->
+<g transform="translate(50, 180)">
+<rect class="node-box" height="100" rx="8" width="100" x="0" y="0"></rect>
+<text fill="#3B82F6" font-family="FontAwesome" font-size="24" text-anchor="middle" x="50" y="45"></text>
+<text class="text-title" font-size="12" text-anchor="middle" x="50" y="75">MINER</text>
+</g>
+<!-- RIGHT TOP: Legit Pool -->
+<g transform="translate(1000, 80)">
+<rect class="node-box" height="80" rx="8" style="stroke: #10B981;" width="100" x="0" y="0"></rect>
+<text fill="#10B981" font-family="FontAwesome" font-size="20" text-anchor="middle" x="50" y="35"></text>
+<text class="text-title" font-size="12" text-anchor="middle" x="50" y="60">LEGIT POOL</text>
+</g>
+<!-- RIGHT BOTTOM: Attacker Pool -->
+<g transform="translate(1000, 280)">
+<rect class="attacker-box" height="80" rx="8" width="100" x="0" y="0"></rect>
+<text fill="#EF4444" font-family="FontAwesome" font-size="20" text-anchor="middle" x="50" y="35"></text>
+<text class="text-title" font-size="12" text-anchor="middle" x="50" y="60">EVIL POOL</text>
+</g>
+<!-- Segment 1 Flow (Normal) -->
+<g opacity="0.8">
+<rect fill="#1E293B" height="40" rx="4" stroke="#3B82F6" width="280" x="160" y="100"></rect>
+<text class="text-label" fill="#60A5FA" x="170" y="125">Connection Established</text>
+<path class="flow-line-legit" d="M 250 145 C 350 145, 800 120, 990 120"></path>
+</g>
+<!-- Segment 2 Flow (Attack) -->
+<g opacity="1">
+<rect fill="#2D1B1B" height="60" rx="4" stroke="#EF4444" width="280" x="460" y="220"></rect>
+<text class="text-label" fill="#F87171" font-weight="bold" x="470" y="240">MITM Injection:</text>
+<text class="text-label" fill="#FCA5A5" x="470" y="260">client.reconnect(evil_ip)</text>
+<path class="flow-line-attack" d="M 450 230 C 550 320, 800 320, 990 320"></path>
+</g>
+<!-- Segment 3 Flow (Return to Normal) -->
+<g opacity="0.8">
+<rect fill="#1E293B" height="60" rx="4" stroke="#3B82F6" width="280" x="760" y="100"></rect>
+<text class="text-label" fill="#60A5FA" font-weight="bold" x="770" y="120">MITM Injection:</text>
+<text class="text-label" fill="#93C5FD" x="770" y="140">client.reconnect(legit_ip)</text>
+<path class="flow-line-legit" d="M 750 180 C 850 150, 900 120, 990 120"></path>
+</g>
+<!-- Impact Visualization -->
+<g transform="translate(480, 360)">
+<rect fill="rgba(239, 68, 68, 0.2)" height="30" rx="4" stroke="#EF4444" width="240" x="0" y="0"></rect>
+<text class="text-label" fill="#FECACA" text-anchor="middle" x="120" y="20">⚠ Hashrate Stolen during T1-T2</text>
+</g>
+</svg>
+</div>
+</main>
+<!-- Footer -->
+<footer class="relative z-10 h-16 bg-gray-900 border-t border-gray-800 flex items-center justify-between px-16">
+<div class="flex items-center space-x-2 text-gray-500 text-xs mono-font">
+<i class="fas fa-network-wired"></i>
+<span>SLIDE 18</span>
+</div>
+<div class="flex items-center space-x-6">
+<div class="flex items-center space-x-2">
+<div class="w-3 h-1 bg-blue-500"></div>
+<span class="text-xs text-gray-400 uppercase tracking-wider">Legitimate Work</span>
+</div>
+<div class="flex items-center space-x-2">
+<div class="w-3 h-1 bg-red-500 border-b border-red-500 border-dashed"></div>
+<span class="text-xs text-gray-400 uppercase tracking-wider">Stolen Hashrate</span>
+</div>
+</div>
+</footer>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

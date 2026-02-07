@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Stratum V1 Basic Setup</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0B0F19;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B0F19;
+            color: #F3F4F6;
+            overflow: hidden;
+        }
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(30, 41, 59, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 2rem 3rem 1rem 3rem;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+            background-color: rgba(11, 15, 25, 0.9);
+        }
+        .main-content {
+            display: flex;
+            flex: 1;
+            position: relative;
+            z-index: 10;
+            padding: 2rem 3rem;
+            gap: 3rem;
+        }
+        .diagram-col {
+            flex: 1;
+            background-color: rgba(17, 24, 39, 0.6);
+            border-radius: 1rem;
+            border: 1px solid rgba(55, 65, 81, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .text-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #60A5FA;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        .mono-text {
+            font-family: 'Roboto Mono', monospace;
+        }
+        .bullet-point {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: #D1D5DB;
+        }
+        .bullet-icon {
+            color: #EF4444; /* Red for insecure V1 */
+            margin-right: 1rem;
+            margin-top: 0.25rem;
+            font-size: 1rem;
+        }
+        .code-snippet {
+            background-color: #1F2937;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9em;
+            color: #93C5FD;
+            border: 1px solid #374151;
+        }
+        /* Network Diagram Elements */
+        .node {
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            z-index: 2;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+        .miner-node {
+            background-color: #1E293B;
+            border: 2px solid #60A5FA;
+            left: 100px;
+        }
+        .pool-node {
+            background-color: #1E293B;
+            border: 2px solid #A78BFA;
+            right: 100px;
+        }
+        .connection-line {
+            position: absolute;
+            height: 4px;
+            background-color: #4B5563;
+            top: 50%;
+            left: 200px;
+            right: 200px;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+        .packet {
+            position: absolute;
+            top: 50%;
+            width: 12px;
+            height: 12px;
+            background-color: #F87171;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            box-shadow: 0 0 10px #F87171;
+        }
+        .port-label {
+            position: absolute;
+            top: 42%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #111827;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            color: #9CA3AF;
+            border: 1px solid #374151;
+            z-index: 2;
+        }
+        .warning-badge {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #EF4444;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: rgba(239, 68, 68, 0.1);
+            padding: 4px 12px;
+            border-radius: 99px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="bg-grid"></div>
+<!-- Header -->
+<div class="header">
+<h1>Stratum V1: Basic Setup</h1>
+<div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
+<div class="absolute bottom-0 left-12 w-64 h-1 bg-blue-500"></div>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<!-- Left Column: Network Diagram -->
+<div class="diagram-col">
+<!-- Miner Node -->
+<div class="node miner-node">
+<i class="fas fa-microchip text-3xl text-blue-400 mb-2"></i>
+<span class="text-xs font-bold text-gray-300">MINER</span>
+<span class="text-[10px] text-gray-500 font-mono">ASIC / GPU</span>
+</div>
+<!-- Pool Node -->
+<div class="node pool-node">
+<i class="fas fa-server text-3xl text-purple-400 mb-2"></i>
+<span class="text-xs font-bold text-gray-300">POOL</span>
+<span class="text-[10px] text-gray-500 font-mono">Server</span>
+</div>
+<!-- Connection -->
+<div class="connection-line"></div>
+<div class="port-label">TCP Port 3333</div>
+<!-- Unsecured Badge -->
+<div class="warning-badge">
+<i class="fas fa-lock-open"></i>
+                    PLAINTEXT
+                </div>
+<!-- Animated Packet Visual (Static representation) -->
+<div class="packet" style="left: 35%;"></div>
+<div class="packet" style="left: 45%; opacity: 0.7;"></div>
+<div class="packet" style="left: 65%;"></div>
+<!-- JSON Snippet Floating -->
+<div class="absolute top-10 left-1/2 transform -translate-x-1/2 bg-gray-900 border border-gray-700 p-2 rounded shadow-xl text-[10px] text-green-400 font-mono opacity-80 z-0">
+                    {"method": "mining.subscribe"}
+                </div>
+</div>
+<!-- Right Column: Bullet Points -->
+<div class="text-col">
+<h2>Architecture Overview</h2>
+<div class="bullet-point">
+<i class="fas fa-network-wired bullet-icon"></i>
+<div>
+<p class="font-bold text-gray-200">Transport Layer</p>
+<p class="text-gray-400 text-base mt-1">Plain TCP connection, typically on port <span class="code-snippet">3333</span>. Uses line-delimited JSON-RPC messages.</p>
+</div>
+</div>
+<div class="bullet-point">
+<i class="fas fa-user-tag bullet-icon"></i>
+<div>
+<p class="font-bold text-gray-200">Roles &amp; Directionality</p>
+<p class="text-gray-400 text-base mt-1">
+<strong>Pool:</strong> Pushes jobs (mining.notify)<br/>
+<strong>Miner:</strong> Submits shares (mining.submit)
+                        </p>
+</div>
+</div>
+<div class="bullet-point">
+<i class="fas fa-triangle-exclamation bullet-icon"></i>
+<div>
+<p class="font-bold text-red-400">Security Model (None)</p>
+<p class="text-gray-400 text-base mt-1">
+                            No encryption (TLS optional/rare).<br/>
+                            No server authentication (MITM possible).<br/>
+<span class="text-red-400 text-sm italic">"Trust on first use" is the default behavior.</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

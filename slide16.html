@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>How do you speak privately in a public setting?</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Playfair+Display:ital,wght@1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0B0F19;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B0F19;
+            color: #F3F4F6;
+            overflow: hidden;
+            justify-content: center;
+            align-items: center;
+        }
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgNjBWMHptNjAgMFYweiIgc3Ryb2tlPSJyZ2JhKDMwLDQxLDU5LDAuMikiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==');
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .quote-mark {
+            font-family: 'Playfair Display', serif;
+            font-size: 8rem;
+            color: #3B82F6;
+            opacity: 0.2;
+            line-height: 0;
+            margin-bottom: 2rem;
+        }
+        
+        .main-question {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            color: #F3F4F6;
+            margin-bottom: 3rem;
+            letter-spacing: -0.03em;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        
+        .highlight {
+            color: #60A5FA;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            width: 100%;
+            height: 12px;
+            background-color: rgba(59, 130, 246, 0.2);
+            z-index: -1;
+            transform: skew(-10deg);
+        }
+        
+        .analogy-container {
+            background-color: rgba(31, 41, 55, 0.5);
+            border-left: 4px solid #3B82F6;
+            padding: 1.5rem 2rem;
+            border-radius: 0 0.75rem 0.75rem 0;
+            max-width: 800px;
+            text-align: left;
+        }
+        
+        .analogy-text {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.5rem;
+            color: #D1D5DB;
+            margin: 0;
+            line-height: 1.6;
+        }
+        
+        .concept-pills {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        .pill {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            background-color: rgba(17, 24, 39, 0.8);
+            border: 1px solid #374151;
+            color: #9CA3AF;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .pill i {
+            font-size: 1.2rem;
+        }
+        
+        .pill.active {
+            border-color: #60A5FA;
+            color: #E5E7EB;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+        }
+        
+        .pill.active i {
+            color: #60A5FA;
+        }
+        
+        .decorative-line {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background-color: #3B82F6;
+            border-radius: 2px;
+        }
+
+        /* Ambient particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: #60A5FA;
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="bg-grid"></div>
+<!-- Decorative Particles -->
+<div class="particle" style="top: 20%; left: 10%;"></div>
+<div class="particle" style="top: 70%; left: 15%;"></div>
+<div class="particle" style="top: 30%; right: 20%;"></div>
+<div class="particle" style="top: 80%; right: 10%;"></div>
+<div class="particle" style="top: 15%; right: 40%;"></div>
+<div class="content-wrapper">
+<div class="quote-mark">“</div>
+<h1 class="main-question">
+                How do you speak <br/>
+<span class="highlight">privately</span> in a public setting?
+            </h1>
+<div class="analogy-container">
+<p class="analogy-text">
+                    "Imagine trying to whisper in a crowded room where everyone is listening—and some can even imitate your voice. Unless you share a secret beforehand, how do you know who you're really talking to?"
+                </p>
+</div>
+<div class="concept-pills">
+<div class="pill active">
+<i class="fas fa-user-shield"></i>
+                    Confidentiality
+                </div>
+<div class="pill active">
+<i class="fas fa-file-signature"></i>
+                    Integrity
+                </div>
+<div class="pill active">
+<i class="fas fa-id-card"></i>
+                    Identity
+                </div>
+</div>
+</div>
+<div class="decorative-line"></div>
+</div>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

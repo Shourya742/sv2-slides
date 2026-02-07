@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SV2 Architecture: Three-Layer Security</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0B0F19;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B0F19;
+            color: #F3F4F6;
+            overflow: hidden;
+        }
+        /* Grid background using solid colors/svg to simulate grid without gradients */
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgNDBWMHptNDAgMFYweiIgc3Ryb2tlPSJyZ2JhKDMwLDQxLDU5LDAuMykiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==');
+            opacity: 0.4;
+            z-index: 0;
+        }
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 2rem 3rem 1.5rem 3rem;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+            background-color: rgba(11, 15, 25, 0.95);
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        .main-content {
+            display: flex;
+            flex: 1;
+            position: relative;
+            z-index: 10;
+            padding: 2rem 4rem;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        /* Layer Stack Styles */
+        .stack-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+        }
+        
+        .layer-card {
+            background-color: #111827;
+            border: 1px solid;
+            border-radius: 12px;
+            padding: 1.25rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: transform 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .layer-3 {
+            border-color: #8B5CF6; /* Purple */
+            background-color: rgba(139, 92, 246, 0.05);
+        }
+        .layer-2 {
+            border-color: #10B981; /* Green */
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+        .layer-1 {
+            border-color: #3B82F6; /* Blue */
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+        
+        .layer-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            opacity: 0.2;
+            line-height: 1;
+        }
+        
+        .layer-icon-box {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .layer-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+            color: #F3F4F6;
+        }
+        
+        .layer-content p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #9CA3AF;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* Stack Connectors */
+        .stack-connector {
+            position: absolute;
+            left: 42px; /* Center of icon box roughly */
+            width: 2px;
+            background-color: #374151;
+            z-index: -1;
+        }
+        
+        /* Flow Diagram Styles */
+        .flow-container {
+            flex: 1;
+            background-color: rgba(17, 24, 39, 0.5);
+            border: 1px solid #374151;
+            border-radius: 16px;
+            height: 100%;
+            max-height: 500px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .node {
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
+            background-color: #1F2937;
+            border: 2px solid #4B5563;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+        
+        .tunnel-path {
+            position: absolute;
+            top: 50%;
+            left: 100px; /* Width of miner node */
+            right: 100px; /* Width of pool node */
+            height: 60px;
+            transform: translateY(-50%);
+            background-color: rgba(16, 185, 129, 0.1);
+            border-top: 2px dashed #10B981;
+            border-bottom: 2px dashed #10B981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .data-packet {
+            width: 40px;
+            height: 40px;
+            background-color: #8B5CF6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            position: absolute;
+            animation: movePacket 3s infinite linear;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+            z-index: 5;
+        }
+
+        @keyframes movePacket {
+            0% { left: 15%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { left: 85%; opacity: 0; }
+        }
+        
+        /* Interactive Lines connecting Stack to Flow */
+        .mapping-line {
+            position: absolute;
+            height: 1px;
+            background-color: #4B5563;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        .shield-icon {
+            position: absolute;
+            top: -12px;
+            background-color: #064E3B;
+            color: #34D399;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            border: 1px solid #10B981;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background -->
+<div class="bg-grid"></div>
+<!-- Header -->
+<div class="header">
+<h1>SV2 Architecture: Three-Layer Security</h1>
+<div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
+<div class="absolute bottom-0 left-12 w-64 h-1 bg-indigo-500"></div>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<!-- LEFT: The Stack -->
+<div class="stack-container">
+<!-- Vertical Connector Line -->
+<div class="stack-connector" style="top: 60px; bottom: 60px;"></div>
+<!-- Layer 3 -->
+<div class="layer-card layer-3">
+<div class="layer-number text-purple-500">3</div>
+<div class="layer-icon-box bg-purple-900 bg-opacity-30 text-purple-400 border border-purple-500 border-opacity-30">
+<i class="fas fa-file-signature"></i>
+</div>
+<div class="layer-content">
+<h3 class="text-purple-300">AuthZ + Job Negotiation</h3>
+<p>Application Logic: Cryptographic template construction, digital signatures on block headers, and policy authorization.</p>
+</div>
+</div>
+<!-- Layer 2 -->
+<div class="layer-card layer-2">
+<div class="layer-number text-green-500">2</div>
+<div class="layer-icon-box bg-green-900 bg-opacity-30 text-green-400 border border-green-500 border-opacity-30">
+<i class="fas fa-shield-alt"></i>
+</div>
+<div class="layer-content">
+<h3 class="text-green-300">Encrypted Transport</h3>
+<p>Data Plane: AEAD-secured frames. Every byte is encrypted and authenticated. Protects against eavesdropping and tampering.</p>
+</div>
+</div>
+<!-- Layer 1 -->
+<div class="layer-card layer-1">
+<div class="layer-number text-blue-500">1</div>
+<div class="layer-icon-box bg-blue-900 bg-opacity-30 text-blue-400 border border-blue-500 border-opacity-30">
+<i class="fas fa-handshake"></i>
+</div>
+<div class="layer-content">
+<h3 class="text-blue-300">Noise Handshake</h3>
+<p>Control Plane: Authenticated key agreement. Verifies server identity using static keys before any data flows.</p>
+</div>
+</div>
+</div>
+<!-- RIGHT: Data Flow Visualization -->
+<div class="flow-container">
+<h3 class="absolute top-6 left-0 right-0 text-center font-mono text-gray-500 text-sm tracking-widest">SECURE CHANNEL VISUALIZATION</h3>
+<!-- Miner -->
+<div class="absolute left-8 top-1/2 transform -translate-y-1/2 flex flex-col items-center z-10">
+<div class="node border-blue-500">
+<i class="fas fa-microchip text-3xl text-blue-400 mb-2"></i>
+<span class="text-xs font-bold text-gray-300">MINER</span>
+</div>
+<div class="mt-2 text-xs font-mono text-gray-500">Client</div>
+</div>
+<!-- Pool -->
+<div class="absolute right-8 top-1/2 transform -translate-y-1/2 flex flex-col items-center z-10">
+<div class="node border-purple-500">
+<i class="fas fa-server text-3xl text-purple-400 mb-2"></i>
+<span class="text-xs font-bold text-gray-300">POOL</span>
+</div>
+<div class="mt-2 text-xs font-mono text-gray-500">Authority</div>
+</div>
+<!-- The Tunnel -->
+<div class="absolute left-[140px] right-[140px] h-[80px] bg-gray-800 rounded-lg border border-gray-700 flex items-center justify-center">
+<!-- Layer 1: Base Connection -->
+<div class="absolute bottom-[-10px] bg-blue-900 bg-opacity-50 px-4 py-1 rounded-full text-[10px] text-blue-300 border border-blue-700 font-mono">
+<i class="fas fa-link mr-1"></i> Noise Session
+                </div>
+<!-- Layer 2: Encryption Shield -->
+<div class="w-full h-full bg-green-900 bg-opacity-10 border-t-2 border-b-2 border-dashed border-green-500 flex items-center relative overflow-hidden">
+<!-- Packet (Layer 3 Payload) -->
+<div class="data-packet">
+<i class="fas fa-file-code"></i>
+</div>
+</div>
+<!-- Layer 2 Label -->
+<div class="absolute top-[-10px] bg-green-900 bg-opacity-50 px-4 py-1 rounded-full text-[10px] text-green-300 border border-green-700 font-mono">
+<i class="fas fa-lock mr-1"></i> AEAD Tunnel
+                </div>
+</div>
+<!-- Legend/Key -->
+<div class="absolute bottom-6 flex gap-6">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+<span class="text-xs text-gray-400">Identity</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-green-500 rounded-full"></div>
+<span class="text-xs text-gray-400">Privacy</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-purple-500 rounded-full"></div>
+<span class="text-xs text-gray-400">Logic</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

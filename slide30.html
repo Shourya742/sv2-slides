@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SV1 vs SV2: Security Features</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0B0F19;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B0F19;
+            color: #F3F4F6;
+            overflow: hidden;
+        }
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(30, 41, 59, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 1.5rem 3rem 1rem 3rem;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+            background-color: rgba(11, 15, 25, 0.9);
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            position: relative;
+            z-index: 10;
+            padding: 2rem 3rem;
+            gap: 1rem;
+        }
+        
+        /* Table Layout */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 240px 1fr 1fr;
+            gap: 1.25rem;
+            width: 100%;
+        }
+        
+        .header-row {
+            display: contents;
+        }
+        .header-cell {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-row {
+            display: contents;
+        }
+        
+        .feature-cell {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background-color: #111827;
+            padding: 1rem;
+            border-radius: 0.5rem 0 0 0.5rem;
+            border-top: 1px solid #374151;
+            border-bottom: 1px solid #374151;
+            border-left: 1px solid #374151;
+        }
+        
+        .sv1-cell {
+            background-color: rgba(69, 10, 10, 0.2);
+            padding: 1rem;
+            border-top: 1px solid #7F1D1D;
+            border-bottom: 1px solid #7F1D1D;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .sv2-cell {
+            background-color: rgba(6, 78, 59, 0.2);
+            padding: 1rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            border-top: 1px solid #065F46;
+            border-bottom: 1px solid #065F46;
+            border-right: 1px solid #065F46;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .icon-box {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.5rem;
+            background-color: #1F2937;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        
+        .feature-title {
+            color: #F3F4F6;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .cell-content {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        .cell-sub {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            font-family: 'Roboto Mono', monospace;
+        }
+        
+        .status-icon {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Specific Colors */
+        .text-sv1 { color: #FCA5A5; }
+        .text-sv2 { color: #6EE7B7; }
+        
+        .vs-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #374151;
+            color: #9CA3AF;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="bg-grid"></div>
+<!-- Header -->
+<div class="header">
+<h1>SV1 vs SV2: Security Features</h1>
+<div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
+<div class="absolute bottom-0 left-12 w-64 h-1 bg-green-500"></div>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<div class="comparison-grid">
+<!-- Header Row -->
+<div class="header-row">
+<div class="header-cell text-gray-400">Security Dimension</div>
+<div class="header-cell text-red-400">
+<i class="fas fa-exclamation-triangle mr-2"></i>Stratum V1 (Legacy)
+                </div>
+<div class="header-cell text-green-400">
+<i class="fas fa-shield-alt mr-2"></i>Stratum V2 (Secure)
+                </div>
+</div>
+<!-- Row 1: Transport -->
+<div class="feature-row">
+<div class="feature-cell">
+<div class="icon-box text-blue-400">
+<i class="fas fa-network-wired"></i>
+</div>
+<div class="feature-title">Transport Protocol</div>
+</div>
+<div class="sv1-cell">
+<p class="cell-content text-sv1">Plaintext JSON-RPC</p>
+<p class="cell-sub text-red-300">Readable by ISP/Wi-Fi sniffer</p>
+<i class="fas fa-unlock status-icon text-red-500"></i>
+</div>
+<div class="sv2-cell">
+<p class="cell-content text-sv2">Binary + AEAD Encryption</p>
+<p class="cell-sub text-green-300">Confidentiality via Noise</p>
+<i class="fas fa-lock status-icon text-green-500"></i>
+</div>
+</div>
+<!-- Row 2: Authentication -->
+<div class="feature-row">
+<div class="feature-cell">
+<div class="icon-box text-purple-400">
+<i class="fas fa-id-card"></i>
+</div>
+<div class="feature-title">Authentication</div>
+</div>
+<div class="sv1-cell">
+<p class="cell-content text-sv1">None / Basic Auth</p>
+<p class="cell-sub text-red-300">Miner cannot verify Pool ID</p>
+<i class="fas fa-user-times status-icon text-red-500"></i>
+</div>
+<div class="sv2-cell">
+<p class="cell-content text-sv2">Server Identity (Noise)</p>
+<p class="cell-sub text-green-300">PubKey Pinning &amp; Verification</p>
+<i class="fas fa-user-check status-icon text-green-500"></i>
+</div>
+</div>
+<!-- Row 3: Integrity -->
+<div class="feature-row">
+<div class="feature-cell">
+<div class="icon-box text-yellow-400">
+<i class="fas fa-file-signature"></i>
+</div>
+<div class="feature-title">Data Integrity</div>
+</div>
+<div class="sv1-cell">
+<p class="cell-content text-sv1">None (CRC/TCP only)</p>
+<p class="cell-sub text-red-300">MITM can modify jobs silently</p>
+<i class="fas fa-times-circle status-icon text-red-500"></i>
+</div>
+<div class="sv2-cell">
+<p class="cell-content text-sv2">Per-Message Tags</p>
+<p class="cell-sub text-green-300">Poly1305 Auth Tags</p>
+<i class="fas fa-check-circle status-icon text-green-500"></i>
+</div>
+</div>
+<!-- Row 4: Job Control -->
+<div class="feature-row">
+<div class="feature-cell">
+<div class="icon-box text-pink-400">
+<i class="fas fa-tasks"></i>
+</div>
+<div class="feature-title">Job Control</div>
+</div>
+<div class="sv1-cell">
+<p class="cell-content text-sv1">Pool Dictated</p>
+<p class="cell-sub text-red-300">Centralized tx selection</p>
+<i class="fas fa-server status-icon text-red-500"></i>
+</div>
+<div class="sv2-cell">
+<p class="cell-content text-sv2">Miner Job Negotiation</p>
+<p class="cell-sub text-green-300">Miner proposes templates</p>
+<i class="fas fa-hand-holding-heart status-icon text-green-500"></i>
+</div>
+</div>
+<!-- Row 5: Exploit Surface -->
+<div class="feature-row">
+<div class="feature-cell">
+<div class="icon-box text-red-400">
+<i class="fas fa-bug"></i>
+</div>
+<div class="feature-title">Exploit Surface</div>
+</div>
+<div class="sv1-cell">
+<p class="cell-content text-sv1">High Risk</p>
+<p class="cell-sub text-red-300">MITM, Injection, Hijacking</p>
+<i class="fas fa-skull-crossbones status-icon text-red-500"></i>
+</div>
+<div class="sv2-cell">
+<p class="cell-content text-sv2">Minimal / Hardened</p>
+<p class="cell-sub text-green-300">Cryptographic proofs required</p>
+<i class="fas fa-shield-virus status-icon text-green-500"></i>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

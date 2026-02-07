@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SRI Implementation Details</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0B0F19;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B0F19;
+            color: #F3F4F6;
+            overflow: hidden;
+        }
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 1.5rem 3rem 1rem 3rem;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+            background-color: #0B0F19;
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        .main-content {
+            display: flex;
+            flex: 1;
+            position: relative;
+            z-index: 10;
+            padding: 2rem 3rem;
+            gap: 2rem;
+        }
+        .steps-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .step-card {
+            display: flex;
+            background-color: #111827;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .step-card:hover {
+            border-color: #60A5FA;
+            background-color: #1F2937;
+        }
+        .step-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: #1F2937;
+            border: 2px solid #3B82F6;
+            color: #3B82F6;
+            border-radius: 50%;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-right: 1.25rem;
+            flex-shrink: 0;
+        }
+        .step-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #F3F4F6;
+            font-size: 1.15rem;
+            margin-bottom: 0.25rem;
+            margin-top: 0;
+        }
+        .step-content p {
+            color: #9CA3AF;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+        .code-inline {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #374151;
+            color: #93C5FD;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .visual-container {
+            flex: 0.8;
+            background-color: #1F2937;
+            border-radius: 1rem;
+            border: 1px solid #374151;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* New styles for Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            width: 100%;
+        }
+        .feature-box {
+            background-color: #111827;
+            border: 1px solid #374151;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .icon-circle {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        .feature-text {
+            display: flex;
+            flex-direction: column;
+        }
+        .feature-title {
+            color: #F3F4F6;
+            font-weight: bold;
+            font-size: 0.9rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .feature-desc {
+            color: #9CA3AF;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Header -->
+<div class="header">
+<h1>SRI Implementation Details</h1>
+<div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
+<div class="absolute bottom-0 left-12 w-64 h-1 bg-green-500"></div>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<!-- Left Column: Steps -->
+<div class="steps-container">
+<!-- Step 1 -->
+<div class="step-card">
+<div class="step-number">1</div>
+<div class="step-content">
+<h3>Binary Protocol Efficiency</h3>
+<p>Replaces verbose JSON-RPC with a compact binary format. Reduces bandwidth usage by ~50% and eliminates parsing vulnerabilities associated with text-based protocols.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="step-card">
+<div class="step-number">2</div>
+<div class="step-content">
+<h3>Certificate &amp; Key Pinning</h3>
+<p>Miners enforce strict server authentication by verifying the pool's authority key against a local pinned set, making impersonation attacks mathematically impossible.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="step-card">
+<div class="step-number">3</div>
+<div class="step-content">
+<h3>Strict State Machines</h3>
+<p>Implements formal state transitions with nonce-based replay protection. The SRI enforces strict protocol correctness, automatically rejecting out-of-order or replayed messages.</p>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="step-card">
+<div class="step-number">4</div>
+<div class="step-content">
+<h3>Migration via Translators</h3>
+<p>Includes <span class="code-inline">sv2-proxy</span> components that bridge legacy miners to V2 pools. Translators handle the upgrade transparently, allowing gradual fleet adoption.</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Visualization -->
+<div class="visual-container">
+<h3 class="text-gray-300 font-bold mb-6 font-mono">SRI Security Architecture</h3>
+<div class="feature-grid">
+<!-- Feature 1 -->
+<div class="feature-box">
+<div class="icon-circle bg-blue-900 text-blue-400">
+<i class="fas fa-microchip"></i>
+</div>
+<div class="feature-text">
+<span class="feature-title">Binary Framing</span>
+<span class="feature-desc">Zero-copy parsing</span>
+</div>
+</div>
+<!-- Feature 2 -->
+<div class="feature-box">
+<div class="icon-circle bg-green-900 text-green-400">
+<i class="fas fa-shield-alt"></i>
+</div>
+<div class="feature-text">
+<span class="feature-title">Rust Safety</span>
+<span class="feature-desc">Memory safe logic</span>
+</div>
+</div>
+<!-- Feature 3 -->
+<div class="feature-box">
+<div class="icon-circle bg-purple-900 text-purple-400">
+<i class="fas fa-key"></i>
+</div>
+<div class="feature-text">
+<span class="feature-title">Auth Pinning</span>
+<span class="feature-desc">Identity verification</span>
+</div>
+</div>
+<!-- Feature 4 -->
+<div class="feature-box">
+<div class="icon-circle bg-yellow-900 text-yellow-400">
+<i class="fas fa-exchange-alt"></i>
+</div>
+<div class="feature-text">
+<span class="feature-title">Translators</span>
+<span class="feature-desc">Backwards compat</span>
+</div>
+</div>
+</div>
+<!-- Code Snippet Visual -->
+<div class="mt-8 bg-gray-900 border border-gray-700 rounded-lg p-5 w-full font-mono text-sm shadow-lg">
+<div class="flex items-center gap-2 mb-3 text-gray-500 border-b border-gray-700 pb-2 text-xs">
+<i class="fab fa-rust"></i> <span class="text-gray-400">stratum/src/connection.rs</span>
+</div>
+<div class="leading-relaxed">
+<p class="text-pink-400">pub struct <span class="text-blue-300">SecureChannel</span> {</p>
+<p class="pl-4 text-gray-300">state: <span class="text-green-300">State</span>,</p>
+<p class="pl-4 text-gray-300">noise: <span class="text-green-300">NoiseSession</span>,</p>
+<p class="pl-4 text-gray-300">buffer: <span class="text-green-300">BytesMut</span>,</p>
+<p class="text-pink-400">}</p>
+<p class="text-gray-500 italic mt-2">// Zero-allocation parsing</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

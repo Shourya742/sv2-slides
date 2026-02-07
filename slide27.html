@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Job Negotiation: Miner-Driven Templates</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0B0F19;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B0F19;
+            color: #F3F4F6;
+            overflow: hidden;
+        }
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(30, 41, 59, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 1.5rem 3rem 1rem 3rem;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+            background-color: rgba(11, 15, 25, 0.9);
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        .main-content {
+            display: flex;
+            flex: 1;
+            position: relative;
+            z-index: 10;
+            padding: 2rem 3rem;
+            gap: 2rem;
+        }
+        .steps-container {
+            flex: 1.1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        .step-card {
+            display: flex;
+            background-color: #111827;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .step-card:hover {
+            border-color: #60A5FA;
+            background-color: #1F2937;
+        }
+        .step-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 3rem;
+            height: 3rem;
+            background-color: #1F2937;
+            border: 2px solid #3B82F6;
+            color: #3B82F6;
+            border-radius: 50%;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+        }
+        .step-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #F3F4F6;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .step-content p {
+            color: #9CA3AF;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+        }
+        .code-inline {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #374151;
+            color: #93C5FD;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .visual-container {
+            flex: 0.9;
+            background-color: #1F2937;
+            border-radius: 1rem;
+            border: 1px solid #374151;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .note-box {
+            margin-top: auto;
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10B981;
+            padding: 1rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        /* Negotiation Visuals */
+        .node-box {
+            width: 100%;
+            padding: 1rem;
+            background-color: #374151;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid #4B5563;
+        }
+        .node-icon {
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            font-size: 1.5rem;
+        }
+        .miner-icon { background-color: #3B82F6; color: white; }
+        .pool-icon { background-color: #8B5CF6; color: white; }
+        
+        .flow-arrow-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin: 1rem 0;
+            position: relative;
+        }
+        .message-box {
+            background-color: #111827;
+            border: 1px dashed #6B7280;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            color: #D1D5DB;
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 80%;
+            justify-content: center;
+        }
+        .security-badge {
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            transform: translateY(-50%);
+            background-color: #10B981;
+            color: #064E3B;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            z-index: 20;
+        }
+        .line-connector {
+            width: 2px;
+            height: 30px;
+            background-color: #4B5563;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="bg-grid"></div>
+<!-- Header -->
+<div class="header">
+<h1>Job Negotiation: Miner-Driven Templates</h1>
+<div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
+<div class="absolute bottom-0 left-12 w-64 h-1 bg-green-500"></div>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<!-- Left Column: Steps -->
+<div class="steps-container">
+<!-- Step 1 -->
+<div class="step-card">
+<div class="step-number">1</div>
+<div class="step-content">
+<h3>Miner Proposes Template</h3>
+<p>Unlike V1 where the pool decides everything, in V2 the miner selects transactions and constructs the <span class="code-inline">block template</span> (version, coinbase, merkle root).</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="step-card">
+<div class="step-number">2</div>
+<div class="step-content">
+<h3>Cryptographic Commitment</h3>
+<p>The miner calculates a commitment (hash) of the template and signs it. This is sent to the pool via the Job Negotiation subprotocol.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="step-card">
+<div class="step-number">3</div>
+<div class="step-content">
+<h3>Pool Validation &amp; Auth</h3>
+<p>The pool validates the proposal against its policy (e.g., fee requirements, whitelists). If valid, it returns a cryptographically signed authorization token.</p>
+</div>
+</div>
+<!-- Security Note -->
+<div class="note-box">
+<h4 class="text-green-400 font-bold mb-2 text-sm uppercase">Security Outcome</h4>
+<p class="text-gray-300 text-sm">
+                        Job injection attacks are impossible because an attacker cannot forge the miner's signature on the proposal nor the pool's signature on the authorization. Any modification results in a <strong>signature mismatch</strong>.
+                    </p>
+</div>
+</div>
+<!-- Right Column: Visualization -->
+<div class="visual-container">
+<h3 class="text-gray-400 font-bold mb-6 font-mono tracking-widest text-sm uppercase">Negotiation Flow</h3>
+<!-- Pool Node (Top) -->
+<div class="node-box border-purple-500">
+<div class="node-icon pool-icon">
+<i class="fas fa-server"></i>
+</div>
+<div>
+<div class="font-bold text-white">Mining Pool</div>
+<div class="text-xs text-gray-400">Policy Validator</div>
+</div>
+</div>
+<!-- Interaction Flow -->
+<div class="flow-arrow-container">
+<!-- Up Arrow -->
+<div class="line-connector"></div>
+<div class="message-box border-blue-500">
+<i class="fas fa-arrow-up text-blue-500"></i>
+<span>Template + Sig</span>
+</div>
+<div class="line-connector"></div>
+<!-- Security Badge Overlay -->
+<div class="security-badge">
+<i class="fas fa-shield-alt"></i>
+<span>Tamper Proof</span>
+</div>
+<div class="line-connector"></div>
+<div class="message-box border-green-500">
+<i class="fas fa-arrow-down text-green-500"></i>
+<span>Auth Token</span>
+</div>
+<div class="line-connector"></div>
+</div>
+<!-- Miner Node (Bottom) -->
+<div class="node-box border-blue-500">
+<div class="node-icon miner-icon">
+<i class="fas fa-microchip"></i>
+</div>
+<div>
+<div class="font-bold text-white">Miner / Proxy</div>
+<div class="text-xs text-gray-400">Template Proposer</div>
+</div>
+</div>
+<!-- Caption -->
+<div class="mt-6 text-center">
+<p class="text-xs text-gray-500 font-mono">
+<i class="fas fa-lock mr-1"></i> End-to-end Authenticated
+                </p>
+</div>
+</div>
+</div>
+</div>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

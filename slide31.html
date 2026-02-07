@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>How V2 Blocks V1 Attacks</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0B0F19;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B0F19;
+            color: #F3F4F6;
+            overflow: hidden;
+        }
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231f2937' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.1;
+            z-index: 0;
+        }
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 1.5rem 3rem 1rem 3rem;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+            background-color: rgba(11, 15, 25, 0.95);
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        .main-content {
+            display: flex;
+            flex: 1;
+            position: relative;
+            z-index: 10;
+            padding: 2rem 3rem;
+            gap: 2rem;
+        }
+        
+        /* Attack-Solution Grid */
+        .mitigation-grid {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        
+        .mitigation-row {
+            display: flex;
+            align-items: stretch;
+            background-color: #111827;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid #374151;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s;
+        }
+        .mitigation-row:hover {
+            border-color: #10B981;
+            transform: translateY(-2px);
+        }
+        
+        .attack-col {
+            flex: 0 0 35%;
+            padding: 1.25rem;
+            background-color: rgba(69, 10, 10, 0.2);
+            border-right: 1px solid #374151;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .arrow-col {
+            flex: 0 0 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #1F2937;
+            color: #6B7280;
+        }
+        
+        .solution-col {
+            flex: 1;
+            padding: 1.25rem;
+            background-color: rgba(6, 78, 59, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .attack-title {
+            color: #FCA5A5;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .solution-title {
+            color: #6EE7B7;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .desc-text {
+            color: #9CA3AF;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        /* Operational Sidebar */
+        .ops-sidebar {
+            flex: 0 0 320px;
+            background-color: #1F2937;
+            border-radius: 1rem;
+            border: 1px solid #374151;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .ops-header {
+            color: #F3F4F6;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 0.75rem;
+        }
+        
+        .ops-item {
+            margin-bottom: 1.5rem;
+        }
+        
+        .ops-label {
+            color: #93C5FD;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .ops-desc {
+            color: #D1D5DB;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            background-color: #111827;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border-left: 3px solid #3B82F6;
+        }
+
+        .check-badge {
+            background-color: #065F46;
+            color: #34D399;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .code-pill {
+            font-family: 'Roboto Mono', monospace;
+            background-color: rgba(0,0,0,0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="bg-pattern"></div>
+<!-- Header -->
+<div class="header">
+<h1>How V2 Blocks V1 Attacks</h1>
+<div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
+<div class="absolute bottom-0 left-12 w-64 h-1 bg-green-500"></div>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<!-- Left: Mitigation Grid -->
+<div class="mitigation-grid">
+<!-- Row 1: set_extranonce -->
+<div class="mitigation-row">
+<div class="attack-col">
+<div class="attack-title">
+<i class="fas fa-syringe"></i>
+<span>set_extranonce Injection</span>
+</div>
+<p class="desc-text">MITM injects malicious pool parameters to redirect hashrate silently.</p>
+</div>
+<div class="arrow-col">
+<i class="fas fa-arrow-right"></i>
+</div>
+<div class="solution-col">
+<div class="solution-title">
+<div class="check-badge"><i class="fas fa-check"></i></div>
+<span>Encrypted + Authenticated Channel</span>
+</div>
+<p class="desc-text">Noise encryption prevents reading session state. AEAD authentication tags reject any injected frames instantly.</p>
+</div>
+</div>
+<!-- Row 2: client.reconnect -->
+<div class="mitigation-row">
+<div class="attack-col">
+<div class="attack-title">
+<i class="fas fa-random"></i>
+<span>client.reconnect Hijack</span>
+</div>
+<p class="desc-text">Attacker forces miner to connect to a malicious endpoint.</p>
+</div>
+<div class="arrow-col">
+<i class="fas fa-arrow-right"></i>
+</div>
+<div class="solution-col">
+<div class="solution-title">
+<div class="check-badge"><i class="fas fa-check"></i></div>
+<span>Server Identity Verification</span>
+</div>
+<p class="desc-text">Miners verify the pool's static public key. Unauthorized endpoints cannot complete the Noise handshake.</p>
+</div>
+</div>
+<!-- Row 3: Job Tampering -->
+<div class="mitigation-row">
+<div class="attack-col">
+<div class="attack-title">
+<i class="fas fa-edit"></i>
+<span>Share / Job Tampering</span>
+</div>
+<p class="desc-text">Modifying jobs or shares to steal rewards or censor txs.</p>
+</div>
+<div class="arrow-col">
+<i class="fas fa-arrow-right"></i>
+</div>
+<div class="solution-col">
+<div class="solution-title">
+<div class="check-badge"><i class="fas fa-check"></i></div>
+<span>Digital Signatures</span>
+</div>
+<p class="desc-text">Job Negotiation requires cryptographic signatures. Any modification invalidates the template commitment.</p>
+</div>
+</div>
+</div>
+<!-- Right: Operational Sidebar -->
+<div class="ops-sidebar">
+<div class="ops-header">
+<i class="fas fa-cogs mr-2 text-gray-400"></i>Operational Notes
+            </div>
+<div class="ops-item">
+<div class="ops-label">
+<i class="fas fa-thumbtack"></i> Key Pinning
+                </div>
+<div class="ops-desc">
+<p>Pools distribute their long-term static public key via secure channels (HTTPS/DNSSEC). Miners configure <span class="code-pill">pool_pubkey</span> to reject unknown certs.</p>
+</div>
+</div>
+<div class="ops-item">
+<div class="ops-label">
+<i class="fas fa-clipboard-list"></i> Audit Logs
+                </div>
+<div class="ops-desc">
+<p>Auth failures generate alerts. Logs capture handshake errors (e.g., <span class="code-pill">Noise_HandshakeFailed</span>), helping detect active MITM attempts.</p>
+</div>
+</div>
+<div class="ops-item">
+<div class="ops-label">
+<i class="fas fa-shield-virus"></i> Fallback Policy
+                </div>
+<div class="ops-desc">
+<p>If V2 handshake fails, fallback to V1 only if explicitly allowed by config. Strict mode prevents downgrade attacks.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

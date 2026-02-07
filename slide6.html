@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BlackHat Asia 2021: MITM Preconditions</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0B0F19;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B0F19;
+            color: #F3F4F6;
+            overflow: hidden;
+        }
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0B0F19;
+            opacity: 1;
+            z-index: 0;
+        }
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgNDBWMHptNDAgMFYweiIgc3Ryb2tlPSJyZ2JhKDIzOSw2OCw2OCwwLjEpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=');
+            opacity: 0.3;
+            z-index: 0;
+        }
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 1.5rem 3rem 1rem 3rem;
+            border-bottom: 1px solid rgba(239, 68, 68, 0.3);
+            background-color: rgba(11, 15, 25, 0.95);
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        .subtitle {
+            color: #EF4444;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .main-content {
+            display: flex;
+            flex: 1;
+            position: relative;
+            z-index: 10;
+            padding: 2rem 3rem;
+            gap: 2rem;
+        }
+        
+        /* Attack Diagram Layout */
+        .diagram-container {
+            flex: 1.4;
+            background-color: rgba(31, 41, 55, 0.4);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 1rem;
+            position: relative;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .network-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            height: 120px;
+            margin-bottom: 2rem;
+        }
+        
+        .node {
+            width: 110px;
+            height: 110px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        
+        .miner-node {
+            background-color: #1E293B;
+            border: 2px solid #60A5FA;
+        }
+        
+        .attacker-node {
+            background-color: #450a0a;
+            border: 2px solid #EF4444;
+            width: 140px;
+            height: 140px;
+        }
+        
+        .legit-pool-node {
+            background-color: #1E293B;
+            border: 2px solid #A78BFA;
+        }
+        
+        .malicious-pool-node {
+            background-color: #1E293B;
+            border: 2px dashed #EF4444;
+            position: absolute;
+            right: 0;
+            top: 180px; /* Position below legit pool */
+        }
+        
+        .connection-line {
+            position: absolute;
+            height: 4px;
+            top: 50%;
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+        
+        .conn-miner-mitm {
+            left: 110px;
+            right: calc(100% - 50% + 70px);
+            background-color: #60A5FA;
+        }
+        
+        .conn-mitm-legit {
+            left: calc(50% + 70px);
+            right: 110px;
+            background-color: #A78BFA;
+        }
+        
+        .conn-mitm-malicious {
+            position: absolute;
+            width: 4px;
+            background-color: #EF4444;
+            top: 120px; /* Center of attacker node */
+            bottom: -60px; /* Connect to malicious pool */
+            left: 50%;
+            transform: translateX(-50%);
+            height: 140px;
+            border-left: 2px dashed #EF4444;
+            background-color: transparent;
+        }
+        
+        .secondary-conn {
+            position: absolute;
+            height: 2px;
+            border-top: 2px dashed #EF4444;
+            top: 240px;
+            left: 50%;
+            width: 35%; /* Reach malicious pool */
+        }
+        
+        .node-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .node-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #E5E7EB;
+        }
+        
+        .node-sublabel {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.7rem;
+            color: #9CA3AF;
+        }
+        
+        .skull-icon {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background-color: #111827;
+            border-radius: 50%;
+            padding: 5px;
+            border: 1px solid #EF4444;
+            color: #EF4444;
+            z-index: 20;
+        }
+
+        /* Bullet Points Column */
+        .info-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .attack-card {
+            background-color: #111827;
+            border-left: 4px solid #EF4444;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .attack-card h3 {
+            color: #F87171;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .attack-card p {
+            color: #D1D5DB;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        
+        .condition-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .condition-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            color: #D1D5DB;
+        }
+        
+        .check-icon {
+            color: #EF4444;
+            margin-right: 0.75rem;
+            margin-top: 0.25rem;
+        }
+        
+        .malicious-path {
+            position: absolute;
+            border-left: 2px dashed #EF4444;
+            border-bottom: 2px dashed #EF4444;
+            height: 140px;
+            width: 32%;
+            top: 100px;
+            left: 50%;
+            z-index: 0;
+        }
+        
+        .traffic-badge {
+            position: absolute;
+            background-color: #1F2937;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.7rem;
+            color: #EF4444;
+            border: 1px solid #EF4444;
+            z-index: 5;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="bg-grid"></div>
+<div class="grid-pattern"></div>
+<!-- Header -->
+<div class="header">
+<h1>BlackHat Asia 2021: MITM Preconditions</h1>
+<div class="subtitle">Research by Liu, Chong, Huang, Zhang, Zhou</div>
+<div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
+<div class="absolute bottom-0 left-12 w-64 h-1 bg-red-600"></div>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<!-- Left Column: Attack Diagram -->
+<div class="diagram-container">
+<!-- Top Row: Miner -> Attacker -> Legit Pool -->
+<div class="network-row">
+<!-- Miner -->
+<div class="node miner-node">
+<i class="fas fa-microchip node-icon text-blue-400"></i>
+<span class="node-label">MINER</span>
+<span class="node-sublabel">Victim</span>
+</div>
+<!-- Attacker (MITM) -->
+<div class="node attacker-node">
+<div class="skull-icon"><i class="fas fa-skull"></i></div>
+<i class="fas fa-user-secret node-icon text-red-500"></i>
+<span class="node-label text-red-200">MITM</span>
+<span class="node-sublabel text-red-300">On-Path Attacker</span>
+</div>
+<!-- Legit Pool -->
+<div class="node legit-pool-node">
+<i class="fas fa-server node-icon text-purple-400"></i>
+<span class="node-label">LEGIT POOL</span>
+<span class="node-sublabel">Original Target</span>
+</div>
+<!-- Horizontal Connections -->
+<div class="connection-line conn-miner-mitm"></div>
+<div class="connection-line conn-mitm-legit"></div>
+</div>
+<!-- Malicious Path Visualization -->
+<div class="malicious-path"></div>
+<!-- Bottom Node: Malicious Pool -->
+<div class="node malicious-pool-node">
+<i class="fas fa-server node-icon text-red-500"></i>
+<span class="node-label text-red-400">EVIL POOL</span>
+<span class="node-sublabel">Controlled by Attacker</span>
+</div>
+<!-- Traffic Labels -->
+<div class="traffic-badge" style="top: 85px; left: 25%;">Intercepted TCP</div>
+<div class="traffic-badge" style="top: 85px; right: 25%;">Forwarded Traffic</div>
+<div class="traffic-badge" style="top: 170px; left: 52%;">Hidden Session</div>
+</div>
+<!-- Right Column: Preconditions & Info -->
+<div class="info-col">
+<div class="attack-card">
+<h3><i class="fas fa-network-wired"></i> On-Path Positioning</h3>
+<p>The attacker must sit between the miner and the pool (ISP, LAN, Rogue Wi-Fi, or BGP hijacking) to intercept the TCP connection on port 3333.</p>
+</div>
+<div class="attack-card">
+<h3><i class="fas fa-unlock"></i> Plaintext Visibility</h3>
+<p>Because Stratum V1 sends JSON in cleartext, the attacker can parse every message type (subscribe, authorize, submit) in real-time.</p>
+</div>
+<div class="attack-card">
+<h3><i class="fas fa-plug"></i> Dual Sessions</h3>
+<p>The attacker maintains two active upstream connections:</p>
+<ul class="condition-list mt-2">
+<li class="condition-item">
+<i class="fas fa-check check-icon"></i>
+<span><strong>Legit Pool:</strong> To proxy normal traffic and keep miner happy.</span>
+</li>
+<li class="condition-item">
+<i class="fas fa-check check-icon"></i>
+<span><strong>Evil Pool:</strong> To receive malicious jobs for injection attacks.</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Attack 1: Job Injection Architecture</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&amp;family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #0B1120;
+            color: #F8FAFC;
+        }
+        .mono-font {
+            font-family: 'Roboto Mono', monospace;
+        }
+        .bg-grid {
+            background-image: linear-gradient(rgba(30, 41, 59, 0.5) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        /* Diagram Specifics */
+        .node-box {
+            fill: #1E293B;
+            stroke: #3B82F6;
+            stroke-width: 2;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+        }
+        .node-box-attacker {
+            fill: #1E293B;
+            stroke: #EF4444;
+            stroke-width: 2;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+        }
+        .node-box-proxy {
+            fill: #1E293B;
+            stroke: #F59E0B;
+            stroke-width: 2;
+            stroke-dasharray: 4 4;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+        }
+        .flow-line {
+            stroke: #3B82F6;
+            stroke-width: 2;
+            marker-end: url(#arrowhead);
+        }
+        .flow-line-attack {
+            stroke: #EF4444;
+            stroke-width: 2;
+            marker-end: url(#arrowhead-red);
+        }
+        .text-title {
+            font-family: 'Inter', sans-serif;
+            fill: #F8FAFC;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .text-label {
+            font-family: 'Roboto Mono', monospace;
+            fill: #94A3B8;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body class="relative flex flex-col justify-between">
+<!-- Background -->
+<div class="absolute inset-0 z-0 bg-grid opacity-20"></div>
+<!-- Header -->
+<header class="relative z-10 px-16 pt-10 pb-4 flex items-end justify-between border-b border-gray-800">
+<div>
+<div class="flex items-center space-x-3 mb-2">
+<span class="px-2 py-1 text-xs font-bold text-red-900 bg-red-500 rounded mono-font">EXPLOIT DIAGRAM</span>
+<span class="text-xs text-gray-500 mono-font">// MITM INJECTION</span>
+</div>
+<h1 class="text-3xl font-black tracking-tight text-white uppercase">
+                Attack 1: <span class="text-red-500">Job Injection</span> Architecture
+</h1>
+</div>
+<div class="text-right">
+<p class="text-gray-400 text-sm max-w-md text-right mono-font">
+                Visualizing the interception and injection of malicious work
+            </p>
+</div>
+</header>
+<!-- Main Diagram Area -->
+<main class="relative z-10 flex-1 w-full h-full flex items-center justify-center p-8">
+<div class="w-full h-full relative glass-panel rounded-xl">
+<svg height="100%" preserveaspectratio="xMidYMid meet" viewbox="0 0 1152 480" width="100%">
+<defs>
+<marker id="arrowhead" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon fill="#3B82F6" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+<marker id="arrowhead-red" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon fill="#EF4444" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+</defs>
+<!-- MITM Area -->
+<rect fill="rgba(245, 158, 11, 0.05)" height="300" rx="8" stroke="#F59E0B" stroke-dasharray="4,4" width="200" x="476" y="90"></rect>
+<text class="text-label" fill="#F59E0B" font-weight="bold" text-anchor="middle" x="576" y="80">MITM / ATTACKER PROXY</text>
+<!-- Node: Miner (Left) -->
+<g transform="translate(60, 180)">
+<rect class="node-box" height="120" rx="8" width="140" x="0" y="0"></rect>
+<text fill="#3B82F6" font-family="FontAwesome" font-size="24" text-anchor="middle" x="70" y="50"></text>
+<text class="text-title" text-anchor="middle" x="70" y="80">VICTIM MINER</text>
+<text class="text-label" text-anchor="middle" x="70" y="100">Unaware</text>
+</g>
+<!-- Node: Attacker Proxy Logic (Center) -->
+<g transform="translate(506, 180)">
+<rect class="node-box-proxy" height="120" rx="8" width="140" x="0" y="0"></rect>
+<text fill="#F59E0B" font-family="FontAwesome" font-size="24" text-anchor="middle" x="70" y="50"></text>
+<text class="text-title" text-anchor="middle" x="70" y="80">MALICIOUS PROXY</text>
+<text class="text-label" text-anchor="middle" x="70" y="100">Injects Jobs</text>
+</g>
+<!-- Node: Legit Pool (Top Right) -->
+<g transform="translate(900, 80)">
+<rect class="node-box" height="120" rx="8" width="140" x="0" y="0"></rect>
+<text fill="#3B82F6" font-family="FontAwesome" font-size="24" text-anchor="middle" x="70" y="50"></text>
+<text class="text-title" text-anchor="middle" x="70" y="80">LEGIT POOL</text>
+<text class="text-label" text-anchor="middle" x="70" y="100">Target</text>
+</g>
+<!-- Node: Attacker Pool (Bottom Right) -->
+<g transform="translate(900, 280)">
+<rect class="node-box-attacker" height="120" rx="8" width="140" x="0" y="0"></rect>
+<text fill="#EF4444" font-family="FontAwesome" font-size="24" text-anchor="middle" x="70" y="50"></text>
+<text class="text-title" text-anchor="middle" x="70" y="80">ATTACKER POOL</text>
+<text class="text-label" text-anchor="middle" x="70" y="100">Hashrate Thief</text>
+</g>
+<!-- Connections -->
+<!-- Miner <-> Proxy -->
+<path class="flow-line" d="M 200 240 L 500 240"></path>
+<!-- Proxy <-> Legit Pool -->
+<path class="flow-line" d="M 646 220 C 750 220, 750 140, 900 140"></path>
+<!-- Proxy <-> Attacker Pool -->
+<path class="flow-line-attack" d="M 646 260 C 750 260, 750 340, 900 340"></path>
+<!-- Labels on lines -->
+<g transform="translate(300, 220)">
+<rect fill="#0F172A" height="20" rx="4" width="100" x="0" y="0"></rect>
+<text class="text-label" fill="#94A3B8" text-anchor="middle" x="50" y="14">Normal Traffic</text>
+</g>
+<g transform="translate(740, 160)">
+<rect fill="#0F172A" height="20" rx="4" width="100" x="0" y="0"></rect>
+<text class="text-label" fill="#3B82F6" text-anchor="middle" x="50" y="14">Proxy Relays</text>
+</g>
+<g transform="translate(740, 310)">
+<rect fill="#0F172A" height="20" rx="4" width="120" x="-10" y="0"></rect>
+<text class="text-label" fill="#EF4444" font-weight="bold" text-anchor="middle" x="50" y="14">Job Source</text>
+</g>
+<!-- Injection Callout -->
+<g transform="translate(320, 320)">
+<path d="M 506 280 Q 400 340 380 340" fill="none" stroke="#EF4444" stroke-dasharray="4,4" stroke-width="2"></path>
+<rect fill="#1E293B" height="60" rx="4" stroke="#EF4444" width="220" x="140" y="320"></rect>
+<text class="text-label" fill="#EF4444" font-weight="bold" x="150" y="340">INJECTION EVENT:</text>
+<text class="text-label" fill="#CBD5E1" x="150" y="355">mining.set_extranonce(...)</text>
+<text class="text-label" fill="#94A3B8" x="150" y="370">Forces miner to switch context</text>
+</g>
+</svg>
+</div>
+</main>
+<!-- Footer -->
+<footer class="relative z-10 h-16 bg-gray-900 border-t border-gray-800 flex items-center justify-between px-16">
+<div class="flex items-center space-x-2 text-gray-500 text-xs mono-font">
+<i class="fas fa-network-wired"></i>
+<span>SLIDE 16</span>
+</div>
+<div class="flex items-center space-x-6">
+<div class="flex items-center space-x-2">
+<div class="w-2 h-2 rounded-full bg-blue-500"></div>
+<span class="text-xs text-gray-400 uppercase tracking-wider">Legitimate Path</span>
+</div>
+<div class="flex items-center space-x-2">
+<div class="w-2 h-2 rounded-full bg-red-500"></div>
+<span class="text-xs text-gray-400 uppercase tracking-wider">Attack Path</span>
+</div>
+<div class="flex items-center space-x-2">
+<div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+<span class="text-xs text-gray-400 uppercase tracking-wider">MITM Proxy</span>
+</div>
+</div>
+</footer>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SV1 Theft: How Stratum V2 Fixes a Broken Mining Protocol</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0B0F19;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #0B0F19;
+            color: #F3F4F6;
+            overflow: hidden;
+        }
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(30, 41, 59, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.2;
+            z-index: 0;
+        }
+        .circuit-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1280px;
+            height: 720px;
+            z-index: 1;
+            opacity: 0.4;
+        }
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 1100px;
+            padding: 2rem;
+            background-color: rgba(11, 15, 25, 0.85); /* specific background overlay for readability */
+            border: 1px solid rgba(55, 65, 81, 0.5);
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+        .mono-text {
+            font-family: 'Roboto Mono', monospace;
+        }
+        .glow-red {
+            text-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+        }
+        .glow-green {
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+        .tech-border-top {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 2px;
+            background-color: #374151;
+        }
+        .tech-border-top::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20%;
+            height: 4px;
+            background-color: #3B82F6;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="bg-grid"></div>
+<canvas class="circuit-canvas" height="720" id="circuitCanvas" width="1280"></canvas>
+<!-- Main Content -->
+<div class="content-wrapper">
+<div class="tech-border-top"></div>
+<!-- Iconography Row -->
+<div class="flex justify-center items-center gap-8 mb-8 mt-4">
+<div class="flex flex-col items-center">
+<div class="w-20 h-20 rounded-lg border-2 border-red-500/30 bg-red-900/10 flex items-center justify-center mb-2">
+<i class="fas fa-lock-open text-4xl text-red-500"></i>
+</div>
+<p class="text-xs uppercase tracking-widest text-red-400 font-bold mono-text">V1 Insecure</p>
+</div>
+<div class="flex items-center text-gray-500">
+<i class="fas fa-arrow-right text-2xl animate-pulse"></i>
+<i class="fas fa-arrow-right text-2xl animate-pulse ml-[-10px]"></i>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-20 h-20 rounded-lg border-2 border-green-500/30 bg-green-900/10 flex items-center justify-center mb-2">
+<i class="fas fa-shield-halved text-4xl text-green-500"></i>
+</div>
+<p class="text-xs uppercase tracking-widest text-green-400 font-bold mono-text">V2 Secured</p>
+</div>
+</div>
+<!-- Title -->
+<h1 class="text-7xl font-bold text-white mb-6">
+<span class="text-red-500 glow-red">SV1 Theft</span><span class="text-gray-600 mx-4">|</span>How Stratum V2<br/>
+                Fixes a <span class="text-gray-400 border-b-4 border-red-500 border-opacity-50">Broken</span> Mining Protocol
+            </h1>
+<!-- Subtitle -->
+<div class="flex items-center justify-center mb-10">
+<p class="text-2xl text-gray-300 font-light mono-text">
+                    From <span class="text-red-400 font-medium">plaintext jobs</span> to 
+                    <span class="text-green-400 font-bold glow-green">authenticated, encrypted mining</span>
+</p>
+</div>
+<!-- Footer Meta -->
+<div class="border-t border-gray-700 pt-6 flex justify-between items-center text-sm text-gray-400 font-mono w-full px-12">
+<div class="flex items-center gap-2">
+<i class="fab fa-bitcoin text-orange-500 text-lg"></i>
+<p>Bitcoin Mining Security</p>
+</div>
+<div class="flex items-center gap-2">
+<i class="fas fa-fingerprint text-blue-400 text-lg"></i>
+<p>Noise Protocol Framework</p>
+</div>
+<div class="flex items-center gap-2">
+<i class="fas fa-code-branch text-purple-400 text-lg"></i>
+<p>SRI Implementation</p>
+</div>
+</div>
+</div>
+</div>
+<script>
+        // Draw Technical Circuit Background
+        const canvas = document.getElementById('circuitCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = 1280;
+        const height = 720;
+        
+        ctx.strokeStyle = '#334155'; // Slate-700
+        ctx.lineWidth = 1.5;
+        
+        // Helper to draw a node
+        function drawNode(x, y, filled = true) {
+            ctx.beginPath();
+            ctx.arc(x, y, 3, 0, Math.PI * 2);
+            ctx.fillStyle = filled ? '#475569' : '#0B0F19';
+            ctx.fill();
+            ctx.stroke();
+        }
+
+        // Draw Left Side "Unsecured" Network (Chaotic)
+        for(let i=0; i<15; i++) {
+            let x = Math.random() * 400;
+            let y = Math.random() * height;
+            drawNode(x, y);
+            
+            // Connect to random neighbor
+            let x2 = x + (Math.random() - 0.5) * 200;
+            let y2 = y + (Math.random() - 0.5) * 200;
+            
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            drawNode(x2, y2, false);
+        }
+
+        // Draw Right Side "Secured" Network (Structured Grid)
+        ctx.strokeStyle = '#1e293b'; // Darker for subtlety
+        const startX = 900;
+        const spacing = 60;
+        
+        for(let x = startX; x < width; x += spacing) {
+            for(let y = 50; y < height; y += spacing) {
+                if(Math.random() > 0.6) {
+                    drawNode(x, y);
+                    // Draw connections
+                    if(x + spacing < width) {
+                        ctx.beginPath();
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x + spacing, y);
+                        ctx.stroke();
+                    }
+                    if(y + spacing < height) {
+                        ctx.beginPath();
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x, y + spacing);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+    </script>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

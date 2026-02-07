@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Attack 2: Time-Segment Reconnect</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0B0F19;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B0F19;
+            color: #F3F4F6;
+            overflow: hidden;
+        }
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0B0F19;
+            opacity: 1;
+            z-index: 0;
+        }
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgNDBWMHptNDAgMFYweiIgc3Ryb2tlPSJyZ2JhKDIzOSw2OCw2OCwwLjEpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=');
+            opacity: 0.2;
+            z-index: 0;
+        }
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 1.5rem 3rem 1rem 3rem;
+            border-bottom: 1px solid rgba(239, 68, 68, 0.3);
+            background-color: rgba(11, 15, 25, 0.95);
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        .subtitle {
+            color: #EF4444;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .main-content {
+            display: flex;
+            flex: 1;
+            position: relative;
+            z-index: 10;
+            padding: 2rem 3rem;
+            gap: 2rem;
+        }
+        
+        /* Attack Flow Visualization */
+        .flow-container {
+            flex: 1.2;
+            background-color: rgba(17, 24, 39, 0.6);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 1rem;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            position: relative;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 40px;
+            top: 40px;
+            bottom: 40px;
+            width: 4px;
+            background-color: #374151;
+            z-index: 0;
+        }
+        
+        .stage-card {
+            display: flex;
+            gap: 1.5rem;
+            z-index: 1;
+        }
+        
+        .stage-marker {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: #1F2937;
+            border: 3px solid #374151;
+            color: #9CA3AF;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            margin-left: -2px; /* Center on line */
+        }
+        
+        .stage-active .stage-marker {
+            background-color: #450a0a;
+            border-color: #EF4444;
+            color: #EF4444;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+        }
+        
+        .stage-content {
+            flex: 1;
+            background-color: #111827;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .stage-active .stage-content {
+            border-color: #EF4444;
+            background-color: rgba(69, 10, 10, 0.3);
+        }
+        
+        .stage-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #F3F4F6;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stage-active .stage-title {
+            color: #F87171;
+        }
+        
+        .code-preview {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            background-color: #000;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            margin-top: 0.5rem;
+            border-left: 3px solid;
+            overflow-x: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        
+        .code-normal { border-color: #60A5FA; color: #93C5FD; }
+        .code-malicious { border-color: #EF4444; color: #FCA5A5; }
+        
+        /* Impact Panel */
+        .impact-panel {
+            flex: 0.8;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .alert-box {
+            background-color: rgba(220, 38, 38, 0.1);
+            border: 1px solid #EF4444;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .alert-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: #F87171;
+            font-weight: bold;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+        }
+        
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .stat-item {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: #9CA3AF;
+            text-transform: uppercase;
+        }
+        
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #E5E7EB;
+            margin-top: 0.25rem;
+        }
+        
+        .outcome-card {
+            background-color: #1F2937;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border: 1px solid #374151;
+        }
+        
+        .warning-badge {
+            display: inline-block;
+            background-color: #EF4444;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+            text-transform: uppercase;
+        }
+        
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #EF4444;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="bg-grid"></div>
+<div class="grid-pattern"></div>
+<!-- Header -->
+<div class="header">
+<h1>Attack 2: Time-Segment Reconnect</h1>
+<div class="subtitle">
+<i class="fas fa-network-wired"></i> Vulnerability: Forced Reconnection Hijack
+            </div>
+<div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
+<div class="absolute bottom-0 left-12 w-64 h-1 bg-red-600"></div>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<!-- Left Column: Attack Flow -->
+<div class="flow-container">
+<div class="timeline-line"></div>
+<!-- Stage 1 -->
+<div class="stage-card">
+<div class="stage-marker">1</div>
+<div class="stage-content">
+<div class="stage-title">Normal Monitoring</div>
+<p class="text-gray-400 text-sm mb-1">MITM forwards traffic seamlessly. Miner is submitting shares to legit pool.</p>
+<div class="code-preview code-normal">
+                            &lt;-- mining.submit("legit_job")<br/>
+                            --&gt; result: true
+                        </div>
+</div>
+</div>
+<!-- Stage 2 -->
+<div class="stage-card stage-active">
+<div class="stage-marker">2</div>
+<div class="stage-content">
+<div class="stage-title flex justify-between">
+                            Reconnect Injection <span class="warning-badge">ATTACK</span>
+</div>
+<p class="text-red-300 text-sm mb-1">MITM sends <span class="font-mono bg-red-900 px-1 rounded">client.reconnect</span> pointing to Malicious Pool.</p>
+<div class="code-preview code-malicious">
+                            --&gt; client.reconnect("evil.pool", 3333, 0)
+                        </div>
+</div>
+</div>
+<!-- Stage 3 -->
+<div class="stage-card">
+<div class="stage-marker">3</div>
+<div class="stage-content">
+<div class="stage-title">Malicious Mining</div>
+<p class="text-gray-400 text-sm mb-1">Miner disconnects from Legit Pool, connects to Evil Pool, and mines for attacker.</p>
+<div class="code-preview code-malicious">
+                            &lt;-- mining.authorize("attacker_user", ...)
+                        </div>
+</div>
+</div>
+<!-- Stage 4 -->
+<div class="stage-card">
+<div class="stage-marker">4</div>
+<div class="stage-content">
+<div class="stage-title">Covering Tracks</div>
+<p class="text-gray-400 text-sm">After time T, Evil Pool sends reconnect back to Legit Pool. Cycle repeats.</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Impact & Analysis -->
+<div class="impact-panel">
+<div class="alert-box">
+<div class="alert-header">
+<i class="fas fa-history"></i> The Duty Cycle Attack
+                    </div>
+<p class="text-gray-300 text-sm leading-relaxed">
+                        By exploiting the unauthenticated <span class="font-mono text-red-400">client.reconnect</span> command, attackers force miners to work for them in short bursts, making it look like connection instability rather than theft.
+                    </p>
+<div class="stat-grid">
+<div class="stat-item">
+<div class="stat-label">Stealth Level</div>
+<div class="stat-value text-yellow-500">Medium</div>
+</div>
+<div class="stat-item">
+<div class="stat-label">Loss Pattern</div>
+<div class="stat-value text-red-400">Oscillating</div>
+</div>
+<div class="stat-item">
+<div class="stat-label">Attack Type</div>
+<div class="stat-value text-red-500">Hijacking</div>
+</div>
+<div class="stat-item">
+<div class="stat-label">Protocol Breach</div>
+<div class="stat-value text-red-500">Auth &amp; State</div>
+</div>
+</div>
+</div>
+<div class="outcome-card">
+<h3 class="text-gray-200 font-bold mb-3 font-mono text-sm uppercase border-b border-gray-700 pb-2">
+<span class="pulse-dot"></span>Operational Symptoms
+                    </h3>
+<ul class="text-gray-400 text-sm space-y-3">
+<li class="flex items-start">
+<i class="fas fa-exchange-alt text-red-500 mt-1 mr-2"></i>
+<p>Frequent TCP connection resets observed on firewall.</p>
+</li>
+<li class="flex items-start">
+<i class="fas fa-chart-line text-yellow-500 mt-1 mr-2"></i>
+<p>Legit pool records hashrate dips (e.g., 20% lower average).</p>
+</li>
+<li class="flex items-start">
+<i class="fas fa-mask text-gray-500 mt-1 mr-2"></i>
+<p>Miner logs show "Pool requested reconnect" - looks like normal load balancing.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

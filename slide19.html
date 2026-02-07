@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Diffie-Hellman Key Exchange</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0B0F19;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B0F19;
+            color: #F3F4F6;
+            overflow: hidden;
+        }
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0B0F19;
+            opacity: 1;
+            z-index: 0;
+        }
+        .grid-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgNDBWMHptNDAgMFYweiIgc3Ryb2tlPSJyZ2JhKDMwLDQxLDU5LDAuNSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==');
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 1.5rem 3rem 1rem 3rem;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+            background-color: rgba(11, 15, 25, 0.95);
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        .main-content {
+            display: flex;
+            flex: 1;
+            position: relative;
+            z-index: 10;
+            padding: 2rem 3rem;
+            gap: 2rem;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        
+        /* Math/Viz Container Styles */
+        .viz-container {
+            width: 55%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .math-container {
+            width: 45%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .equation-card {
+            background-color: #111827;
+            border: 1px solid #374151;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            position: relative;
+            margin-top: 0.5rem;
+        }
+        
+        .equation-title {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background-color: #1F2937;
+            padding: 2px 12px;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #9CA3AF;
+            border: 1px solid #4B5563;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .main-formula {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.25rem;
+            color: #F3F4F6;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        .math-keyword { color: #F59E0B; font-weight: bold; } /* Generator G */
+        .math-private { color: #EF4444; font-weight: bold; } /* Private Keys */
+        .math-public { color: #60A5FA; font-weight: bold; } /* Public Keys */
+        .math-shared { color: #10B981; font-weight: bold; } /* Shared Secret */
+        .math-op { color: #9CA3AF; margin: 0 0.25rem; }
+
+        /* Visualization Elements */
+        .process-box {
+            background: rgba(17, 24, 39, 0.8);
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .actor-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+
+        .key-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            width: fit-content;
+        }
+        .key-private { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #FCA5A5; }
+        .key-public { background: rgba(96, 165, 250, 0.1); border: 1px solid rgba(96, 165, 250, 0.3); color: #93C5FD; }
+        .key-shared { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #6EE7B7; width: 100%; justify-content: center;}
+
+        .exchange-arrows {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 2rem;
+            position: relative;
+            height: 60px;
+        }
+        
+        .arrow-line {
+            height: 2px;
+            flex-grow: 1;
+            position: relative;
+        }
+        .arrow-right { background: linear-gradient(to right, #60A5FA, #93C5FD); }
+        .arrow-left { background: linear-gradient(to left, #60A5FA, #93C5FD); margin-top: 1rem; }
+        
+        .arrow-label {
+            position: absolute;
+            top: -1.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: #93C5FD;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .property-box {
+            display: flex;
+            gap: 1rem;
+            margin-top: auto;
+        }
+        .prop-item {
+            flex: 1;
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid #4B5563;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        .prop-title {
+            color: #E5E7EB;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .prop-desc {
+            color: #9CA3AF;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="bg-grid"></div>
+<div class="grid-lines"></div>
+<!-- Header -->
+<div class="header">
+<h1>Diffie-Hellman Visual + Math</h1>
+<div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
+<div class="absolute bottom-0 left-12 w-64 h-1 bg-blue-500"></div>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<!-- LEFT COLUMN: Visualization -->
+<div class="viz-container">
+<!-- Step 1 & 2: Actors and Keys -->
+<div class="flex justify-between gap-4">
+<!-- Miner -->
+<div class="process-box w-1/2">
+<div class="actor-header">
+<i class="fas fa-microchip text-blue-400"></i> Miner
+                    </div>
+<div class="flex flex-col gap-2">
+<div class="key-badge key-private">
+<i class="fas fa-key text-xs"></i> Private: k1
+                        </div>
+<div class="text-xs text-gray-500 text-center mb-1"> Derive Public Key </div>
+<div class="key-badge key-public">
+<i class="fas fa-globe text-xs"></i> Public: P1
+                        </div>
+</div>
+</div>
+<!-- Pool -->
+<div class="process-box w-1/2">
+<div class="actor-header">
+<i class="fas fa-server text-indigo-400"></i> Pool
+                    </div>
+<div class="flex flex-col gap-2">
+<div class="key-badge key-private">
+<i class="fas fa-key text-xs"></i> Private: k2
+                        </div>
+<div class="text-xs text-gray-500 text-center mb-1"> Derive Public Key </div>
+<div class="key-badge key-public">
+<i class="fas fa-globe text-xs"></i> Public: P2
+                        </div>
+</div>
+</div>
+</div>
+<!-- Step 3: Exchange -->
+<div class="relative py-2">
+<div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 bg-gray-900 p-2 rounded-full border border-gray-700">
+<i class="fas fa-exchange-alt text-gray-400"></i>
+</div>
+<!-- P1 to Pool -->
+<div class="flex items-center mb-4">
+<div class="w-full h-0.5 bg-gradient-to-r from-blue-500 to-indigo-500 relative">
+<span class="absolute -top-5 left-1/4 font-mono text-xs text-blue-300">P1 sent to Pool</span>
+<i class="fas fa-chevron-right absolute right-0 -top-1.5 text-indigo-500"></i>
+</div>
+</div>
+<!-- P2 to Miner -->
+<div class="flex items-center mt-4">
+<div class="w-full h-0.5 bg-gradient-to-l from-indigo-500 to-blue-500 relative">
+<span class="absolute -top-5 right-1/4 font-mono text-xs text-indigo-300">P2 sent to Miner</span>
+<i class="fas fa-chevron-left absolute left-0 -top-1.5 text-blue-500"></i>
+</div>
+</div>
+</div>
+<!-- Step 4: Shared Secret -->
+<div class="flex justify-between gap-4">
+<!-- Miner Computes -->
+<div class="process-box w-1/2 border-green-900/50 bg-green-900/10">
+<div class="text-xs text-green-500 mb-2 font-mono">Miner Computes:</div>
+<div class="key-badge key-shared">
+<i class="fas fa-lock"></i> Secret S
+                    </div>
+<div class="text-xs text-gray-400 text-center font-mono">k1 × P2</div>
+</div>
+<!-- Pool Computes -->
+<div class="process-box w-1/2 border-green-900/50 bg-green-900/10">
+<div class="text-xs text-green-500 mb-2 font-mono">Pool Computes:</div>
+<div class="key-badge key-shared">
+<i class="fas fa-lock"></i> Secret S
+                    </div>
+<div class="text-xs text-gray-400 text-center font-mono">k2 × P1</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Math & Properties -->
+<div class="math-container">
+<!-- Key Generation Math -->
+<div class="equation-card">
+<div class="equation-title">1. Key Generation</div>
+<div class="main-formula">
+<p><span class="math-public">P1</span> <span class="math-op">=</span> <span class="math-private">k1</span> <span class="math-op">·</span> <span class="math-keyword">G</span></p>
+<p><span class="math-public">P2</span> <span class="math-op">=</span> <span class="math-private">k2</span> <span class="math-op">·</span> <span class="math-keyword">G</span></p>
+</div>
+<p class="text-sm text-gray-500 mt-2">
+<span class="math-keyword">G</span> is the Generator Point on the Elliptic Curve.
+                </p>
+</div>
+<!-- Shared Secret Math -->
+<div class="equation-card">
+<div class="equation-title">2. Shared Secret Calculation</div>
+<div class="main-formula text-sm">
+<p class="mb-2">
+<span class="math-shared">S</span> <span class="math-op">=</span>
+<span class="math-private">k1</span> <span class="math-op">·</span> <span class="math-public">P2</span>
+</p>
+<p class="mb-2 pl-4 text-gray-500 text-base">Substitute P2:</p>
+<p class="mb-2 pl-4">
+<span class="math-op">=</span> <span class="math-private">k1</span> <span class="math-op">·</span> (<span class="math-private">k2</span> <span class="math-op">·</span> <span class="math-keyword">G</span>)
+                    </p>
+<p class="mb-2 pl-4 text-gray-500 text-base">Commutative Property:</p>
+<p class="mb-2 pl-4">
+<span class="math-op">=</span> <span class="math-private">k2</span> <span class="math-op">·</span> (<span class="math-private">k1</span> <span class="math-op">·</span> <span class="math-keyword">G</span>)
+                    </p>
+<p>
+<span class="math-op">=</span> <span class="math-private">k2</span> <span class="math-op">·</span> <span class="math-public">P1</span>
+</p>
+</div>
+</div>
+<!-- Security Properties -->
+<div class="property-box">
+<div class="prop-item border-red-900/30">
+<div class="prop-title text-red-400">
+<i class="fas fa-shield-alt"></i> One-Way Function
+                    </div>
+<p class="prop-desc">
+                        Given <span class="math-public">P</span> and <span class="math-keyword">G</span>, it is computationally infeasible to calculate <span class="math-private">k</span> (Discrete Logarithm Problem).
+                    </p>
+</div>
+<div class="prop-item border-blue-900/30">
+<div class="prop-title text-blue-400">
+<i class="fas fa-eye-slash"></i> Privacy
+                    </div>
+<p class="prop-desc">
+                        An observer sees <span class="math-public">P1</span>, <span class="math-public">P2</span>, and <span class="math-keyword">G</span>, but cannot compute <span class="math-shared">S</span> without <span class="math-private">k1</span> or <span class="math-private">k2</span>.
+                    </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Why MITM Fails Under SV2</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0B0F19;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B0F19;
+            color: #F3F4F6;
+            overflow: hidden;
+        }
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(30, 41, 59, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 2rem 3rem 1rem 3rem;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+            background-color: rgba(11, 15, 25, 0.9);
+        }
+        .main-content {
+            display: flex;
+            flex: 1;
+            position: relative;
+            z-index: 10;
+            padding: 2rem 3rem;
+            gap: 3rem;
+        }
+        .diagram-col {
+            flex: 1.1; /* Gave diagram slightly more space */
+            background-color: rgba(17, 24, 39, 0.6);
+            border-radius: 1rem;
+            border: 1px solid rgba(55, 65, 81, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .text-col {
+            flex: 0.9;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #10B981; /* Green for Security */
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        .mono-text {
+            font-family: 'Roboto Mono', monospace;
+        }
+        .bullet-point {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            font-size: 1.15rem;
+            line-height: 1.5;
+            color: #D1D5DB;
+        }
+        .bullet-icon {
+            color: #10B981; /* Green check/shield */
+            margin-right: 1rem;
+            margin-top: 0.25rem;
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+        .code-snippet {
+            background-color: #1F2937;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9em;
+            color: #93C5FD;
+            border: 1px solid #374151;
+        }
+        .result-box {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        /* Network Diagram Elements */
+        .node {
+            width: 90px;
+            height: 90px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            z-index: 10;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            background-color: #1E293B;
+        }
+        .miner-node {
+            border: 2px solid #60A5FA;
+            left: 50px;
+        }
+        .pool-node {
+            border: 2px solid #A78BFA;
+            right: 50px;
+        }
+        .attacker-node {
+            border: 2px solid #EF4444;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            opacity: 0.9;
+        }
+        
+        .secure-tunnel {
+            position: absolute;
+            height: 8px;
+            background: linear-gradient(90deg, #60A5FA, #10B981, #A78BFA);
+            top: 50%;
+            left: 95px;
+            right: 95px;
+            transform: translateY(-50%);
+            z-index: 2;
+            border-radius: 4px;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+        
+        .attack-attempt {
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 20;
+        }
+        
+        .shield-icon {
+            background-color: #064E3B;
+            color: #34D399;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #10B981;
+            position: absolute;
+            z-index: 15;
+            font-size: 0.9rem;
+        }
+        
+        .shield-1 { left: 25%; top: 46%; }
+        .shield-2 { left: 70%; top: 46%; }
+        
+        .blocked-label {
+            position: absolute;
+            bottom: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #7F1D1D;
+            color: #FCA5A5;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border: 1px solid #EF4444;
+            z-index: 20;
+            white-space: nowrap;
+        }
+        
+        .lightning {
+            position: absolute;
+            color: #FBBF24;
+            font-size: 1.5rem;
+            animation: flash 2s infinite;
+        }
+        @keyframes flash {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="bg-grid"></div>
+<!-- Header -->
+<div class="header">
+<h1>Why MITM Fails Under SV2</h1>
+<div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
+<div class="absolute bottom-0 left-12 w-64 h-1 bg-green-500"></div>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<!-- Left Column: Network Diagram -->
+<div class="diagram-col">
+<!-- Secure Connection Visual -->
+<div class="secure-tunnel"></div>
+<!-- Shield Icons on Tunnel -->
+<div class="shield-icon shield-1"><i class="fas fa-lock"></i></div>
+<div class="shield-icon shield-2"><i class="fas fa-check-circle"></i></div>
+<!-- Miner Node -->
+<div class="node miner-node">
+<i class="fas fa-microchip text-3xl text-blue-400 mb-2"></i>
+<span class="text-xs font-bold text-gray-300">MINER</span>
+</div>
+<!-- Attacker Node (Blocked) -->
+<div class="node attacker-node">
+<i class="fas fa-user-secret text-3xl text-red-500 mb-2"></i>
+<span class="text-xs font-bold text-red-400">MITM</span>
+<!-- Red X Overlay -->
+<div class="absolute inset-0 flex items-center justify-center">
+<i class="fas fa-times text-6xl text-red-600 opacity-60"></i>
+</div>
+</div>
+<!-- Pool Node -->
+<div class="node pool-node">
+<i class="fas fa-server text-3xl text-purple-400 mb-2"></i>
+<span class="text-xs font-bold text-gray-300">POOL</span>
+</div>
+<!-- Attack Visualizations -->
+<div class="blocked-label">
+<i class="fas fa-ban mr-1"></i> ACCESS DENIED
+                </div>
+<!-- Specific Failed Attacks -->
+<div class="absolute top-20 left-1/4 transform -translate-x-1/2 text-center">
+<div class="text-red-400 text-xs font-mono mb-1">Decrypt?</div>
+<i class="fas fa-eye-slash text-gray-500 text-xl"></i>
+</div>
+<div class="absolute top-20 right-1/4 transform translate-x-1/2 text-center">
+<div class="text-red-400 text-xs font-mono mb-1">Tamper?</div>
+<i class="fas fa-file-signature text-gray-500 text-xl"></i>
+<i class="fas fa-slash text-red-500 absolute top-0 left-0 text-2xl opacity-80" style="transform: rotate(90deg) translate(2px, -8px);"></i>
+</div>
+</div>
+<!-- Right Column: Bullet Points -->
+<div class="text-col">
+<h2>Defense Mechanisms</h2>
+<div class="bullet-point">
+<i class="fas fa-eye-slash bullet-icon"></i>
+<div>
+<p class="font-bold text-gray-200">No Decryption (Confidentiality)</p>
+<p class="text-gray-400 text-sm mt-1">
+                            Attacker lacks the <strong>Noise session keys</strong>. The Diffie-Hellman exchange ensures only the Miner and Pool share the encryption secret. Forward secrecy protects past sessions.
+                        </p>
+</div>
+</div>
+<div class="bullet-point">
+<i class="fas fa-shield-alt bullet-icon"></i>
+<div>
+<p class="font-bold text-gray-200">No Modification (Integrity)</p>
+<p class="text-gray-400 text-sm mt-1">
+                            Every frame includes an <strong>AEAD authentication tag</strong>. If an attacker modifies even a single bit (e.g., changing a job ID), the verification fails, and the connection is dropped.
+                        </p>
+</div>
+</div>
+<div class="bullet-point">
+<i class="fas fa-id-card bullet-icon"></i>
+<div>
+<p class="font-bold text-gray-200">No Impersonation (Authenticity)</p>
+<p class="text-gray-400 text-sm mt-1">
+                            The attacker cannot complete the handshake without the Pool's <strong>Private Authority Key</strong>. Miners verify the Pool's static public key before sending shares.
+                        </p>
+</div>
+</div>
+<!-- Result Summary -->
+<div class="result-box">
+<div class="flex items-center mb-2">
+<i class="fas fa-check-double text-green-400 mr-2"></i>
+<span class="font-bold text-green-400 uppercase tracking-wider text-sm">Threats Neutralized</span>
+</div>
+<p class="text-gray-300 text-sm">
+<span class="text-red-400 line-through mr-2">set_extranonce injection</span>
+<span class="text-red-400 line-through mr-2">client.reconnect hijacking</span>
+<span class="text-red-400 line-through">Job tampering</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

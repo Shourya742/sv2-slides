@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Key Authenticity: Who Are You Talking To?</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0B0F19;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B0F19;
+            color: #F3F4F6;
+            overflow: hidden;
+        }
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(30, 41, 59, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 1.5rem 3rem 1rem 3rem;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+            background-color: rgba(11, 15, 25, 0.9);
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        .main-content {
+            display: flex;
+            flex: 1;
+            position: relative;
+            z-index: 10;
+            padding: 2rem 3rem;
+            gap: 2rem;
+        }
+        .steps-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        .step-card {
+            display: flex;
+            background-color: #111827;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1rem 1.25rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .step-card:hover {
+            background-color: #1F2937;
+        }
+        .step-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: #1F2937;
+            border: 2px solid #3B82F6;
+            color: #3B82F6;
+            border-radius: 50%;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-right: 1.25rem;
+            flex-shrink: 0;
+        }
+        .step-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #F3F4F6;
+            font-size: 1.15rem;
+            margin-bottom: 0.25rem;
+        }
+        .step-content p {
+            color: #9CA3AF;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin-bottom: 0.25rem;
+        }
+        .visual-container {
+            flex: 0.9;
+            background-color: #1F2937;
+            border-radius: 1rem;
+            border: 1px solid #374151;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        /* Diagram Styles */
+        .diagram-card {
+            background-color: #111827;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        .diagram-card:last-child {
+            margin-bottom: 0;
+        }
+        .diagram-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        .flow-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            height: 80px;
+        }
+        .node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 2;
+            width: 80px;
+        }
+        .node-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            background-color: #374151;
+            color: #D1D5DB;
+            position: relative;
+        }
+        .node-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #D1D5DB;
+        }
+        .conn-line {
+            position: absolute;
+            top: 24px;
+            left: 40px;
+            right: 40px;
+            height: 2px;
+            background-color: #4B5563;
+            z-index: 1;
+        }
+        .key-badge {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-top: 4px;
+            display: inline-block;
+        }
+        .intercept-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1F2937;
+            padding: 0.25rem;
+            border-radius: 50%;
+            color: #EF4444;
+            border: 1px solid #EF4444;
+            z-index: 3;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="bg-grid"></div>
+<!-- Header -->
+<div class="header">
+<h1>Key Authenticity: Who Are You Talking To?</h1>
+<div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
+<div class="absolute bottom-0 left-12 w-64 h-1 bg-blue-500"></div>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<!-- Left Column: Steps -->
+<div class="steps-container">
+<!-- Step 1: The Threat -->
+<div class="step-card" style="border-left: 4px solid #EF4444;">
+<div class="step-number" style="border-color: #EF4444; color: #EF4444;">1</div>
+<div class="step-content">
+<h3>The Threat: Key Swapping (MITM)</h3>
+<p>Encryption alone guarantees confidentiality, not identity. An attacker can intercept the handshake, presenting their own key to the miner and the pool.</p>
+<p class="text-xs text-red-400 mt-1 font-semibold"><i class="fas fa-exclamation-triangle mr-1"></i> Result: You have a secure channel with the <em>Attacker</em>.</p>
+</div>
+</div>
+<!-- Step 2: PSK -->
+<div class="step-card" style="border-left: 4px solid #F59E0B;">
+<div class="step-number" style="border-color: #F59E0B; color: #F59E0B;">2</div>
+<div class="step-content">
+<h3>Approach A: Pre-Shared Keys (PSK)</h3>
+<p>Both sides agree on a secret password beforehand. Handshake fails if secret doesn't match.</p>
+<p class="text-xs text-gray-500 italic mt-1"><i class="fas fa-times-circle mr-1"></i> Issue: Doesn't scale. Distributing secrets to 1M+ anonymous miners is impossible.</p>
+</div>
+</div>
+<!-- Step 3: Identity Keys -->
+<div class="step-card" style="border-left: 4px solid #10B981;">
+<div class="step-number" style="border-color: #10B981; color: #10B981;">3</div>
+<div class="step-content">
+<h3>Approach B: Identity Keys (Stratum V2)</h3>
+<p>Pools publish a long-term <strong>Static Public Key</strong> (Identity). Miners "pin" or verify this key during the Noise handshake.</p>
+<p class="text-xs text-green-400 mt-1 font-semibold"><i class="fas fa-check-circle mr-1"></i> Result: Scalable authenticity without distributing secrets.</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Visualization -->
+<div class="visual-container">
+<!-- Diagram 1: The Problem -->
+<div class="diagram-card">
+<div class="diagram-title text-red-400">
+<i class="fas fa-user-secret mr-2"></i> The Problem: Key Swapping
+                    </div>
+<div class="flow-row">
+<div class="conn-line bg-red-500"></div>
+<!-- Miner -->
+<div class="node">
+<div class="node-icon bg-blue-900 text-blue-300 border border-blue-700">
+<i class="fas fa-hdd"></i>
+</div>
+<span class="node-label">Miner</span>
+</div>
+<!-- Attacker -->
+<div class="node">
+<div class="node-icon bg-red-900 text-red-300 border border-red-600">
+<i class="fas fa-user-secret"></i>
+</div>
+<span class="node-label text-red-400">Attacker</span>
+<span class="key-badge bg-red-900 text-red-200 border border-red-700">Swaps Keys</span>
+</div>
+<!-- Pool -->
+<div class="node">
+<div class="node-icon bg-purple-900 text-purple-300 border border-purple-700">
+<i class="fas fa-server"></i>
+</div>
+<span class="node-label">Pool</span>
+</div>
+</div>
+<div class="text-center mt-2">
+<p class="text-xs text-gray-400 font-mono">Miner trusts Attacker's Key thinking it's the Pool's</p>
+</div>
+</div>
+<!-- Diagram 2: The Solution -->
+<div class="diagram-card border-green-800 bg-gray-900">
+<div class="diagram-title text-green-400">
+<i class="fas fa-shield-alt mr-2"></i> The Solution: Identity Check
+                    </div>
+<div class="flow-row">
+<div class="conn-line bg-green-500 opacity-20" style="border-bottom: 2px dashed #10B981; background: transparent; height: 0; top: 24px;"></div>
+<!-- Miner -->
+<div class="node">
+<div class="node-icon bg-blue-900 text-blue-300 border border-blue-700">
+<i class="fas fa-hdd"></i>
+</div>
+<span class="node-label">Miner</span>
+<span class="key-badge bg-green-900 text-green-200 border border-green-700">Expects: ID<sub>Pool</sub></span>
+</div>
+<!-- Verification Logic -->
+<div class="node" style="width: 140px;">
+<div class="bg-gray-800 border border-gray-600 rounded p-2 text-center relative z-10">
+<div class="text-xs text-gray-400 mb-1">Handshake Verify</div>
+<div class="text-xs font-mono text-green-400 font-bold">Signed by ID<sub>Pool</sub>?</div>
+</div>
+</div>
+<!-- Pool -->
+<div class="node">
+<div class="node-icon bg-purple-900 text-purple-300 border border-purple-700">
+<i class="fas fa-server"></i>
+</div>
+<span class="node-label">Pool</span>
+<span class="key-badge bg-purple-900 text-purple-200 border border-purple-700">Signs w/ PrivKey</span>
+</div>
+</div>
+<div class="text-center mt-3 flex justify-center items-center gap-2">
+<span class="text-xs text-gray-400 font-mono">Attacker fails to sign</span>
+<i class="fas fa-arrow-right text-gray-600 text-xs"></i>
+<span class="text-xs text-red-400 font-mono border border-red-900 bg-red-900 bg-opacity-20 px-2 rounded">Connection Rejected</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

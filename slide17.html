@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Encrypting Isn’t Enough: The Key Problem</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0B0F19;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B0F19;
+            color: #F3F4F6;
+            overflow: hidden;
+        }
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0B0F19;
+            opacity: 1;
+            z-index: 0;
+        }
+        .grid-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgNDBWMHptNDAgMFYweiIgc3Ryb2tlPSJyZ2JhKDMwLDQxLDU5LDAuNSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==');
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 1.5rem 3rem 1rem 3rem;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+            background-color: rgba(11, 15, 25, 0.95);
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        .main-content {
+            display: flex;
+            flex: 1;
+            position: relative;
+            z-index: 10;
+            padding: 2rem 3rem;
+            gap: 2rem;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        
+        .math-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .equation-card {
+            background-color: #111827;
+            border: 1px solid #374151;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .equation-title {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background-color: #1F2937;
+            padding: 2px 12px;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #9CA3AF;
+            border: 1px solid #4B5563;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .main-formula {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.5rem;
+            color: #F3F4F6;
+            text-align: center;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .component-breakdown {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .operation-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .operation-icon {
+            font-size: 1.5rem;
+        }
+
+        .explanation-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .explanation-item {
+            background-color: rgba(31, 41, 55, 0.5);
+            border-top: 3px solid;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .explanation-header {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            color: #E5E7EB;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .explanation-text {
+            color: #9CA3AF;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin: 0;
+            flex-grow: 1;
+        }
+        
+        .math-symbol {
+            color: #60A5FA;
+            font-weight: bold;
+            margin: 0 0.2rem;
+        }
+        
+        .key-problem-alert {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #FCA5A5;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            font-size: 1.1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+        
+        .xor-symbol {
+            font-size: 1.2rem;
+            vertical-align: middle;
+            color: #F59E0B;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="bg-grid"></div>
+<div class="grid-lines"></div>
+<!-- Header -->
+<div class="header">
+<h1>Encrypting Isn’t Enough: The Key Problem</h1>
+<div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
+<div class="absolute bottom-0 left-12 w-64 h-1 bg-blue-500"></div>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<div class="math-container">
+<!-- Main Equation Block -->
+<div class="equation-card">
+<div class="equation-title">Symmetric Encryption Model</div>
+<div class="main-formula">
+<p class="mb-4">
+                        Encryption: <span class="text-green-400">Enc</span> <span class="math-symbol">=</span> <span class="text-blue-300">Message</span> <span class="xor-symbol">⊕</span> <span class="text-purple-300">RNG</span>(<span class="text-red-300 font-bold">seed</span>)
+                    </p>
+<p>
+                        Decryption: <span class="text-blue-300">Message</span> <span class="math-symbol">=</span> <span class="text-green-400">Enc</span> <span class="xor-symbol">⊕</span> <span class="text-purple-300">RNG</span>(<span class="text-red-300 font-bold">seed</span>)
+                    </p>
+</div>
+<div class="component-breakdown">
+<div class="operation-label text-blue-300">
+<i class="fas fa-file-alt operation-icon"></i>
+<span class="text-sm font-mono">Plaintext</span>
+</div>
+<div class="operation-label text-yellow-500">
+<i class="fas fa-random operation-icon"></i>
+<span class="text-sm font-mono">XOR Operation</span>
+</div>
+<div class="operation-label text-purple-300">
+<i class="fas fa-key operation-icon"></i>
+<span class="text-sm font-mono">Keystream</span>
+</div>
+</div>
+</div>
+<!-- Issues Grid -->
+<div class="explanation-grid">
+<!-- Issue 1: Key Reuse -->
+<div class="explanation-item" style="border-color: #F59E0B;">
+<div class="explanation-header">
+<i class="fas fa-recycle text-yellow-500"></i>
+                        Key Reuse Risks
+                    </div>
+<p class="explanation-text">
+                        If the same code or <span class="font-mono text-red-300 text-sm">seed</span> is reused across connections, patterns emerge. Attackers can perform cryptanalysis to recover the plaintext or the key itself over time.
+                    </p>
+</div>
+<!-- Issue 2: Distribution -->
+<div class="explanation-item" style="border-color: #EF4444;">
+<div class="explanation-header">
+<i class="fas fa-broadcast-tower text-red-500"></i>
+                        The Distribution Paradox
+                    </div>
+<p class="explanation-text">
+                        How do you share the <span class="font-mono text-red-300 text-sm">seed</span>? If sent over the same channel, eavesdroppers capture it immediately, rendering encryption useless.
+                    </p>
+</div>
+<!-- Issue 3: Requirements -->
+<div class="explanation-item" style="border-color: #3B82F6;">
+<div class="explanation-header">
+<i class="fas fa-shield-alt text-blue-500"></i>
+                        The Requirement
+                    </div>
+<p class="explanation-text">
+                        We need a method to generate a <strong>fresh, unique key</strong> for every connection that both parties can derive independently, without ever transmitting the key itself.
+                    </p>
+</div>
+</div>
+<!-- Bottom Alert -->
+<div class="key-problem-alert">
+<i class="fas fa-exclamation-circle text-2xl"></i>
+<p class="m-0 font-medium">Without a secure key exchange mechanism, encryption is just obfuscation.</p>
+</div>
+</div>
+</div>
+</div>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

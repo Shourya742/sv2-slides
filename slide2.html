@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SV1 Bootstrapping: Message Flow</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0B0F19;
+            font-family: 'Inter', sans-serif;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B0F19;
+            color: #F3F4F6;
+            overflow: hidden;
+        }
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(30, 41, 59, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 1.5rem 3rem 1rem 3rem;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+            background-color: rgba(11, 15, 25, 0.9);
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            position: relative;
+            z-index: 10;
+            padding: 1.5rem 3rem;
+            gap: 1rem;
+            overflow-y: hidden;
+        }
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            height: 100%;
+        }
+        .message-block {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            position: relative;
+        }
+        .direction-arrow {
+            width: 40px;
+            display: flex;
+            justify-content: center;
+            padding-top: 1rem;
+        }
+        .code-card {
+            flex: 1;
+            background-color: #111827;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            position: relative;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+        .code-card.miner {
+            border-left: 4px solid #60A5FA; /* Blue for miner */
+        }
+        .code-card.pool {
+            border-left: 4px solid #A78BFA; /* Purple for pool */
+        }
+        .label {
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            background-color: #1F2937;
+            border: 1px solid #4B5563;
+            color: #9CA3AF;
+        }
+        /* Syntax Highlighting */
+        .key { color: #93C5FD; } /* Light Blue */
+        .string { color: #A5B4FC; } /* Light Purple */
+        .number { color: #FCA5A5; } /* Light Red */
+        .boolean { color: #FCD34D; } /* Yellow */
+        .method { color: #6EE7B7; font-weight: bold; } /* Green */
+        
+        .connector-line {
+            position: absolute;
+            left: 20px; /* Center of arrow column */
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #374151;
+            z-index: 0;
+        }
+        
+        .step-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #374151;
+            color: #E5E7EB;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="bg-grid"></div>
+<!-- Header -->
+<div class="header">
+<h1>SV1 Bootstrapping: Message Flow</h1>
+<div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
+<div class="absolute bottom-0 left-12 w-64 h-1 bg-blue-500"></div>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<div class="flow-container relative">
+<!-- Vertical connector line -->
+<div class="connector-line"></div>
+<!-- Step 1: Subscribe -->
+<div class="message-block">
+<div class="direction-arrow z-10 bg-[#0B0F19] h-full pt-4">
+<i class="fas fa-arrow-right text-blue-400"></i>
+</div>
+<div class="code-card miner">
+<div class="label">Step 1: Subscribe</div>
+<p>
+<span class="step-badge">1</span>
+                            {<span class="key">"id"</span>: <span class="number">1</span>, 
+                            <span class="key">"method"</span>: <span class="string method">"mining.subscribe"</span>, 
+                            <span class="key">"params"</span>: [<span class="string">"miner/1.0"</span>]}
+                        </p>
+</div>
+</div>
+<!-- Step 2: Subscribe Response -->
+<div class="message-block">
+<div class="direction-arrow z-10 bg-[#0B0F19] h-full pt-4">
+<i class="fas fa-arrow-left text-purple-400"></i>
+</div>
+<div class="code-card pool">
+<div class="label">Step 2: Subscription Result</div>
+<p>
+<span class="step-badge">2</span>
+                            {<span class="key">"id"</span>: <span class="number">1</span>, 
+                            <span class="key">"result"</span>: [[ [<span class="string">"mining.set_difficulty"</span>, <span class="string">"sub1"</span>], [<span class="string">"mining.notify"</span>, <span class="string">"sub2"</span>] ], <span class="string">"extranonce1"</span>, <span class="number">4</span>], <span class="key">"error"</span>: <span class="boolean">null</span>}
+                        </p>
+</div>
+</div>
+<!-- Step 3: Authorize -->
+<div class="message-block">
+<div class="direction-arrow z-10 bg-[#0B0F19] h-full pt-4">
+<i class="fas fa-arrow-right text-blue-400"></i>
+</div>
+<div class="code-card miner">
+<div class="label">Step 3: Authorize</div>
+<p>
+<span class="step-badge">3</span>
+                            {<span class="key">"id"</span>: <span class="number">2</span>, 
+                            <span class="key">"method"</span>: <span class="string method">"mining.authorize"</span>, 
+                            <span class="key">"params"</span>: [<span class="string">"user.worker"</span>, <span class="string">"password"</span>]}
+                        </p>
+</div>
+</div>
+<!-- Step 4: Notify (Job Push) -->
+<div class="message-block">
+<div class="direction-arrow z-10 bg-[#0B0F19] h-full pt-4">
+<i class="fas fa-arrow-left text-purple-400"></i>
+</div>
+<div class="code-card pool">
+<div class="label">Step 4: New Job</div>
+<p>
+<span class="step-badge">4</span>
+                            {<span class="key">"id"</span>: <span class="boolean">null</span>, 
+                            <span class="key">"method"</span>: <span class="string method">"mining.notify"</span>, 
+                            <span class="key">"params"</span>: [<span class="string">"job_id"</span>, <span class="string">"prevhash"</span>, <span class="string">"coinb1"</span>, <span class="string">"coinb2"</span>, <span class="string">"merkle_branches"</span>, <span class="string">"ver"</span>, <span class="string">"nbits"</span>, <span class="string">"ntime"</span>, <span class="boolean">true</span>]}
+                        </p>
+</div>
+</div>
+<!-- Step 5: Set Difficulty -->
+<div class="message-block">
+<div class="direction-arrow z-10 bg-[#0B0F19] h-full pt-4">
+<i class="fas fa-arrow-left text-purple-400"></i>
+</div>
+<div class="code-card pool">
+<div class="label">Step 5: Adjust Difficulty</div>
+<p>
+<span class="step-badge">5</span>
+                            {<span class="key">"id"</span>: <span class="boolean">null</span>, 
+                            <span class="key">"method"</span>: <span class="string method">"mining.set_difficulty"</span>, 
+                            <span class="key">"params"</span>: [<span class="number">2</span>]}
+                        </p>
+</div>
+</div>
+<!-- Step 6: Submit Share -->
+<div class="message-block">
+<div class="direction-arrow z-10 bg-[#0B0F19] h-full pt-4">
+<i class="fas fa-arrow-right text-blue-400"></i>
+</div>
+<div class="code-card miner">
+<div class="label">Step 6: Submit Share</div>
+<p>
+<span class="step-badge">6</span>
+                            {<span class="key">"id"</span>: <span class="number">4</span>, 
+                            <span class="key">"method"</span>: <span class="string method">"mining.submit"</span>, 
+                            <span class="key">"params"</span>: [<span class="string">"user.worker"</span>, <span class="string">"job_id"</span>, <span class="string">"extranonce2"</span>, <span class="string">"ntime"</span>, <span class="string">"nonce"</span>]}
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>

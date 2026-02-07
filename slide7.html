@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Section Header: Black Hat Asia 2021</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&amp;family=Inter:wght@400;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #0B1120; /* Very Dark Slate */
+            color: #F8FAFC;
+        }
+        .mono-font {
+            font-family: 'Roboto Mono', monospace;
+        }
+        /* SVG Pattern for Grid */
+        .bg-grid {
+            background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23EF4444" fill-opacity="0.08"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+        }
+        
+        .glass-card {
+            background-color: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(239, 68, 68, 0.3); /* Red border for security warning */
+            box-shadow: 0 0 40px rgba(220, 38, 38, 0.1);
+        }
+
+        .glitch-effect {
+            position: relative;
+        }
+        
+        .security-badge {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #EF4444;
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-family: 'Roboto Mono', monospace;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            font-size: 0.8rem;
+        }
+
+        /* Decorative red line */
+        .red-line {
+            height: 4px;
+            background-color: #EF4444;
+            width: 100px;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body class="relative flex flex-col justify-center items-center">
+<!-- Background Elements -->
+<div class="absolute inset-0 z-0 bg-grid opacity-50"></div>
+<!-- Red glow accent (simulated with blurred div) -->
+<div class="absolute top-0 right-0 w-1/2 h-full bg-red-900 opacity-5 filter blur-3xl rounded-full transform translate-x-1/4 pointer-events-none"></div>
+<!-- Main Content Container -->
+<main class="relative z-10 w-full max-w-5xl px-12 flex flex-col items-start">
+<!-- Badge -->
+<div class="mb-8">
+<span class="security-badge">
+<i class="fas fa-exclamation-triangle mr-3"></i> Security Research Case Study
+            </span>
+</div>
+<!-- Title Section -->
+<div class="relative">
+<!-- Decorative Line -->
+<div class="red-line"></div>
+<h2 class="text-2xl text-gray-400 mono-font mb-2 tracking-widest uppercase">
+                Black Hat Asia 2021
+            </h2>
+<h1 class="text-7xl font-black text-white tracking-tight leading-none mb-6">
+                HASHRATE<br/>
+<span class="text-red-500">STEALING</span> ATTACKS
+            </h1>
+<p class="text-xl text-gray-400 max-w-2xl leading-relaxed mt-8 border-l-4 border-gray-700 pl-6 py-2">
+                Demonstrating how <span class="text-white font-bold">plaintext Stratum V1 communication</span> allows active Man-in-the-Middle attackers to silently redirect computational power.
+            </p>
+</div>
+<!-- Visual Elements / Cards below -->
+<div class="mt-16 grid grid-cols-2 gap-8 w-full">
+<!-- Attack 1 -->
+<div class="glass-card p-6 rounded-lg flex items-center space-x-4 transform transition hover:translate-x-2">
+<div class="w-12 h-12 bg-red-900 bg-opacity-20 rounded flex items-center justify-center border border-red-900">
+<i class="fas fa-syringe text-red-500 text-xl"></i>
+</div>
+<div>
+<h3 class="text-white font-bold mono-font text-sm">ATTACK VECTOR #1</h3>
+<p class="text-gray-400 text-sm mt-1">Job Injection via <code class="text-red-400">set_extranonce</code></p>
+</div>
+</div>
+<!-- Attack 2 -->
+<div class="glass-card p-6 rounded-lg flex items-center space-x-4 transform transition hover:translate-x-2">
+<div class="w-12 h-12 bg-red-900 bg-opacity-20 rounded flex items-center justify-center border border-red-900">
+<i class="fas fa-clock text-red-500 text-xl"></i>
+</div>
+<div>
+<h3 class="text-white font-bold mono-font text-sm">ATTACK VECTOR #2</h3>
+<p class="text-gray-400 text-sm mt-1">Time Segment <code class="text-red-400">client.reconnect</code></p>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="absolute bottom-0 w-full h-16 border-t border-gray-800 flex items-center justify-between px-16 bg-gray-900 bg-opacity-80 backdrop-filter backdrop-blur-sm z-20">
+<div class="flex items-center space-x-2 text-gray-500 text-xs mono-font">
+<i class="fas fa-skull-crossbones text-red-900"></i>
+<span>SLIDE 13</span>
+</div>
+<div class="flex items-center space-x-6">
+<div class="flex items-center space-x-2">
+<div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+<span class="text-xs text-red-400 uppercase tracking-wider font-bold">Vulnerability Analysis</span>
+</div>
+</div>
+</footer>
+<script src="slides.js"></script>
+<script src="navigate.js"></script>
+</body>
+</html>
