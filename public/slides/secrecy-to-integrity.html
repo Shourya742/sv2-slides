@@ -49,13 +49,13 @@
         .header {
             position: relative;
             z-index: 10;
-            padding: 1.5rem 3rem 1rem 3rem;
+            padding: 1.25rem 3rem 0.875rem 3rem;
             border-bottom: 1px solid rgba(55, 65, 81, 0.5);
             background-color: rgba(11, 15, 25, 0.95);
         }
         h1 {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.25rem;
             color: white;
             margin: 0;
             letter-spacing: -0.02em;
@@ -65,10 +65,11 @@
             flex: 1;
             position: relative;
             z-index: 10;
-            padding: 2rem 3rem;
+            padding: 1.25rem 3rem 1.25rem 3rem;
             gap: 2rem;
             justify-content: center;
             align-items: flex-start;
+            max-height: calc(720px - 75px);
         }
         
         /* Math Equation Styling */
@@ -76,14 +77,14 @@
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.25rem;
         }
-        
+
         .equation-card {
             background-color: #111827;
             border: 1px solid #374151;
             border-radius: 1rem;
-            padding: 2rem;
+            padding: 1.5rem;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
             position: relative;
         }
@@ -137,14 +138,14 @@
         .explanation-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-top: 1rem;
+            gap: 1rem;
+            margin-top: 0.875rem;
         }
-        
+
         .explanation-item {
             background-color: rgba(31, 41, 55, 0.5);
             border-left: 3px solid #4B5563;
-            padding: 1rem;
+            padding: 0.875rem;
             border-radius: 0 0.5rem 0.5rem 0;
             display: flex;
             flex-direction: column;
@@ -163,8 +164,8 @@
         
         .explanation-text {
             color: #9CA3AF;
-            font-size: 0.95rem;
-            line-height: 1.5;
+            font-size: 0.875rem;
+            line-height: 1.4;
             margin: 0;
         }
         
@@ -181,9 +182,9 @@
             background-color: rgba(239, 68, 68, 0.1);
             border: 1px solid rgba(239, 68, 68, 0.3);
             color: #FCA5A5;
-            padding: 1rem;
+            padding: 0.875rem;
             border-radius: 0.5rem;
-            margin-top: 1rem;
+            margin-top: 0;
         }
 
         .viz-box {

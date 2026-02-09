@@ -42,13 +42,13 @@
         .header {
             position: relative;
             z-index: 10;
-            padding: 1.5rem 3rem 1rem 3rem;
+            padding: 1.25rem 3rem 0.875rem 3rem;
             border-bottom: 1px solid rgba(55, 65, 81, 0.5);
             background-color: rgba(11, 15, 25, 0.9);
         }
         h1 {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.25rem;
             color: white;
             margin: 0;
             letter-spacing: -0.02em;
@@ -58,21 +58,23 @@
             flex: 1;
             position: relative;
             z-index: 10;
-            padding: 2rem 3rem;
-            gap: 2rem;
+            padding: 1.25rem 3rem 1.25rem 3rem;
+            gap: 1.75rem;
+            max-height: calc(720px - 75px);
         }
         .steps-container {
             flex: 1.1;
             display: flex;
             flex-direction: column;
-            gap: 1.25rem;
+            gap: 1rem;
+            overflow-y: auto;
         }
         .step-card {
             display: flex;
             background-color: #111827;
             border: 1px solid #374151;
             border-radius: 0.75rem;
-            padding: 1.25rem;
+            padding: 1rem;
             position: relative;
             transition: all 0.3s ease;
         }
@@ -121,30 +123,31 @@
             background-color: #1F2937;
             border-radius: 1rem;
             border: 1px solid #374151;
-            padding: 2rem;
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
+            min-height: 0;
         }
         .note-box {
             margin-top: auto;
             background-color: rgba(16, 185, 129, 0.1);
             border-left: 4px solid #10B981;
-            padding: 1rem;
+            padding: 0.875rem;
             border-radius: 0 0.5rem 0.5rem 0;
         }
         
         /* Negotiation Visuals */
         .node-box {
             width: 100%;
-            padding: 1rem;
+            padding: 0.875rem;
             background-color: #374151;
             border-radius: 0.5rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.875rem;
             border: 1px solid #4B5563;
         }
         .node-icon {
@@ -164,7 +167,7 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            margin: 1rem 0;
+            margin: 0.875rem 0;
             position: relative;
         }
         .message-box {

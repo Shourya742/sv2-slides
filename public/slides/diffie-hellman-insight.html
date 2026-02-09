@@ -40,13 +40,13 @@
         .header {
             position: relative;
             z-index: 10;
-            padding: 1.5rem 3rem 1rem 3rem;
+            padding: 1.25rem 3rem 0.875rem 3rem;
             border-bottom: 1px solid rgba(55, 65, 81, 0.5);
             background-color: rgba(11, 15, 25, 0.9);
         }
         h1 {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.25rem;
             color: white;
             margin: 0;
             letter-spacing: -0.02em;
@@ -56,21 +56,24 @@
             flex: 1;
             position: relative;
             z-index: 10;
-            padding: 2rem 3rem;
-            gap: 2rem;
+            padding: 1.25rem 3rem 1.5rem 3rem;
+            gap: 1.75rem;
+            overflow: visible;
+            max-height: calc(720px - 80px);
         }
         .steps-container {
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.25rem;
+            overflow-y: auto;
         }
         .step-card {
             display: flex;
             background-color: #111827;
             border: 1px solid #374151;
             border-radius: 0.75rem;
-            padding: 1.25rem;
+            padding: 1rem;
             position: relative;
             transition: all 0.3s ease;
         }
@@ -119,18 +122,19 @@
             background-color: #1F2937;
             border-radius: 1rem;
             border: 1px solid #374151;
-            padding: 2rem;
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
+            min-height: 0;
         }
         .note-box {
             margin-top: auto;
             background-color: rgba(59, 130, 246, 0.1);
             border-left: 4px solid #3B82F6;
-            padding: 1rem;
+            padding: 0.875rem;
             border-radius: 0 0.5rem 0.5rem 0;
         }
         
@@ -139,11 +143,11 @@
             background-color: #111827;
             border: 1px solid #4B5563;
             border-radius: 0.5rem;
-            padding: 1rem;
-            width: 140px;
+            padding: 0.875rem;
+            width: 130px;
             text-align: center;
             position: absolute;
-            top: 20%;
+            top: 18%;
             z-index: 2;
         }
         .party-miner { left: 2rem; }
@@ -173,14 +177,16 @@
         
         .shared-secret-box {
             position: absolute;
-            bottom: 2rem;
+            bottom: 0.75rem;
+            left: 50%;
+            transform: translateX(-50%);
             background-color: #064E3B;
             border: 1px solid #059669;
-            padding: 1rem 2rem;
+            padding: 0.75rem 1.5rem;
             border-radius: 0.5rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.875rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             z-index: 2;
         }
@@ -277,7 +283,7 @@
 <span class="text-purple-300"><i class="fas fa-long-arrow-alt-left"></i> P2</span>
 </div>
 <!-- Calculation Visuals -->
-<div class="absolute bottom-32 w-full flex justify-between px-16">
+<div class="absolute bottom-24 w-full flex justify-between px-16">
 <div class="text-xs text-gray-400 font-mono text-center">
                     Computes:<br/>
 <span class="text-green-400">k1 · P2</span>
@@ -289,10 +295,10 @@
 </div>
 <!-- Shared Secret -->
 <div class="shared-secret-box">
-<div class="text-3xl text-green-200"><i class="fas fa-shield-alt"></i></div>
+<div class="text-2xl text-green-200"><i class="fas fa-shield-alt"></i></div>
 <div>
-<div class="text-green-200 font-bold text-lg">Shared Secret (S)</div>
-<div class="text-green-400 font-mono text-sm">k1·P2 == k2·P1</div>
+<div class="text-green-200 font-bold text-base">Shared Secret (S)</div>
+<div class="text-green-400 font-mono text-xs">k1·P2 == k2·P1</div>
 </div>
 </div>
 </div>
