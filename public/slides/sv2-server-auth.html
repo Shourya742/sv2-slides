@@ -294,11 +294,24 @@
 </div>
 </div>
 <!-- MITM Blocked Visual -->
-<div class="absolute -right-4 top-1/2 transform translate-x-1/2 bg-red-900 border border-red-500 rounded p-3 shadow-xl w-32 text-center opacity-90">
-<div class="text-red-200 text-xs font-bold mb-1">MITM Attacker</div>
-<i class="fas fa-user-secret text-red-400 text-2xl mb-1"></i>
-<div class="text-red-300 text-[10px] leading-tight">Lacks Private Key<br/>Handshake Fails</div>
-<div class="absolute top-1/2 -left-2 w-2 h-2 bg-red-900 border-l border-b border-red-500 transform rotate-45"></div>
+<div class="mt-6 pt-4 border-t border-gray-700">
+<div class="flex items-center justify-between gap-4">
+<div class="flex-1">
+<div class="text-gray-400 text-xs font-mono mb-2 uppercase tracking-wider">Security Layer</div>
+<div class="flex items-center gap-2">
+<i class="fas fa-shield-alt text-green-400 text-lg"></i>
+<span class="text-green-300 text-sm font-semibold">MITM Attacks Blocked</span>
+</div>
+</div>
+<div class="bg-red-900/30 border-2 border-red-500/50 rounded-lg p-3 text-center relative">
+<div class="absolute -top-2 -right-2 bg-red-500 rounded-full w-5 h-5 flex items-center justify-center">
+<i class="fas fa-times text-white text-xs"></i>
+</div>
+<i class="fas fa-user-secret text-red-400 text-3xl mb-1"></i>
+<div class="text-red-300 text-xs font-bold">MITM Attacker</div>
+<div class="text-red-400 text-[10px] mt-1">Lacks Private Key</div>
+</div>
+</div>
 </div>
 </div>
 </div>
