@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
@@ -7,267 +6,260 @@
 <title>Conclusion</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
 <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #0B0F19;
-            font-family: 'Inter', sans-serif;
-        }
-        .slide-container {
-            width: 1280px;
-            height: 720px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            background-color: #0B0F19;
-            color: #F3F4F6;
-            overflow: hidden;
-        }
-        .bg-pattern {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231E293B' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            z-index: 0;
-            opacity: 0.3;
-        }
-        .header {
-            position: relative;
-            z-index: 10;
-            padding: 1.5rem 3rem 1rem 3rem;
-            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
-            background-color: rgba(11, 15, 25, 0.95);
-        }
-        h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem;
-            color: white;
-            margin: 0;
-            letter-spacing: -0.02em;
-        }
-        .main-content {
-            display: flex;
-            flex: 1;
-            position: relative;
-            z-index: 10;
-            padding: 2.5rem 4rem;
-            flex-direction: column;
-            justify-content: center;
-        }
+    :root {
+        --cyan-400: #22d3ee;
+        --cyan-500: #06b6d4;
+        --cyan-600: #0891b2;
+        --blue-600: #2563eb;
+    }
+    body { margin:0; padding:0; overflow:hidden; background-color:#000000; font-family:'Inter',sans-serif; }
 
-        .section-label {
-            text-align: center;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 0.875rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: #60A5FA;
-            margin-bottom: 2.5rem;
-            font-weight: 600;
-        }
+    /* ── Gradient orbs ── */
+    .hero-gradient-1 {
+        position:absolute; top:-20%; left:25%;
+        width:600px; height:600px; border-radius:9999px;
+        background:var(--cyan-500);
+        filter:blur(120px); mix-blend-mode:screen; opacity:0.45; z-index:0;
+        animation:pulse-orb 4s ease-in-out infinite;
+    }
+    .hero-gradient-2 {
+        position:absolute; top:-10%; right:25%;
+        width:500px; height:500px; border-radius:9999px;
+        background:var(--blue-600);
+        filter:blur(120px); mix-blend-mode:screen; opacity:0.4; z-index:0;
+    }
+    .hero-gradient-3 {
+        position:absolute; top:10%; left:50%; transform:translateX(-50%);
+        width:800px; height:400px; border-radius:9999px;
+        background:var(--cyan-400);
+        filter:blur(100px); mix-blend-mode:screen; opacity:0.25; z-index:0;
+    }
+    @keyframes pulse-orb {
+        0%,100%{ opacity:0.45; transform:scale(1); }
+        50%    { opacity:0.55; transform:scale(1.04); }
+    }
 
-        .takeaways-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            margin-bottom: 2.5rem;
-        }
+    .bg-grid {
+        position:absolute; inset:0; z-index:1;
+        background-image:
+            linear-gradient(rgba(6,182,212,0.07) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(6,182,212,0.07) 1px, transparent 1px);
+        background-size:30px 30px; opacity:0.5;
+    }
 
-        .takeaway-box {
-            background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(31, 41, 55, 0.6) 100%);
-            border: 1px solid #374151;
-            border-radius: 1rem;
-            padding: 2rem 1.5rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
+    .slide-container {
+        width:1280px; height:720px;
+        position:relative; display:flex; flex-direction:column;
+        color:#F8FAFC; overflow:hidden;
+    }
 
-        .takeaway-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
+    .mono-font { font-family:'JetBrains Mono',monospace; }
 
-        .takeaway-box:hover::before {
-            opacity: 1;
-        }
+    .section-label {
+        text-align:center;
+        font-family:'JetBrains Mono',monospace;
+        font-size:0.875rem;
+        text-transform:uppercase;
+        letter-spacing:0.15em;
+        color:#22d3ee;
+        margin-bottom:2rem;
+        font-weight:600;
+    }
 
-        .takeaway-box:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-color);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
-        }
+    .takeaways-grid {
+        display:grid;
+        grid-template-columns:repeat(3, 1fr);
+        gap:1.75rem;
+        margin-bottom:2rem;
+    }
 
-        .takeaway-box.red {
-            --accent-color: #EF4444;
-        }
+    .takeaway-box {
+        background:rgba(0,0,0,0.45);
+        backdrop-filter:blur(10px);
+        border-radius:1rem;
+        padding:1.75rem 1.5rem;
+        text-align:center;
+        position:relative;
+        overflow:hidden;
+        transition:all 0.3s ease;
+        border:1px solid rgba(6,182,212,0.12);
+    }
 
-        .takeaway-box.green {
-            --accent-color: #10B981;
-        }
+    .takeaway-box::before {
+        content:'';
+        position:absolute;
+        top:0; left:0; right:0;
+        height:3px;
+        background:linear-gradient(90deg, transparent, var(--accent-color), transparent);
+        opacity:0;
+        transition:opacity 0.3s ease;
+    }
 
-        .takeaway-box.blue {
-            --accent-color: #3B82F6;
-        }
+    .takeaway-box:hover::before { opacity:1; }
 
-        .takeaway-icon-wrapper {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 1.5rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
+    .takeaway-box:hover {
+        transform:translateY(-5px);
+        border-color:var(--accent-color);
+        box-shadow:0 20px 40px -10px rgba(0,0,0,0.5);
+    }
 
-        .takeaway-box.red .takeaway-icon-wrapper {
-            background: radial-gradient(circle, rgba(239, 68, 68, 0.2) 0%, rgba(239, 68, 68, 0.05) 70%, transparent 100%);
-            border: 2px solid rgba(239, 68, 68, 0.3);
-        }
+    .takeaway-box.red   { --accent-color:#EF4444; }
+    .takeaway-box.cyan  { --accent-color:#22d3ee; }
+    .takeaway-box.light-cyan { --accent-color:#A5F3FC; }
 
-        .takeaway-box.green .takeaway-icon-wrapper {
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.05) 70%, transparent 100%);
-            border: 2px solid rgba(16, 185, 129, 0.3);
-        }
+    .takeaway-icon-wrapper {
+        width:80px; height:80px;
+        margin:0 auto 1.25rem;
+        border-radius:50%;
+        display:flex; align-items:center; justify-content:center;
+        position:relative;
+    }
 
-        .takeaway-box.blue .takeaway-icon-wrapper {
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.05) 70%, transparent 100%);
-            border: 2px solid rgba(59, 130, 246, 0.3);
-        }
+    .takeaway-box.red .takeaway-icon-wrapper {
+        background:radial-gradient(circle, rgba(239,68,68,0.2) 0%, rgba(239,68,68,0.05) 70%, transparent 100%);
+        border:2px solid rgba(239,68,68,0.3);
+    }
 
-        .takeaway-icon {
-            font-size: 2.5rem;
-        }
+    .takeaway-box.cyan .takeaway-icon-wrapper {
+        background:radial-gradient(circle, rgba(6,182,212,0.2) 0%, rgba(6,182,212,0.05) 70%, transparent 100%);
+        border:2px solid rgba(6,182,212,0.3);
+    }
 
-        .takeaway-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.375rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            line-height: 1.3;
-        }
+    .takeaway-box.light-cyan .takeaway-icon-wrapper {
+        background:radial-gradient(circle, rgba(165,243,252,0.15) 0%, rgba(6,182,212,0.05) 70%, transparent 100%);
+        border:2px solid rgba(165,243,252,0.3);
+    }
 
-        .takeaway-box.red .takeaway-title {
-            color: #FCA5A5;
-        }
+    .takeaway-icon { font-size:2.5rem; }
 
-        .takeaway-box.green .takeaway-title {
-            color: #6EE7B7;
-        }
+    .takeaway-title {
+        font-family:'Space Grotesk',sans-serif;
+        font-size:1.375rem; font-weight:700;
+        margin-bottom:0.875rem; line-height:1.3;
+    }
 
-        .takeaway-box.blue .takeaway-title {
-            color: #93C5FD;
-        }
+    .takeaway-box.red        .takeaway-title { color:#FCA5A5; }
+    .takeaway-box.cyan       .takeaway-title { color:#22d3ee; }
+    .takeaway-box.light-cyan .takeaway-title { color:#A5F3FC; }
 
-        .takeaway-text {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: #D1D5DB;
-        }
+    .takeaway-text {
+        font-size:0.97rem; line-height:1.6;
+        color:rgba(209,213,219,0.85);
+    }
 
-        .closing-section {
-            text-align: center;
-            padding: 2rem;
-            background: linear-gradient(135deg, rgba(31, 41, 55, 0.4) 0%, rgba(17, 24, 39, 0.6) 100%);
-            border-radius: 1rem;
-            border: 1px solid #374151;
-        }
+    .closing-section {
+        text-align:center;
+        padding:1.75rem 2rem;
+        background:rgba(0,0,0,0.45);
+        backdrop-filter:blur(10px);
+        border-radius:1rem;
+        border:1px solid rgba(6,182,212,0.2);
+    }
 
-        .thank-you-text {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #60A5FA 0%, #A78BFA 50%, #F472B6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+    .thank-you-text {
+        font-family:'Space Grotesk',sans-serif;
+        font-size:2.5rem; font-weight:700;
+        margin-bottom:0.5rem;
+        background:linear-gradient(135deg, #22d3ee 0%, #67E8F9 50%, #A5F3FC 100%);
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
+        background-clip:text;
+    }
 
-        .questions-text {
-            font-size: 1.25rem;
-            color: #9CA3AF;
-            font-weight: 500;
-        }
-    </style>
+    .questions-text {
+        font-size:1.25rem;
+        color:rgba(148,163,184,0.8);
+        font-weight:500;
+        font-family:'JetBrains Mono',monospace;
+    }
+</style>
 </head>
 <body>
+<!-- Gradient orbs -->
+<div class="hero-gradient-1"></div>
+<div class="hero-gradient-2"></div>
+<div class="hero-gradient-3"></div>
+<div class="bg-grid"></div>
+
 <div class="slide-container">
-<!-- Background -->
-<div class="bg-pattern"></div>
+
 <!-- Header -->
-<div class="header">
-<h1>Conclusion</h1>
-<div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
-<div class="absolute bottom-0 left-12 w-64 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+<div class="relative z-10 px-12 pt-7 pb-3 flex items-end justify-between"
+     style="border-bottom:1px solid rgba(6,182,212,0.2); background:rgba(0,0,0,0.5);">
+    <div>
+        <div class="flex items-center space-x-3 mb-2">
+            <span class="px-2 py-1 text-xs font-bold rounded mono-font"
+                  style="background:rgba(6,182,212,0.12); color:#22d3ee; border:1px solid rgba(6,182,212,0.35);">
+                SV2
+            </span>
+            <span class="text-xs mono-font" style="color:rgba(6,182,212,0.5);">// CONCLUSION</span>
+        </div>
+        <h1 class="text-3xl font-black tracking-tight text-white uppercase"
+            style="font-family:'Space Grotesk',sans-serif; letter-spacing:-0.02em;">
+            Conclusion: <span style="color:#22d3ee;">Key Takeaways</span>
+        </h1>
+    </div>
+    <div class="text-right">
+        <p class="text-sm mono-font" style="color:rgba(148,163,184,0.7);">
+            SV1 vs SV2 · Noise Protocol · Secure Mining
+        </p>
+    </div>
 </div>
+
 <!-- Main Content -->
-<div class="main-content">
-<div class="section-label">
-<i class="fas fa-lightbulb mr-2"></i>Key Takeaways
+<div class="relative z-10 flex-1 px-12 py-6 flex flex-col justify-center overflow-hidden" style="min-height:0;">
+
+    <div class="section-label">
+        <i class="fas fa-lightbulb mr-2"></i>Key Takeaways
+    </div>
+
+    <div class="takeaways-grid">
+
+        <!-- Problem -->
+        <div class="takeaway-box red">
+            <div class="takeaway-icon-wrapper">
+                <i class="fas fa-exclamation-triangle takeaway-icon" style="color:#F87171;"></i>
+            </div>
+            <div class="takeaway-title">The Vulnerability</div>
+            <p class="takeaway-text">
+                SV1's plaintext protocol enables hashrate theft through MITM attacks, job injection, and time-segment exploits.
+            </p>
         </div>
 
-<div class="takeaways-grid">
-<!-- Problem -->
-<div class="takeaway-box red">
-<div class="takeaway-icon-wrapper">
-<i class="fas fa-exclamation-triangle takeaway-icon text-red-400"></i>
-</div>
-<div class="takeaway-title">
-                    The Vulnerability
-                </div>
-<p class="takeaway-text">
-                    SV1's plaintext protocol enables hashrate theft through MITM attacks, job injection, and time-segment exploits.
-                </p>
+        <!-- Solution -->
+        <div class="takeaway-box cyan">
+            <div class="takeaway-icon-wrapper">
+                <i class="fas fa-shield-alt takeaway-icon" style="color:#22d3ee;"></i>
+            </div>
+            <div class="takeaway-title">The Solution</div>
+            <p class="takeaway-text">
+                SV2 with Noise Protocol provides encryption, authentication, and integrity—blocking all known attack vectors.
+            </p>
+        </div>
+
+        <!-- Impact -->
+        <div class="takeaway-box light-cyan">
+            <div class="takeaway-icon-wrapper">
+                <i class="fas fa-lock takeaway-icon" style="color:#A5F3FC;"></i>
+            </div>
+            <div class="takeaway-title">The Impact</div>
+            <p class="takeaway-text">
+                Miners gain verifiable security while maintaining decentralization through job negotiation.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Closing -->
+    <div class="closing-section">
+        <div class="thank-you-text">Thank You</div>
+        <p class="questions-text">Questions?</p>
+    </div>
+
 </div>
 
-<!-- Solution -->
-<div class="takeaway-box green">
-<div class="takeaway-icon-wrapper">
-<i class="fas fa-shield-alt takeaway-icon text-green-400"></i>
-</div>
-<div class="takeaway-title">
-                    The Solution
-                </div>
-<p class="takeaway-text">
-                    SV2 with Noise Protocol provides encryption, authentication, and integrity—blocking all known attack vectors.
-                </p>
-</div>
-
-<!-- Impact -->
-<div class="takeaway-box blue">
-<div class="takeaway-icon-wrapper">
-<i class="fas fa-lock takeaway-icon text-blue-400"></i>
-</div>
-<div class="takeaway-title">
-                    The Impact
-                </div>
-<p class="takeaway-text">
-                    Miners gain verifiable security while maintaining decentralization through job negotiation.
-                </p>
-</div>
-</div>
-
-<!-- Closing -->
-<div class="closing-section">
-<div class="thank-you-text">Thank You</div>
-<p class="questions-text">Questions?</p>
-</div>
-</div>
 </div>
 <script src="slides.js"></script>
 <script src="navigate.js"></script>

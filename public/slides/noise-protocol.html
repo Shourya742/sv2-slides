@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
@@ -7,331 +6,326 @@
 <title>Noise Protocol: Putting It Together</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
 <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #0B0F19;
-            font-family: 'Inter', sans-serif;
-        }
-        .slide-container {
-            width: 1280px;
-            height: 720px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            background-color: #0B0F19;
-            color: #F3F4F6;
-            overflow: hidden;
-        }
-        /* Grid background using solid colors to simulate grid without gradients */
-        .bg-grid {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(30, 41, 59, 0.5) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
-            background-size: 40px 40px;
-            opacity: 0.15;
-            z-index: 0;
-        }
-        .header {
-            position: relative;
-            z-index: 10;
-            padding: 2rem 3rem 1rem 3rem;
-            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
-            background-color: rgba(11, 15, 25, 0.9);
-        }
-        .main-content {
-            display: flex;
-            flex: 1;
-            position: relative;
-            z-index: 10;
-            padding: 2rem 3rem;
-            gap: 3rem;
-        }
-        .diagram-col {
-            flex: 1;
-            background-color: rgba(17, 24, 39, 0.6);
-            border-radius: 1rem;
-            border: 1px solid rgba(55, 65, 81, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .text-col {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 3rem;
-            color: white;
-            margin: 0;
-            letter-spacing: -0.02em;
-        }
-        h2 {
-            font-family: 'Space Grotesk', sans-serif;
-            color: #34D399; /* Green for secure topic */
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
-        }
-        .mono-text {
-            font-family: 'Roboto Mono', monospace;
-        }
-        .bullet-point {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 1.5rem;
-            font-size: 1.25rem;
-            line-height: 1.6;
-            color: #D1D5DB;
-        }
-        .bullet-icon {
-            color: #34D399; /* Green for secure */
-            margin-right: 1rem;
-            margin-top: 0.25rem;
-            font-size: 1.1rem;
-        }
-        .code-snippet {
-            background-color: #1F2937;
-            padding: 0.2rem 0.5rem;
-            border-radius: 0.375rem;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 0.9em;
-            color: #A7F3D0;
-            border: 1px solid #065F46;
-        }
-        /* Network Diagram Elements */
-        .node {
-            width: 110px;
-            height: 110px;
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            z-index: 2;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
-        }
-        .miner-node {
-            background-color: #064E3B; /* Dark Green */
-            border: 2px solid #34D399;
-            left: 80px;
-        }
-        .pool-node {
-            background-color: #064E3B; /* Dark Green */
-            border: 2px solid #34D399;
-            right: 80px;
-        }
-        .connection-wrapper {
-            position: absolute;
-            top: 50%;
-            left: 190px;
-            right: 190px;
-            height: 60px;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1;
-        }
-        .connection-pipe {
-            width: 100%;
-            height: 12px;
-            background-color: #065F46;
-            border-radius: 6px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 15px rgba(52, 211, 153, 0.2);
-        }
-        .connection-flow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 50%;
-            height: 100%;
-            background-color: #34D399;
-            opacity: 0.3;
-            animation: flow 2s infinite linear;
-        }
-        @keyframes flow {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(200%); }
-        }
-        .lock-shield {
-            width: 60px;
-            height: 60px;
-            background-color: #111827;
-            border: 2px solid #34D399;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #34D399;
-            font-size: 1.5rem;
-            position: absolute;
-            z-index: 5;
-            box-shadow: 0 0 20px rgba(52, 211, 153, 0.3);
-        }
-        .handshake-icon {
-            position: absolute;
-            top: -40px;
-            font-size: 1.5rem;
-            color: #A78BFA;
-            animation: bounce 2s infinite;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-        .protocol-label {
-            position: absolute;
-            bottom: -35px;
-            background-color: #111827;
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 0.9rem;
-            color: #34D399;
-            border: 1px solid #059669;
-            z-index: 2;
-        }
-        .key-exchange-line {
-            position: absolute;
-            top: 30%;
-            left: 200px;
-            right: 200px;
-            height: 1px;
-            border-top: 2px dashed #A78BFA;
-            z-index: 0;
-        }
-        .key-icon {
-            font-size: 0.8rem;
-            color: #FCD34D;
-            position: absolute;
-        }
-        .label-pill {
-            background-color: rgba(6, 78, 59, 0.8);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            color: #A7F3D0;
-            margin-top: 4px;
-            border: 1px solid #059669;
-        }
-    </style>
+    :root {
+        --cyan-400: #22d3ee;
+        --cyan-500: #06b6d4;
+        --cyan-600: #0891b2;
+        --blue-600: #2563eb;
+    }
+    body { margin:0; padding:0; overflow:hidden; background-color:#000000; font-family:'Inter',sans-serif; }
+
+    /* ── Gradient orbs ── */
+    .hero-gradient-1 {
+        position:absolute; top:-20%; left:25%;
+        width:600px; height:600px; border-radius:9999px;
+        background:var(--cyan-500);
+        filter:blur(120px); mix-blend-mode:screen; opacity:0.45; z-index:0;
+        animation:pulse-orb 4s ease-in-out infinite;
+    }
+    .hero-gradient-2 {
+        position:absolute; top:-10%; right:25%;
+        width:500px; height:500px; border-radius:9999px;
+        background:var(--blue-600);
+        filter:blur(120px); mix-blend-mode:screen; opacity:0.4; z-index:0;
+    }
+    .hero-gradient-3 {
+        position:absolute; top:10%; left:50%; transform:translateX(-50%);
+        width:800px; height:400px; border-radius:9999px;
+        background:var(--cyan-400);
+        filter:blur(100px); mix-blend-mode:screen; opacity:0.25; z-index:0;
+    }
+    @keyframes pulse-orb {
+        0%,100%{ opacity:0.45; transform:scale(1); }
+        50%    { opacity:0.55; transform:scale(1.04); }
+    }
+
+    .bg-grid {
+        position:absolute; inset:0; z-index:1;
+        background-image:
+            linear-gradient(rgba(6,182,212,0.07) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(6,182,212,0.07) 1px, transparent 1px);
+        background-size:30px 30px; opacity:0.5;
+    }
+
+    .slide-container {
+        width:1280px; height:720px;
+        position:relative; display:flex; flex-direction:column;
+        color:#F8FAFC; overflow:hidden;
+    }
+
+    .mono-font { font-family:'JetBrains Mono',monospace; }
+
+    /* Diagram column */
+    .diagram-col {
+        flex:1;
+        background:rgba(0,0,0,0.45);
+        backdrop-filter:blur(10px);
+        border-radius:1rem;
+        border:1px solid rgba(6,182,212,0.18);
+        display:flex; justify-content:center; align-items:center;
+        position:relative; overflow:hidden;
+    }
+
+    /* Text column */
+    .text-col {
+        flex:1;
+        display:flex; flex-direction:column; justify-content:center;
+    }
+
+    /* Bullet points */
+    .bullet-point {
+        display:flex; align-items:flex-start;
+        margin-bottom:1.35rem;
+        font-size:1rem; line-height:1.5;
+        color:rgba(209,213,219,0.9);
+    }
+    .bullet-icon {
+        color:#22d3ee;
+        margin-right:0.9rem; margin-top:0.25rem;
+        font-size:1rem; width:22px; text-align:center; flex-shrink:0;
+    }
+
+    .code-snippet {
+        background:rgba(14,79,95,0.4);
+        padding:1px 6px; border-radius:4px;
+        font-family:'JetBrains Mono',monospace;
+        font-size:0.88em;
+        color:#A5F3FC;
+        border:1px solid rgba(6,182,212,0.4);
+    }
+
+    /* Network Diagram */
+    .node {
+        width:105px; height:105px; border-radius:14px;
+        display:flex; flex-direction:column; justify-content:center; align-items:center;
+        position:absolute; z-index:2;
+        box-shadow:0 10px 15px -3px rgba(0,0,0,0.5);
+        background:rgba(14,79,95,0.35);
+        border:2px solid #22d3ee;
+        transition:all 0.3s ease;
+    }
+    .miner-node { left:70px; top:50%; transform:translateY(-50%); }
+    .pool-node  { right:70px; top:50%; transform:translateY(-50%); }
+
+    .connection-wrapper {
+        position:absolute;
+        top:50%; left:175px; right:175px;
+        height:60px;
+        transform:translateY(-50%);
+        display:flex; flex-direction:column;
+        justify-content:center; align-items:center;
+        z-index:1;
+    }
+
+    .connection-pipe {
+        width:100%; height:10px;
+        background:rgba(14,79,95,0.5);
+        border-radius:5px; position:relative; overflow:hidden;
+        box-shadow:0 0 15px rgba(6,182,212,0.2);
+    }
+    .connection-flow {
+        position:absolute; top:0; left:0;
+        width:50%; height:100%;
+        background:#22d3ee; opacity:0.35;
+        animation:flow 2s infinite linear;
+    }
+    @keyframes flow {
+        0%  { transform:translateX(-100%); }
+        100%{ transform:translateX(200%); }
+    }
+
+    .lock-shield {
+        width:56px; height:56px;
+        background:rgba(0,0,0,0.7);
+        border:2px solid #22d3ee;
+        border-radius:50%;
+        display:flex; justify-content:center; align-items:center;
+        color:#22d3ee; font-size:1.4rem;
+        position:absolute; z-index:5;
+        box-shadow:0 0 20px rgba(6,182,212,0.3);
+    }
+
+    .handshake-icon {
+        position:absolute; top:-36px;
+        font-size:1.4rem; color:#22d3ee;
+        animation:bounce 2s infinite;
+    }
+    @keyframes bounce {
+        0%,100%{ transform:translateY(0); }
+        50%    { transform:translateY(-5px); }
+    }
+
+    .protocol-label {
+        position:absolute; bottom:-32px;
+        background:rgba(0,0,0,0.8);
+        padding:3px 12px; border-radius:4px;
+        font-family:'JetBrains Mono',monospace;
+        font-size:0.8rem; color:#22d3ee;
+        border:1px solid rgba(6,182,212,0.35); z-index:2;
+    }
+
+    .key-exchange-line {
+        position:absolute; top:30%;
+        left:175px; right:175px;
+        height:1px;
+        border-top:2px dashed rgba(6,182,212,0.25); z-index:0;
+    }
+
+    .key-icon { font-size:0.8rem; color:#FCD34D; position:absolute; }
+
+    .label-pill {
+        background:rgba(14,79,95,0.5);
+        padding:2px 8px; border-radius:4px;
+        font-size:0.68rem; color:#A5F3FC;
+        margin-top:4px;
+        border:1px solid rgba(6,182,212,0.35);
+        font-family:'JetBrains Mono',monospace;
+    }
+</style>
 </head>
 <body>
-<div class="slide-container">
-<!-- Background Elements -->
+<!-- Gradient orbs -->
+<div class="hero-gradient-1"></div>
+<div class="hero-gradient-2"></div>
+<div class="hero-gradient-3"></div>
 <div class="bg-grid"></div>
+
+<div class="slide-container">
+
 <!-- Header -->
-<div class="header">
-<h1>Noise Protocol: Putting It Together</h1>
-<div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
-<div class="absolute bottom-0 left-12 w-64 h-1 bg-green-500"></div>
+<div class="relative z-10 px-12 pt-7 pb-3 flex items-end justify-between"
+     style="border-bottom:1px solid rgba(6,182,212,0.2); background:rgba(0,0,0,0.5);">
+    <div>
+        <div class="flex items-center space-x-3 mb-2">
+            <span class="px-2 py-1 text-xs font-bold rounded mono-font"
+                  style="background:rgba(6,182,212,0.12); color:#22d3ee; border:1px solid rgba(6,182,212,0.35);">
+                CRYPTO
+            </span>
+            <span class="text-xs mono-font" style="color:rgba(6,182,212,0.5);">// NOISE PROTOCOL</span>
+        </div>
+        <h1 class="text-3xl font-black tracking-tight text-white uppercase"
+            style="font-family:'Space Grotesk',sans-serif; letter-spacing:-0.02em;">
+            Noise Protocol: <span style="color:#22d3ee;">Putting It Together</span>
+        </h1>
+    </div>
+    <div class="text-right">
+        <p class="text-sm mono-font" style="color:rgba(148,163,184,0.7);">
+            DH handshake · AEAD transport · Forward secrecy
+        </p>
+    </div>
 </div>
+
 <!-- Main Content -->
-<div class="main-content">
-<!-- Left Column: Conceptual Diagram -->
-<div class="diagram-col">
-<!-- Key Exchange Visual (Background) -->
-<div class="key-exchange-line"></div>
-<div class="absolute top-[26%] left-[45%] text-purple-400 font-mono text-xs bg-gray-900 px-2 rounded">Diffie-Hellman</div>
-<!-- Miner Node -->
-<div class="node miner-node">
-<div class="relative">
-<i class="fas fa-microchip text-3xl text-green-300 mb-2"></i>
-<i class="fas fa-key key-icon" style="bottom: -5px; right: -5px;"></i>
+<div class="relative z-10 flex-1 px-12 py-5 flex gap-8 overflow-hidden" style="min-height:0;">
+
+    <!-- Left Column: Conceptual Diagram -->
+    <div class="diagram-col">
+
+        <!-- Key Exchange Visual (Background) -->
+        <div class="key-exchange-line"></div>
+        <div class="absolute mono-font text-xs px-2 rounded"
+             style="top:26%; left:43%; color:#A5F3FC; background:rgba(0,0,0,0.65); border:1px solid rgba(6,182,212,0.2);">
+            Diffie-Hellman
+        </div>
+
+        <!-- Miner Node -->
+        <div class="node miner-node">
+            <div class="relative">
+                <i class="fas fa-microchip text-3xl mb-2" style="color:#22d3ee;"></i>
+                <i class="fas fa-key key-icon" style="bottom:-5px; right:-5px;"></i>
+            </div>
+            <span class="text-xs font-bold" style="color:rgba(203,213,225,0.9); font-family:'JetBrains Mono',monospace;">INITIATOR</span>
+            <div class="label-pill">Ephemeral Key</div>
+        </div>
+
+        <!-- Pool Node -->
+        <div class="node pool-node">
+            <div class="relative">
+                <i class="fas fa-server text-3xl mb-2" style="color:#22d3ee;"></i>
+                <i class="fas fa-key key-icon" style="bottom:-5px; right:-5px;"></i>
+            </div>
+            <span class="text-xs font-bold" style="color:rgba(203,213,225,0.9); font-family:'JetBrains Mono',monospace;">RESPONDER</span>
+            <div class="label-pill">Static Identity</div>
+        </div>
+
+        <!-- Connection Pipe -->
+        <div class="connection-wrapper">
+            <div class="connection-pipe">
+                <div class="connection-flow"></div>
+            </div>
+            <!-- Central Lock -->
+            <div class="lock-shield">
+                <i class="fas fa-shield-halved"></i>
+            </div>
+            <!-- Labels -->
+            <div class="handshake-icon">
+                <i class="fas fa-handshake"></i>
+            </div>
+            <div class="protocol-label">AEAD ENCRYPTED CHANNEL</div>
+        </div>
+
+        <!-- Secure Badge -->
+        <div class="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex items-center gap-2 text-sm font-bold px-4 py-2 rounded-full"
+             style="color:#22d3ee; background:rgba(14,79,95,0.3); border:1px solid rgba(6,182,212,0.4);">
+            <i class="fas fa-lock"></i>
+            AUTHENTICATED &amp; SECRET
+        </div>
+    </div>
+
+    <!-- Right Column: Bullet Points -->
+    <div class="text-col">
+
+        <h2 class="mb-5" style="font-family:'Space Grotesk',sans-serif; font-size:1.6rem; font-weight:700; color:#22d3ee;">
+            The Security Recipe
+        </h2>
+
+        <div class="bullet-point">
+            <i class="fas fa-layer-group bullet-icon"></i>
+            <div>
+                <p class="font-bold" style="color:#F8FAFC;">Noise Patterns</p>
+                <p style="color:rgba(148,163,184,0.85); font-size:0.92rem; margin-top:0.25rem;">
+                    Combines <span style="color:#22d3ee; font-weight:700;">Diffie-Hellman (DH)</span> handshake for key agreement with <span style="color:#A5F3FC; font-weight:700;">AEAD</span> for secure message transport.
+                </p>
+            </div>
+        </div>
+
+        <div class="bullet-point">
+            <i class="fas fa-id-badge bullet-icon"></i>
+            <div>
+                <p class="font-bold" style="color:#F8FAFC;">Identity Binding</p>
+                <p style="color:rgba(148,163,184,0.85); font-size:0.92rem; margin-top:0.25rem;">
+                    Binds ephemeral session keys to static <span class="code-snippet">Identity Keys</span>. You cryptographically prove <em>who</em> you are while agreeing on a temporary secret.
+                </p>
+            </div>
+        </div>
+
+        <div class="bullet-point">
+            <i class="fas fa-history bullet-icon"></i>
+            <div>
+                <p class="font-bold" style="color:#F8FAFC;">Critical Properties</p>
+                <p style="color:rgba(148,163,184,0.85); font-size:0.92rem; margin-top:0.25rem;">
+                    <strong style="color:#F8FAFC;">Forward Secrecy:</strong> Compromise of long-term keys doesn't decrypt past sessions.<br/>
+                    <strong style="color:#F8FAFC;">Replay Protection:</strong> Prevents attackers from resending old valid messages.
+                </p>
+            </div>
+        </div>
+
+        <div class="bullet-point">
+            <i class="fas fa-check-circle bullet-icon"></i>
+            <div>
+                <p class="font-bold" style="color:#F8FAFC;">The Outcome</p>
+                <p style="color:rgba(148,163,184,0.85); font-size:0.92rem; margin-top:0.25rem;">
+                    A fully encrypted, authenticated, identity-verified tunnel ready for the Application Layer (Stratum V2 messages).
+                </p>
+            </div>
+        </div>
+
+    </div>
+
 </div>
-<span class="text-xs font-bold text-gray-200 mt-1">INITIATOR</span>
-<div class="label-pill">Ephemeral Key</div>
-</div>
-<!-- Pool Node -->
-<div class="node pool-node">
-<div class="relative">
-<i class="fas fa-server text-3xl text-green-300 mb-2"></i>
-<i class="fas fa-key key-icon" style="bottom: -5px; right: -5px;"></i>
-</div>
-<span class="text-xs font-bold text-gray-200 mt-1">RESPONDER</span>
-<div class="label-pill">Static Identity</div>
-</div>
-<!-- Connection Pipe -->
-<div class="connection-wrapper">
-<div class="connection-pipe">
-<div class="connection-flow"></div>
-</div>
-<!-- Central Lock -->
-<div class="lock-shield">
-<i class="fas fa-shield-halved"></i>
-</div>
-<!-- Labels -->
-<div class="handshake-icon">
-<i class="fas fa-handshake"></i>
-</div>
-<div class="protocol-label">AEAD ENCRYPTED CHANNEL</div>
-</div>
-<!-- Secure Badge -->
-<div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-2 text-green-400 text-sm font-bold bg-green-900 bg-opacity-30 px-4 py-2 rounded-full border border-green-800">
-<i class="fas fa-lock"></i>
-                    AUTHENTICATED &amp; SECRET
-                </div>
-</div>
-<!-- Right Column: Bullet Points -->
-<div class="text-col">
-<h2>The Security Recipe</h2>
-<div class="bullet-point">
-<i class="fas fa-layer-group bullet-icon"></i>
-<div>
-<p class="font-bold text-gray-200">Noise Patterns</p>
-<p class="text-gray-400 text-base mt-1">
-                            Combines <span class="text-purple-400 font-bold">Diffie-Hellman (DH)</span> handshake for key agreement with <span class="text-green-400 font-bold">AEAD</span> for secure message transport.
-                        </p>
-</div>
-</div>
-<div class="bullet-point">
-<i class="fas fa-id-badge bullet-icon"></i>
-<div>
-<p class="font-bold text-gray-200">Identity Binding</p>
-<p class="text-gray-400 text-base mt-1">
-                            Binds ephemeral session keys to static <span class="code-snippet">Identity Keys</span>. You cryptographically prove <em>who</em> you are while agreeing on a temporary secret.
-                        </p>
-</div>
-</div>
-<div class="bullet-point">
-<i class="fas fa-history bullet-icon"></i>
-<div>
-<p class="font-bold text-gray-200">Critical Properties</p>
-<p class="text-gray-400 text-base mt-1">
-<strong>Forward Secrecy:</strong> Compromise of long-term keys doesn't decrypt past sessions.<br/>
-<strong>Replay Protection:</strong> Prevents attackers from resending old valid messages.
-                        </p>
-</div>
-</div>
-<div class="bullet-point">
-<i class="fas fa-check-circle bullet-icon"></i>
-<div>
-<p class="font-bold text-gray-200">The Outcome</p>
-<p class="text-gray-400 text-base mt-1">
-                            A fully encrypted, authenticated, identity-verified tunnel ready for the Application Layer (Stratum V2 messages).
-                        </p>
-</div>
-</div>
-</div>
-</div>
+
 </div>
 <script src="slides.js"></script>
 <script src="navigate.js"></script>

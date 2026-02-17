@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
@@ -7,314 +6,325 @@
 <title>Server Authentication in SV2</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
 <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #0B0F19;
-            font-family: 'Inter', sans-serif;
-        }
-        .slide-container {
-            width: 1280px;
-            height: 720px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            background-color: #0B0F19;
-            color: #F3F4F6;
-            overflow: hidden;
-        }
-        .bg-grid {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(30, 41, 59, 0.5) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
-            background-size: 40px 40px;
-            opacity: 0.15;
-            z-index: 0;
-        }
-        .header {
-            position: relative;
-            z-index: 10;
-            padding: 1.25rem 3rem 0.875rem 3rem;
-            border-bottom: 1px solid rgba(55, 65, 81, 0.5);
-            background-color: rgba(11, 15, 25, 0.9);
-        }
-        h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.25rem;
-            color: white;
-            margin: 0;
-            letter-spacing: -0.02em;
-        }
-        .main-content {
-            display: flex;
-            flex: 1;
-            position: relative;
-            z-index: 10;
-            padding: 1.25rem 3rem 1.25rem 3rem;
-            gap: 1.75rem;
-            max-height: calc(720px - 75px);
-        }
-        .steps-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-            overflow-y: auto;
-        }
-        .step-card {
-            display: flex;
-            background-color: #111827;
-            border: 1px solid #374151;
-            border-radius: 0.75rem;
-            padding: 1rem;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-        .step-card:hover {
-            border-color: #10B981;
-            background-color: #1F2937;
-        }
-        .step-number {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 3rem;
-            height: 3rem;
-            background-color: #1F2937;
-            border: 2px solid #10B981;
-            color: #10B981;
-            border-radius: 50%;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-right: 1.5rem;
-            flex-shrink: 0;
-        }
-        .step-content h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            color: #F3F4F6;
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-        }
-        .step-content p {
-            color: #9CA3AF;
-            font-size: 1rem;
-            line-height: 1.5;
-            margin-bottom: 0.5rem;
-        }
-        .code-inline {
-            font-family: 'Roboto Mono', monospace;
-            background-color: #374151;
-            color: #93C5FD;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.9em;
-        }
-        .visual-container {
-            flex: 0.8;
-            background-color: #1F2937;
-            border-radius: 1rem;
-            border: 1px solid #374151;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            min-height: 0;
-        }
-        
-        /* Auth Visual Styles */
-        .auth-node {
-            width: 100%;
-            background-color: #111827;
-            border: 1px solid #374151;
-            border-radius: 0.75rem;
-            padding: 0.875rem;
-            display: flex;
-            align-items: center;
-            position: relative;
-            margin-bottom: 0.875rem;
-        }
-        .auth-node.success {
-            border-color: #10B981;
-            background-color: rgba(16, 185, 129, 0.1);
-        }
-        .auth-icon-box {
-            width: 3rem;
-            height: 3rem;
-            background-color: #374151;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            margin-right: 1rem;
-            flex-shrink: 0;
-        }
-        .auth-details {
-            flex: 1;
-        }
-        .auth-title {
-            font-family: 'Space Grotesk', sans-serif;
-            color: #F3F4F6;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-        .auth-subtitle {
-            font-family: 'Roboto Mono', monospace;
-            color: #9CA3AF;
-            font-size: 0.85rem;
-            margin-top: 0.25rem;
-        }
-        .connector-line {
-            width: 2px;
-            height: 1.5rem;
-            background-color: #4B5563;
-            margin-bottom: 1rem;
-        }
-        .key-badge {
-            background-color: #F59E0B;
-            color: #111827;
-            font-size: 0.75rem;
-            font-weight: bold;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Roboto Mono', monospace;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .note-box {
-            margin-top: auto;
-            background-color: rgba(16, 185, 129, 0.1);
-            border-left: 4px solid #10B981;
-            padding: 0.875rem;
-            border-radius: 0 0.5rem 0.5rem 0;
-        }
-    </style>
+    :root {
+        --cyan-400: #22d3ee;
+        --cyan-500: #06b6d4;
+        --cyan-600: #0891b2;
+        --blue-600: #2563eb;
+    }
+    body { margin:0; padding:0; overflow:hidden; background-color:#000000; font-family:'Inter',sans-serif; }
+
+    /* ── Gradient orbs ── */
+    .hero-gradient-1 {
+        position:absolute; top:-20%; left:25%;
+        width:600px; height:600px; border-radius:9999px;
+        background:var(--cyan-500);
+        filter:blur(120px); mix-blend-mode:screen; opacity:0.45; z-index:0;
+        animation:pulse-orb 4s ease-in-out infinite;
+    }
+    .hero-gradient-2 {
+        position:absolute; top:-10%; right:25%;
+        width:500px; height:500px; border-radius:9999px;
+        background:var(--blue-600);
+        filter:blur(120px); mix-blend-mode:screen; opacity:0.4; z-index:0;
+    }
+    .hero-gradient-3 {
+        position:absolute; top:10%; left:50%; transform:translateX(-50%);
+        width:800px; height:400px; border-radius:9999px;
+        background:var(--cyan-400);
+        filter:blur(100px); mix-blend-mode:screen; opacity:0.25; z-index:0;
+    }
+    @keyframes pulse-orb {
+        0%,100%{ opacity:0.45; transform:scale(1); }
+        50%    { opacity:0.55; transform:scale(1.04); }
+    }
+
+    .bg-grid {
+        position:absolute; inset:0; z-index:1;
+        background-image:
+            linear-gradient(rgba(6,182,212,0.07) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(6,182,212,0.07) 1px, transparent 1px);
+        background-size:30px 30px; opacity:0.5;
+    }
+
+    .slide-container {
+        width:1280px; height:720px;
+        position:relative; display:flex; flex-direction:column;
+        color:#F8FAFC; overflow:hidden;
+    }
+
+    .mono-font { font-family:'JetBrains Mono',monospace; }
+
+    /* Step cards */
+    .step-card {
+        display:flex;
+        background:rgba(0,0,0,0.4);
+        backdrop-filter:blur(8px);
+        border:1px solid rgba(6,182,212,0.12);
+        border-radius:0.75rem;
+        padding:0.9rem 1rem;
+        transition:border-color 0.2s;
+    }
+    .step-card:hover { border-color:rgba(6,182,212,0.4); }
+
+    .step-number {
+        display:flex; align-items:center; justify-content:center;
+        width:2.75rem; height:2.75rem; flex-shrink:0;
+        background:rgba(0,0,0,0.5);
+        border:2px solid #22d3ee;
+        color:#22d3ee;
+        border-radius:50%;
+        font-family:'Space Grotesk',sans-serif;
+        font-size:1.3rem; font-weight:700;
+        margin-right:1.25rem;
+    }
+
+    .step-content h3 {
+        font-family:'Space Grotesk',sans-serif;
+        color:#F8FAFC; font-size:1.05rem; font-weight:700;
+        margin:0 0 0.35rem;
+    }
+    .step-content p {
+        color:rgba(148,163,184,0.85);
+        font-size:0.88rem; line-height:1.5; margin:0;
+    }
+
+    .code-inline {
+        font-family:'JetBrains Mono',monospace;
+        background:rgba(6,182,212,0.1);
+        color:#A5F3FC;
+        padding:1px 6px; border-radius:4px;
+        font-size:0.88em;
+        border:1px solid rgba(6,182,212,0.25);
+    }
+
+    /* Note box */
+    .note-box {
+        background:rgba(14,79,95,0.2);
+        border-left:3px solid #22d3ee;
+        padding:0.75rem 1rem;
+        border-radius:0 0.5rem 0.5rem 0;
+    }
+
+    /* Visual panel */
+    .visual-container {
+        flex:0.8; display:flex; flex-direction:column;
+        align-items:center; justify-content:center;
+        background:rgba(0,0,0,0.45);
+        backdrop-filter:blur(10px);
+        border:1px solid rgba(6,182,212,0.18);
+        border-radius:1rem; padding:1.25rem;
+        min-height:0;
+    }
+
+    .auth-node {
+        width:100%;
+        background:rgba(0,0,0,0.5);
+        border:1px solid rgba(6,182,212,0.15);
+        border-radius:0.75rem;
+        padding:0.75rem 0.875rem;
+        display:flex; align-items:center;
+        margin-bottom:0;
+    }
+    .auth-node.success {
+        border-color:rgba(6,182,212,0.45);
+        background:rgba(14,79,95,0.18);
+    }
+
+    .auth-icon-box {
+        width:2.75rem; height:2.75rem; flex-shrink:0;
+        background:rgba(6,182,212,0.08);
+        border-radius:0.5rem;
+        display:flex; align-items:center; justify-content:center;
+        font-size:1.1rem; margin-right:0.875rem;
+        border:1px solid rgba(6,182,212,0.2);
+    }
+
+    .auth-title {
+        font-family:'Space Grotesk',sans-serif;
+        color:#F8FAFC; font-weight:700; font-size:0.95rem;
+    }
+    .auth-subtitle {
+        font-family:'JetBrains Mono',monospace;
+        color:rgba(148,163,184,0.7); font-size:0.78rem; margin-top:0.2rem;
+    }
+
+    .connector-line {
+        width:2px; height:1rem;
+        background:rgba(6,182,212,0.25);
+        margin:0.4rem 0;
+    }
+
+    .key-badge {
+        background:rgba(245,158,11,0.15);
+        color:#FDE68A;
+        border:1px solid rgba(245,158,11,0.4);
+        font-size:0.72rem; font-weight:700;
+        padding:1px 6px; border-radius:4px;
+        font-family:'JetBrains Mono',monospace;
+        display:inline-flex; align-items:center; gap:4px;
+    }
+</style>
 </head>
 <body>
-<div class="slide-container">
-<!-- Background Elements -->
+<!-- Gradient orbs -->
+<div class="hero-gradient-1"></div>
+<div class="hero-gradient-2"></div>
+<div class="hero-gradient-3"></div>
 <div class="bg-grid"></div>
+
+<div class="slide-container">
+
 <!-- Header -->
-<div class="header">
-<h1>Server Authentication in SV2</h1>
-<div class="absolute bottom-0 left-0 w-full h-px bg-gray-800"></div>
-<div class="absolute bottom-0 left-12 w-64 h-1 bg-green-500"></div>
+<div class="relative z-10 px-12 pt-7 pb-3 flex items-end justify-between"
+     style="border-bottom:1px solid rgba(6,182,212,0.2); background:rgba(0,0,0,0.5);">
+    <div>
+        <div class="flex items-center space-x-3 mb-2">
+            <span class="px-2 py-1 text-xs font-bold rounded mono-font"
+                  style="background:rgba(6,182,212,0.12); color:#22d3ee; border:1px solid rgba(6,182,212,0.35);">
+                SV2
+            </span>
+            <span class="text-xs mono-font" style="color:rgba(6,182,212,0.5);">// SERVER AUTHENTICATION</span>
+        </div>
+        <h1 class="text-3xl font-black tracking-tight text-white uppercase"
+            style="font-family:'Space Grotesk',sans-serif; letter-spacing:-0.02em;">
+            Server Authentication <span style="color:#22d3ee;">in SV2</span>
+        </h1>
+    </div>
+    <div class="text-right">
+        <p class="text-sm mono-font" style="color:rgba(148,163,184,0.7);">
+            Noise_NX handshake — cryptographic server identity
+        </p>
+    </div>
 </div>
+
 <!-- Main Content -->
-<div class="main-content">
-<!-- Left Column: Steps -->
-<div class="steps-container">
-<!-- Step 1 -->
-<div class="step-card">
-<div class="step-number">1</div>
-<div class="step-content">
-<h3>Authority Key Distribution</h3>
-<p>Mining pools publish their static Authority Public Key via trusted out-of-band channels (website, DNS). Miners configure/pin this key before connecting.</p>
+<div class="relative z-10 flex-1 px-12 py-5 flex gap-7 overflow-hidden" style="min-height:0;">
+
+    <!-- Left Column: Steps -->
+    <div class="flex-1 flex flex-col gap-3 min-h-0" style="overflow-y:auto;">
+
+        <!-- Step 1 -->
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3>Authority Key Distribution</h3>
+                <p>Mining pools publish their static Authority Public Key via trusted out-of-band channels (website, DNS). Miners configure/pin this key before connecting.</p>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3>Noise Handshake Verification</h3>
+                <p>During the handshake (e.g., <span class="code-inline">Noise_NX</span>), the miner verifies the remote server's static key matches the pinned Authority Key.</p>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h3>Cryptographic Proof</h3>
+                <p>The protocol requires the server to use the corresponding <span class="code-inline">Private Key</span> to derive session keys. Without the private key, the handshake mathematics fail immediately.</p>
+            </div>
+        </div>
+
+        <!-- Note box -->
+        <div class="note-box">
+            <div class="mono-font text-xs font-bold mb-1 uppercase tracking-wider" style="color:#22d3ee;">
+                Security Impact
+            </div>
+            <p style="color:rgba(203,213,225,0.85); font-size:0.87rem; line-height:1.5; margin:0;">
+                This effectively <strong style="color:#F8FAFC;">blocks MITM attacks</strong>. An attacker can intercept the TCP connection, but without the pool's private key, they cannot complete the handshake or impersonate the server.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Right Column: Visualization -->
+    <div class="visual-container">
+        <div class="mono-font text-xs font-bold mb-4 uppercase tracking-wider w-full text-center"
+             style="color:rgba(148,163,184,0.6); border-bottom:1px solid rgba(6,182,212,0.1); padding-bottom:0.5rem;">
+            Authentication Flow
+        </div>
+
+        <!-- Stage 1: Miner Config -->
+        <div class="auth-node w-full">
+            <div class="auth-icon-box" style="color:#22d3ee;">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div>
+                <div class="auth-title">Miner Configuration</div>
+                <div class="auth-subtitle">
+                    Pinned: <span class="key-badge"><i class="fas fa-key"></i> Pub_Pool</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="connector-line"></div>
+
+        <!-- Stage 2: Handshake -->
+        <div class="auth-node w-full" style="position:relative;">
+            <div class="auth-icon-box" style="color:#F59E0B;">
+                <i class="fas fa-handshake"></i>
+            </div>
+            <div>
+                <div class="auth-title">Noise Handshake</div>
+                <div class="auth-subtitle">
+                    Challenge: <span class="code-inline" style="font-size:0.75rem;">Auth_Tag = H(key || data)</span>
+                </div>
+            </div>
+            <div class="absolute right-3 top-1/2 -translate-y-1/2">
+                <i class="fas fa-exchange-alt" style="color:rgba(6,182,212,0.35);"></i>
+            </div>
+        </div>
+
+        <div class="connector-line"></div>
+
+        <!-- Stage 3: Session Established -->
+        <div class="auth-node success w-full">
+            <div class="auth-icon-box" style="color:#22d3ee;">
+                <i class="fas fa-lock"></i>
+            </div>
+            <div>
+                <div class="auth-title" style="color:#22d3ee;">Session Established</div>
+                <div class="auth-subtitle" style="color:rgba(165,243,252,0.75);">
+                    <i class="fas fa-check-circle mr-1"></i>Identity Verified
+                </div>
+            </div>
+        </div>
+
+        <!-- MITM Blocked -->
+        <div class="w-full mt-4 pt-3" style="border-top:1px solid rgba(6,182,212,0.1);">
+            <div class="flex items-center justify-between gap-4">
+                <div class="flex-1">
+                    <div class="mono-font text-xs mb-2 uppercase tracking-wider"
+                         style="color:rgba(148,163,184,0.5);">Security Layer</div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-shield-alt" style="color:#22d3ee; font-size:1.1rem;"></i>
+                        <span class="text-sm font-semibold" style="color:#22d3ee; font-family:'Space Grotesk',sans-serif;">MITM Attacks Blocked</span>
+                    </div>
+                </div>
+                <div class="rounded-lg p-3 text-center relative"
+                     style="background:rgba(69,10,10,0.35); border:2px solid rgba(239,68,68,0.4);">
+                    <div class="absolute -top-2 -right-2 rounded-full w-5 h-5 flex items-center justify-center"
+                         style="background:#EF4444;">
+                        <i class="fas fa-times text-white text-xs"></i>
+                    </div>
+                    <i class="fas fa-user-secret text-3xl mb-1" style="color:#F87171;"></i>
+                    <div class="text-xs font-bold mono-font" style="color:#FCA5A5;">MITM Attacker</div>
+                    <div class="mono-font" style="font-size:0.65rem; color:#F87171; margin-top:2px;">Lacks Private Key</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
-</div>
-<!-- Step 2 -->
-<div class="step-card">
-<div class="step-number">2</div>
-<div class="step-content">
-<h3>Noise Handshake Verification</h3>
-<p>During the handshake (e.g., <span class="code-inline">Noise_NX</span>), the miner verifies the remote server's static key matches the pinned Authority Key.</p>
-</div>
-</div>
-<!-- Step 3 -->
-<div class="step-card">
-<div class="step-number">3</div>
-<div class="step-content">
-<h3>Cryptographic Proof</h3>
-<p>The protocol requires the server to use the corresponding <span class="code-inline">Private Key</span> to derive session keys. Without the private key, the handshake mathematics fail immediately.</p>
-</div>
-</div>
-<!-- Technical Note -->
-<div class="note-box">
-<h4 class="text-green-400 font-bold mb-1 font-mono text-sm uppercase">Security Impact</h4>
-<p class="text-gray-300 text-sm">
-                        This effectively <strong>blocks MITM attacks</strong>. An attacker can intercept the TCP connection, but without the pool's private key, they cannot complete the handshake or impersonate the server.
-                    </p>
-</div>
-</div>
-<!-- Right Column: Visualization -->
-<div class="visual-container">
-<h3 class="text-gray-300 font-bold mb-6 font-mono text-sm uppercase tracking-wider">Authentication Flow</h3>
-<!-- Stage 1: Miner Config -->
-<div class="auth-node">
-<div class="auth-icon-box text-blue-400">
-<i class="fas fa-cog"></i>
-</div>
-<div class="auth-details">
-<div class="auth-title">Miner Configuration</div>
-<div class="auth-subtitle">
-                            Pinned: <span class="key-badge"><i class="fas fa-key"></i> Pub_Pool</span>
-</div>
-</div>
-</div>
-<div class="connector-line"></div>
-<!-- Stage 2: Handshake -->
-<div class="auth-node">
-<div class="auth-icon-box text-yellow-400">
-<i class="fas fa-handshake"></i>
-</div>
-<div class="auth-details">
-<div class="auth-title">Noise Handshake</div>
-<div class="auth-subtitle text-xs">
-                            Challenge: <span class="code-inline text-xs">Auth_Tag = H(key || data)</span>
-</div>
-</div>
-<div class="absolute right-4 top-1/2 transform -translate-y-1/2">
-<i class="fas fa-exchange-alt text-gray-600"></i>
-</div>
-</div>
-<div class="connector-line"></div>
-<!-- Stage 3: Verification -->
-<div class="auth-node success">
-<div class="auth-icon-box text-green-400">
-<i class="fas fa-lock"></i>
-</div>
-<div class="auth-details">
-<div class="auth-title text-green-400">Session Established</div>
-<div class="auth-subtitle text-green-200">
-<i class="fas fa-check-circle mr-1"></i> Identity Verified
-                        </div>
-</div>
-</div>
-<!-- MITM Blocked Visual -->
-<div class="mt-6 pt-4 border-t border-gray-700">
-<div class="flex items-center justify-between gap-4">
-<div class="flex-1">
-<div class="text-gray-400 text-xs font-mono mb-2 uppercase tracking-wider">Security Layer</div>
-<div class="flex items-center gap-2">
-<i class="fas fa-shield-alt text-green-400 text-lg"></i>
-<span class="text-green-300 text-sm font-semibold">MITM Attacks Blocked</span>
-</div>
-</div>
-<div class="bg-red-900/30 border-2 border-red-500/50 rounded-lg p-3 text-center relative">
-<div class="absolute -top-2 -right-2 bg-red-500 rounded-full w-5 h-5 flex items-center justify-center">
-<i class="fas fa-times text-white text-xs"></i>
-</div>
-<i class="fas fa-user-secret text-red-400 text-3xl mb-1"></i>
-<div class="text-red-300 text-xs font-bold">MITM Attacker</div>
-<div class="text-red-400 text-[10px] mt-1">Lacks Private Key</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+
 </div>
 <script src="slides.js"></script>
 <script src="navigate.js"></script>
