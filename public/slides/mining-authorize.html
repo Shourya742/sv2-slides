@@ -3,179 +3,114 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>mining.authorize Details</title>
+<title>SV1 – Step 3: mining.authorize</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
-<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-    :root {
-        --cyan-400: #22d3ee;
-        --cyan-500: #06b6d4;
-        --cyan-600: #0891b2;
-        --blue-600: #2563eb;
-    }
     body {
         width: 1280px; height: 720px; overflow: hidden;
         font-family: 'Inter', sans-serif;
-        background-color: #000000;
-        color: #F8FAFC; position: relative;
+        background-color: #09090b; color: #F8FAFC; position: relative;
     }
-        50%       { opacity: 0.06; transform: scale(1.04); }
-    }
-
     .bg-grid {
         position: absolute; inset: 0; z-index: 1;
         background-image:
-            linear-gradient(rgba(6, 182, 212, 0.07) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(6, 182, 212, 0.07) 1px, transparent 1px);
+            linear-gradient(rgba(6,182,212,0.07) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(6,182,212,0.07) 1px, transparent 1px);
         background-size: 30px 30px; opacity: 0.5;
     }
-
-    .mono-font { font-family: 'JetBrains Mono', monospace; }
-
-    .glass-panel {
-        background: rgba(0, 0, 0, 0.45);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(6, 182, 212, 0.18);
-    }
-
-    /* Code window */
-    .code-window {
-        background: rgba(0, 0, 0, 0.6);
-        border: 1px solid rgba(6, 182, 212, 0.2);
-        border-radius: 0.5rem;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.82rem;
-        line-height: 1.6;
-    }
-    .code-header {
-        background: rgba(6, 182, 212, 0.06);
-        padding: 0.45rem 1rem;
-        border-bottom: 1px solid rgba(6, 182, 212, 0.15);
-        border-radius: 0.5rem 0.5rem 0 0;
-        display: flex; align-items: center;
-    }
-    .dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
-
-    /* Syntax highlighting */
-    .code-key     { color: var(--cyan-400); }
-    .code-string  { color: #67e8f9; }
-    .code-number  { color: #FCA5A5; }
-    .code-bool    { color: #FCD34D; }
-    .code-comment { color: rgba(148,163,184,0.5); font-style: italic; }
 </style>
 </head>
-<body class="relative flex flex-col justify-between">
-
-<!-- Gradient orbs -->
+<body class="relative flex flex-col items-center" style="padding: 32px 80px 0;">
 <div class="bg-grid"></div>
 
-<!-- Header -->
-<header class="relative z-10 px-16 pt-9 pb-4 flex items-end justify-between"
-        style="border-bottom: 1px solid rgba(6,182,212,0.2); background: rgba(0,0,0,0.5);">
-    <div>
-        <div class="flex items-center space-x-3 mb-2">
-            <span class="px-2 py-1 text-xs font-bold rounded mono-font"
-                  style="background: rgba(6,182,212,0.15); color: #22d3ee; border: 1px solid rgba(6,182,212,0.3);">
-                PROTOCOL MESSAGE
-            </span>
-            <span class="text-xs mono-font" style="color: rgba(6,182,212,0.5);">// STEP 02</span>
-        </div>
-        <h1 class="text-3xl font-black tracking-tight text-white uppercase"
-            style="font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.02em;">
-            <span style="color: var(--cyan-400);">mining</span>.authorize
-        </h1>
+<!-- Header row -->
+<div class="relative z-10 flex items-center" style="gap:12px; margin-bottom:10px;">
+    <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;
+                 letter-spacing:.18em;color:#22d3ee;border:1px solid rgba(6,182,212,0.45);
+                 background:rgba(6,182,212,0.08);padding:4px 16px;border-radius:999px;">
+        SV1 PROTOCOL
+    </span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:12px;
+                 color:rgba(6,182,212,0.45);letter-spacing:.1em;">// STEP 3</span>
+</div>
+
+<!-- Title -->
+<h1 class="relative z-10" style="font-family:'Space Grotesk',sans-serif;font-size:52px;
+           font-weight:700;letter-spacing:-0.02em;color:#F8FAFC;line-height:1.05;
+           margin-bottom:20px;">
+    mining.<span style="color:#22d3ee;">authorize</span>
+</h1>
+
+<!-- Message flow SVG -->
+<div class="relative z-10" style="margin-bottom:24px;">
+<svg width="1120" height="96" viewBox="0 0 1120 96">
+    <defs>
+        <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0,8 3,0 6" fill="rgba(6,182,212,0.9)"/>
+        </marker>
+    </defs>
+    <!-- Miner chip at (170,48) -->
+    <g transform="translate(170,48)">
+        <rect x="-70" y="-29" width="140" height="58" rx="8"
+              fill="rgba(6,182,212,0.07)" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+        <line x1="-35" y1="-29" x2="-35" y2="-38" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+        <line x1="0"   y1="-29" x2="0"   y2="-38" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+        <line x1="35"  y1="-29" x2="35"  y2="-38" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+        <line x1="-35" y1="29"  x2="-35" y2="38"  stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+        <line x1="0"   y1="29"  x2="0"   y2="38"  stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+        <line x1="35"  y1="29"  x2="35"  y2="38"  stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+        <line x1="-70" y1="-10" x2="-80" y2="-10" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+        <line x1="-70" y1="10"  x2="-80" y2="10"  stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+        <line x1="70"  y1="-10" x2="80"  y2="-10" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+        <line x1="70"  y1="10"  x2="80"  y2="10"  stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+        <rect x="-56" y="-19" width="112" height="38" rx="4"
+              fill="none" stroke="rgba(6,182,212,0.2)" stroke-width="1"/>
+        <text x="0" y="5" text-anchor="middle" font-family="'JetBrains Mono',monospace"
+              font-size="13" font-weight="bold" fill="rgba(6,182,212,0.9)">MINER</text>
+    </g>
+    <!-- Pool cloud at (950,48) -->
+    <g transform="translate(950,48)">
+        <path d="M-81,20 Q-90,-13 -55,-20 Q-46,-48 -18,-41 Q-4,-62 27,-49 Q43,-62 69,-41 Q90,-27 84,4 Q97,14 88,34 Q76,50 50,46 L-50,46 Q-78,46 -81,20 Z"
+              fill="rgba(6,182,212,0.08)" stroke="rgba(6,182,212,0.55)" stroke-width="2"/>
+        <text x="0" y="12" text-anchor="middle" font-family="'JetBrains Mono',monospace"
+              font-size="14" font-weight="bold" fill="#22d3ee">POOL</text>
+    </g>
+    <!-- Miner→Pool arrow -->
+    <line x1="251" y1="48" x2="858" y2="48"
+          stroke="rgba(6,182,212,0.8)" stroke-width="2" marker-end="url(#arr)"/>
+    <text x="554" y="34" text-anchor="middle" font-family="'JetBrains Mono',monospace"
+          font-size="14" font-weight="bold" fill="#22d3ee">mining.authorize</text>
+</svg>
+</div>
+
+<!-- JSON code block -->
+<div class="relative z-10" style="width:860px; background:rgba(0,0,0,0.55);
+     border:1px solid rgba(6,182,212,0.2); border-radius:8px; overflow:hidden;">
+    <!-- Window title bar -->
+    <div style="display:flex; align-items:center; gap:8px; padding:10px 16px;
+                background:rgba(6,182,212,0.07); border-bottom:1px solid rgba(6,182,212,0.15);">
+        <div style="width:11px;height:11px;border-radius:50%;background:#ef4444;"></div>
+        <div style="width:11px;height:11px;border-radius:50%;background:#f59e0b;"></div>
+        <div style="width:11px;height:11px;border-radius:50%;background:#22c55e;"></div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;
+                     color:rgba(148,163,184,0.55);margin-left:8px;letter-spacing:.04em;">
+            Client Request — mining.authorize
+        </span>
     </div>
-    <div class="text-right">
-        <p class="text-sm max-w-md text-right mono-font" style="color: rgba(148,163,184,0.7);">
-            Authenticates the worker to the mining pool
-        </p>
+    <!-- Code body -->
+    <div style="padding:22px 30px;">
+        <pre style="font-family:'JetBrains Mono',monospace;font-size:15px;line-height:1.75;"><span style="color:rgba(148,163,184,0.6);">{</span>
+  <span style="color:#22d3ee;">"id"</span><span style="color:rgba(148,163,184,0.6);">:</span> <span style="color:#67e8f9;">2</span><span style="color:rgba(148,163,184,0.6);">,</span>
+  <span style="color:#22d3ee;">"method"</span><span style="color:rgba(148,163,184,0.6);">:</span> <span style="color:#67e8f9;">"mining.authorize"</span><span style="color:rgba(148,163,184,0.6);">,</span>
+  <span style="color:#22d3ee;">"params"</span><span style="color:rgba(148,163,184,0.6);">: [</span>
+    <span style="color:#67e8f9;">"username.worker"</span><span style="color:rgba(148,163,184,0.6);">,</span>   <span style="color:rgba(100,116,139,0.7);font-style:italic;">// worker name</span>
+    <span style="color:#67e8f9;">"password"</span>           <span style="color:rgba(100,116,139,0.7);font-style:italic;">// worker password</span>
+  <span style="color:rgba(148,163,184,0.6);">]</span>
+<span style="color:rgba(148,163,184,0.6);">}</span></pre>
     </div>
-</header>
+</div>
 
-<!-- Main Content -->
-<main class="relative z-10 flex-1 px-16 py-6 flex gap-8 overflow-hidden">
-
-    <!-- Left Column -->
-    <div class="w-1/2 flex flex-col justify-center space-y-5">
-
-        <div class="glass-panel p-5 rounded-xl" style="border-left: 3px solid var(--cyan-500);">
-            <h3 class="text-lg font-bold mb-2 flex items-center" style="color: var(--cyan-400); font-family: 'Space Grotesk', sans-serif;">
-                <i class="fas fa-id-badge mr-3"></i> Authentication
-            </h3>
-            <p class="text-sm leading-relaxed mb-3" style="color: rgba(211,225,239,0.85);">
-                After subscribing, the miner must authorize a worker to submit shares. This binds the connection to a specific user account on the pool.
-            </p>
-            <ul class="space-y-2 text-sm">
-                <li class="flex items-start">
-                    <i class="fas fa-user-tag mt-0.5 mr-3 flex-shrink-0" style="color: var(--cyan-500);"></i>
-                    <span style="color: rgba(148,163,184,0.8);"><strong style="color: #F8FAFC;">Worker Name:</strong> Usually format "username.worker". Allows tracking individual devices.</span>
-                </li>
-                <li class="flex items-start">
-                    <i class="fas fa-key mt-0.5 mr-3 flex-shrink-0" style="color: var(--cyan-500);"></i>
-                    <span style="color: rgba(148,163,184,0.8);"><strong style="color: #F8FAFC;">Password:</strong> Often optional or generic (e.g., "x") — security relies on the payout address, not the worker login.</span>
-                </li>
-            </ul>
-        </div>
-
-        <div class="glass-panel p-5 rounded-xl" style="border-left: 3px solid #ef4444; background: rgba(69,10,10,0.15);">
-            <h3 class="text-lg font-bold mb-2 flex items-center" style="color: #f87171; font-family: 'Space Grotesk', sans-serif;">
-                <i class="fas fa-shield-alt mr-3"></i> Security Note
-            </h3>
-            <p class="text-sm leading-relaxed" style="color: rgba(211,225,239,0.8);">
-                <span style="color: #fca5a5; font-weight: 600;">No Cryptographic Binding:</span> This authentication does not integrity-protect the session. An attacker can hijack the TCP stream <em>after</em> authorization and submit valid shares for their own worker, or inject jobs.
-            </p>
-        </div>
-
-    </div>
-
-    <!-- Right Column: Code -->
-    <div class="w-1/2 flex flex-col justify-center space-y-5">
-
-        <!-- Request -->
-        <div class="code-window">
-            <div class="code-header">
-                <div class="dot" style="background:#ef4444;"></div>
-                <div class="dot" style="background:#f59e0b;"></div>
-                <div class="dot" style="background:#22c55e;"></div>
-                <span class="ml-2 text-xs mono-font" style="color: rgba(6,182,212,0.6);">Client Request</span>
-            </div>
-            <div class="p-4 overflow-x-auto">
-<pre><code><span class="code-comment">// Miner authorizes specific worker</span>
-{
-  <span class="code-key">"id"</span>: <span class="code-number">2</span>,
-  <span class="code-key">"method"</span>: <span class="code-string">"mining.authorize"</span>,
-  <span class="code-key">"params"</span>: [
-    <span class="code-string">"user_account.worker1"</span>, <span class="code-comment">// Username</span>
-    <span class="code-string">"password"</span>              <span class="code-comment">// Password</span>
-  ]
-}</code></pre>
-            </div>
-        </div>
-
-        <!-- Response -->
-        <div class="code-window">
-            <div class="code-header">
-                <div class="dot" style="background:#ef4444;"></div>
-                <div class="dot" style="background:#f59e0b;"></div>
-                <div class="dot" style="background:#22c55e;"></div>
-                <span class="ml-2 text-xs mono-font" style="color: rgba(6,182,212,0.6);">Server Response</span>
-            </div>
-            <div class="p-4 overflow-x-auto">
-<pre><code><span class="code-comment">// Server confirms authorization</span>
-{
-  <span class="code-key">"id"</span>: <span class="code-number">2</span>,
-  <span class="code-key">"result"</span>: <span class="code-bool">true</span>,  <span class="code-comment">// Auth successful</span>
-  <span class="code-key">"error"</span>: <span class="code-bool">null</span>
-}
-
-<span class="code-comment">// Or if authentication fails:</span>
-<span class="code-comment">// { "error": ["Invalid user", ...] }</span></code></pre>
-            </div>
-        </div>
-
-    </div>
-</main>
 <script src="slides.js"></script>
 <script src="navigate.js"></script>
 </body>

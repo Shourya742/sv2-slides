@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>SV1 – Step 4: mining.set_difficulty</title>
+<title>SV1 – Step 1: TCP Connection</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
@@ -34,39 +34,28 @@
             SV1 PROTOCOL
         </span>
         <span style="font-family:'JetBrains Mono',monospace;font-size:12px;
-                     color:rgba(6,182,212,0.45);letter-spacing:.1em;">// STEP 4</span>
+                     color:rgba(6,182,212,0.45);letter-spacing:.1em;">// STEP 1</span>
     </div>
 
     <!-- Title -->
-    <h1 style="font-family:'Space Grotesk',sans-serif;font-size:58px;font-weight:700;
+    <h1 style="font-family:'Space Grotesk',sans-serif;font-size:62px;font-weight:700;
                letter-spacing:-0.02em;text-align:center;line-height:1.05;color:#F8FAFC;">
-        mining.<span style="color:#22d3ee;">set_difficulty</span>
+        TCP Connection <span style="color:#22d3ee;">Established</span>
     </h1>
 
-    <!-- Message flow SVG: pool→miner -->
-    <svg width="1120" height="100" viewBox="0 0 1120 100">
-        <defs>
-            <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-                <polygon points="0 0,8 3,0 6" fill="rgba(6,182,212,0.9)"/>
-            </marker>
-        </defs>
-        <!-- Pool cloud at (950,50) -->
-        <g transform="translate(950,50)">
-            <path d="M-81,20 Q-90,-13 -55,-20 Q-46,-48 -18,-41 Q-4,-62 27,-49 Q43,-62 69,-41 Q90,-27 84,4 Q97,14 88,34 Q76,50 50,46 L-50,46 Q-78,46 -81,20 Z"
-                  fill="rgba(6,182,212,0.08)" stroke="rgba(6,182,212,0.55)" stroke-width="2"/>
-            <text x="0" y="12" text-anchor="middle" font-family="'JetBrains Mono',monospace"
-                  font-size="14" font-weight="bold" fill="#22d3ee">POOL</text>
-        </g>
-        <!-- Miner chip at (170,50) -->
-        <g transform="translate(170,50)">
+    <!-- Diagram -->
+    <svg width="1020" height="185" viewBox="0 0 1020 185">
+
+        <!-- Miner chip centred at (185,80) -->
+        <g transform="translate(185,80)">
             <rect x="-70" y="-29" width="140" height="58" rx="8"
                   fill="rgba(6,182,212,0.07)" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
-            <line x1="-35" y1="-29" x2="-35" y2="-38" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
-            <line x1="0"   y1="-29" x2="0"   y2="-38" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
-            <line x1="35"  y1="-29" x2="35"  y2="-38" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
-            <line x1="-35" y1="29"  x2="-35" y2="38"  stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
-            <line x1="0"   y1="29"  x2="0"   y2="38"  stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
-            <line x1="35"  y1="29"  x2="35"  y2="38"  stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+            <line x1="-35" y1="-29" x2="-35" y2="-40" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+            <line x1="0"   y1="-29" x2="0"   y2="-40" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+            <line x1="35"  y1="-29" x2="35"  y2="-40" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+            <line x1="-35" y1="29"  x2="-35" y2="40"  stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+            <line x1="0"   y1="29"  x2="0"   y2="40"  stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+            <line x1="35"  y1="29"  x2="35"  y2="40"  stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
             <line x1="-70" y1="-10" x2="-80" y2="-10" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
             <line x1="-70" y1="10"  x2="-80" y2="10"  stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
             <line x1="70"  y1="-10" x2="80"  y2="-10" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
@@ -76,13 +65,35 @@
             <text x="0" y="5" text-anchor="middle" font-family="'JetBrains Mono',monospace"
                   font-size="13" font-weight="bold" fill="rgba(6,182,212,0.9)">MINER</text>
         </g>
-        <!-- Pool→Miner arrow (line goes right to left) -->
-        <line x1="858" y1="50" x2="251" y2="50"
-              stroke="rgba(6,182,212,0.8)" stroke-width="2" marker-end="url(#arr)"/>
-        <text x="554" y="36" text-anchor="middle" font-family="'JetBrains Mono',monospace"
-              font-size="14" font-weight="bold" fill="#22d3ee">mining.set_difficulty</text>
+
+        <!-- Pool cloud centred at (835,80) -->
+        <g transform="translate(835,80)">
+            <path d="M-81,20 Q-90,-13 -55,-20 Q-46,-48 -18,-41 Q-4,-62 27,-49 Q43,-62 69,-41 Q90,-27 84,4 Q97,14 88,34 Q76,50 50,46 L-50,46 Q-78,46 -81,20 Z"
+                  fill="rgba(6,182,212,0.08)" stroke="rgba(6,182,212,0.55)" stroke-width="2"/>
+            <text x="0" y="12" text-anchor="middle" font-family="'JetBrains Mono',monospace"
+                  font-size="14" font-weight="bold" fill="#22d3ee">POOL</text>
+        </g>
+
+        <!-- TCP connection line -->
+        <line x1="266" y1="80" x2="754" y2="80"
+              stroke="rgba(6,182,212,0.65)" stroke-width="2.5"/>
+
+        <!-- TCP label badge in the middle -->
+        <rect x="460" y="63" width="100" height="34" rx="7"
+              fill="#09090b" stroke="rgba(6,182,212,0.6)" stroke-width="1.5"/>
+        <text x="510" y="85" text-anchor="middle" font-family="'JetBrains Mono',monospace"
+              font-size="15" font-weight="bold" fill="#22d3ee">TCP</text>
+
+        <!-- Port label -->
+        <text x="510" y="140" text-anchor="middle" font-family="'JetBrains Mono',monospace"
+              font-size="12" fill="rgba(6,182,212,0.45)">port 3333</text>
     </svg>
 
+    <!-- Note -->
+    <p style="font-family:'JetBrains Mono',monospace;font-size:13px;
+              color:rgba(148,163,184,0.45);">
+        Plain TCP socket — no encryption, no authentication
+    </p>
 </div>
 
 <script src="slides.js"></script>
