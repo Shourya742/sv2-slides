@@ -3,17 +3,10 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Pooled Mining &amp; Shares</title>
+<title>Pooled Mining</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
 <style>
-    :root {
-        --cyan-400: #22d3ee;
-        --cyan-500: #06b6d4;
-        --gold: #f59e0b;
-        --gold-light: #fcd34d;
-    }
     body {
         width: 1280px; height: 720px; overflow: hidden;
         font-family: 'Inter', sans-serif;
@@ -27,262 +20,128 @@
             linear-gradient(90deg, rgba(6,182,212,0.07) 1px, transparent 1px);
         background-size: 30px 30px; opacity: 0.5;
     }
-    .mono-font { font-family: 'JetBrains Mono', monospace; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
 </style>
 </head>
-<body class="relative flex flex-col justify-between">
-
+<body class="relative flex flex-col">
 <div class="bg-grid"></div>
 
 <!-- Header -->
-<header class="relative z-10 px-16 pt-9 pb-4 flex items-end justify-between"
-        style="border-bottom: 1px solid rgba(6,182,212,0.2); background: rgba(0,0,0,0.5);">
+<header class="relative z-10 px-16 pt-8 pb-4 flex items-end justify-between"
+        style="border-bottom:1px solid rgba(6,182,212,0.2); background:rgba(0,0,0,0.5);">
     <div>
-        <div class="flex items-center space-x-3 mb-2">
-            <span class="px-2 py-1 text-xs font-bold rounded mono-font"
-                  style="background: rgba(6,182,212,0.15); color: #22d3ee; border: 1px solid rgba(6,182,212,0.3);">
-                FOUNDATIONS
-            </span>
-        </div>
-        <h1 class="text-3xl font-black tracking-tight text-white uppercase"
-            style="font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.02em;">
-            Pooled Mining <span style="color: var(--cyan-400);">&amp; Shares</span>
+        <span class="px-2 py-1 text-xs font-bold rounded mono"
+              style="background:rgba(6,182,212,0.15);color:#22d3ee;border:1px solid rgba(6,182,212,0.3);">FOUNDATIONS</span>
+        <h1 class="text-3xl font-black tracking-tight text-white uppercase mt-2"
+            style="font-family:'Space Grotesk',sans-serif;letter-spacing:-0.02em;">
+            Pooled <span style="color:#22d3ee;">Mining</span>
         </h1>
     </div>
-    <p class="text-sm mono-font" style="color: rgba(148,163,184,0.6);">
-        How miners collaborate and prove work
-    </p>
+    <p class="text-sm mono" style="color:rgba(148,163,184,0.6);">How miners collaborate to find blocks</p>
 </header>
 
-<!-- Main Content -->
-<main class="relative z-10 flex-1 flex overflow-hidden" style="padding: 24px 64px 20px;">
+<main class="relative z-10 flex-1 flex items-center justify-center">
 
-    <!-- ── LEFT: Pooled Mining Diagram ─────────────────── -->
-    <div class="flex flex-col" style="width: 510px; flex-shrink: 0;">
-        <p class="mono-font text-xs mb-3 uppercase tracking-widest" style="color: rgba(6,182,212,0.55);">Pooled Mining</p>
-
-        <svg width="490" height="380" viewBox="0 0 490 380" style="overflow: visible;">
+    <div>
+        <svg width="540" height="530" viewBox="0 0 540 530">
             <defs>
-                <!-- Cyan arrowhead (right-pointing) -->
-                <marker id="arr-c" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-                    <polygon points="0 0, 8 3, 0 6" fill="rgba(6,182,212,0.85)"/>
+                <marker id="ah-c" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                    <polygon points="0 0, 9 3.5, 0 7" fill="rgba(6,182,212,0.85)"/>
                 </marker>
-                <!-- Gold arrowhead -->
-                <marker id="arr-g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-                    <polygon points="0 0, 8 3, 0 6" fill="rgba(245,158,11,0.85)"/>
+                <marker id="ah-g" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                    <polygon points="0 0, 9 3.5, 0 7" fill="rgba(245,158,11,0.9)"/>
                 </marker>
-                <!-- Reward arrowhead (auto-orients with path direction) -->
-                <marker id="arr-r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-                    <polygon points="0 0, 8 3, 0 6" fill="rgba(6,182,212,0.45)"/>
+                <marker id="ah-r" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                    <polygon points="0 0, 9 3.5, 0 7" fill="rgba(6,182,212,0.38)"/>
                 </marker>
             </defs>
 
-            <!-- ── MINER CHIP helper (repeated 3×) ── -->
-            <!-- Miner 1 -->
-            <g transform="translate(14,24)">
-                <rect width="112" height="56" rx="8"
-                      fill="rgba(6,182,212,0.07)" stroke="rgba(6,182,212,0.35)" stroke-width="1.5"/>
-                <!-- left pins -->
-                <line x1="0" y1="16" x2="-9" y2="16" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <line x1="0" y1="28" x2="-9" y2="28" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <line x1="0" y1="40" x2="-9" y2="40" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <!-- right pins -->
-                <line x1="112" y1="16" x2="121" y2="16" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <line x1="112" y1="28" x2="121" y2="28" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <line x1="112" y1="40" x2="121" y2="40" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <!-- inner die -->
-                <rect x="16" y="10" width="80" height="36" rx="4"
-                      fill="none" stroke="rgba(6,182,212,0.2)" stroke-width="1"/>
-                <text x="56" y="34" text-anchor="middle"
-                      fill="rgba(6,182,212,0.85)" font-family="JetBrains Mono" font-size="11" font-weight="bold">MINER</text>
+            <!-- ── BLOCK RECTANGLE (top) centred at x=270, y=10..92 ── -->
+            <g transform="translate(150,10)">
+                <rect width="240" height="82" rx="9"
+                      fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.55)" stroke-width="2"/>
+                <rect x="7" y="7" width="226" height="68" rx="6"
+                      fill="none" stroke="rgba(245,158,11,0.18)" stroke-width="1"/>
+                <text x="120" y="42" text-anchor="middle"
+                      fill="#fcd34d" font-family="Space Grotesk" font-size="22" font-weight="900">₿  BLOCK</text>
+                <text x="120" y="63" text-anchor="middle"
+                      fill="rgba(245,158,11,0.5)" font-family="JetBrains Mono" font-size="9">broadcast to network</text>
             </g>
 
-            <!-- Miner 2 -->
-            <g transform="translate(14,148)">
-                <rect width="112" height="56" rx="8"
-                      fill="rgba(6,182,212,0.07)" stroke="rgba(6,182,212,0.35)" stroke-width="1.5"/>
-                <line x1="0" y1="16" x2="-9" y2="16" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <line x1="0" y1="28" x2="-9" y2="28" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <line x1="0" y1="40" x2="-9" y2="40" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <line x1="112" y1="16" x2="121" y2="16" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <line x1="112" y1="28" x2="121" y2="28" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <line x1="112" y1="40" x2="121" y2="40" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <rect x="16" y="10" width="80" height="36" rx="4"
-                      fill="none" stroke="rgba(6,182,212,0.2)" stroke-width="1"/>
-                <text x="56" y="34" text-anchor="middle"
-                      fill="rgba(6,182,212,0.85)" font-family="JetBrains Mono" font-size="11" font-weight="bold">MINER</text>
+            <!-- ── Pool → Block arrow (going UP, from pool top to block bottom) ── -->
+            <line x1="270" y1="152" x2="270" y2="100"
+                  stroke="rgba(245,158,11,0.85)" stroke-width="2.5" marker-end="url(#ah-g)"/>
+            <text x="286" y="135" fill="rgba(245,158,11,0.65)" font-family="JetBrains Mono" font-size="9">block candidate</text>
+
+            <!-- ── POOL CLOUD centred at (270, 248) ── -->
+            <!-- cloud top ≈ y=160, bottom ≈ y=320 -->
+            <g transform="translate(270,248)">
+                <path d="M-115,28 Q-128,-18 -78,-28 Q-65,-68 -25,-58 Q-5,-88 38,-70 Q62,-88 98,-58 Q128,-38 120,5 Q138,20 125,48 Q108,72 72,65 L-72,65 Q-112,65 -115,28 Z"
+                      fill="rgba(6,182,212,0.08)" stroke="rgba(6,182,212,0.55)" stroke-width="2"/>
+                <text x="0" y="10" text-anchor="middle"
+                      fill="#22d3ee" font-family="JetBrains Mono" font-size="17" font-weight="bold">POOL</text>
+                <text x="0" y="32" text-anchor="middle"
+                      fill="rgba(148,163,184,0.45)" font-family="JetBrains Mono" font-size="9">validates &amp; coordinates</text>
             </g>
 
-            <!-- Miner 3 -->
-            <g transform="translate(14,272)">
-                <rect width="112" height="56" rx="8"
-                      fill="rgba(6,182,212,0.07)" stroke="rgba(6,182,212,0.35)" stroke-width="1.5"/>
-                <line x1="0" y1="16" x2="-9" y2="16" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <line x1="0" y1="28" x2="-9" y2="28" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <line x1="0" y1="40" x2="-9" y2="40" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <line x1="112" y1="16" x2="121" y2="16" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <line x1="112" y1="28" x2="121" y2="28" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <line x1="112" y1="40" x2="121" y2="40" stroke="rgba(6,182,212,0.4)" stroke-width="2"/>
-                <rect x="16" y="10" width="80" height="36" rx="4"
-                      fill="none" stroke="rgba(6,182,212,0.2)" stroke-width="1"/>
-                <text x="56" y="34" text-anchor="middle"
-                      fill="rgba(6,182,212,0.85)" font-family="JetBrains Mono" font-size="11" font-weight="bold">MINER</text>
+            <!-- ── Shares: bus at y=385, miners at y=438..490 ── -->
+            <!-- Arrow from bus UP to pool bottom (270,320) -->
+            <line x1="270" y1="385" x2="270" y2="322"
+                  stroke="rgba(6,182,212,0.85)" stroke-width="2" marker-end="url(#ah-c)"/>
+
+            <!-- horizontal bus -->
+            <line x1="90" y1="385" x2="450" y2="385" stroke="rgba(6,182,212,0.45)" stroke-width="1.5"/>
+            <!-- vertical rises from miners to bus -->
+            <line x1="90"  y1="438" x2="90"  y2="385" stroke="rgba(6,182,212,0.45)" stroke-width="1.5"/>
+            <line x1="270" y1="438" x2="270" y2="385" stroke="rgba(6,182,212,0.45)" stroke-width="1.5"/>
+            <line x1="450" y1="438" x2="450" y2="385" stroke="rgba(6,182,212,0.45)" stroke-width="1.5"/>
+
+            <!-- shares labels -->
+            <text x="90"  y="423" text-anchor="middle" fill="rgba(6,182,212,0.45)" font-family="JetBrains Mono" font-size="9">shares</text>
+            <text x="270" y="423" text-anchor="middle" fill="rgba(6,182,212,0.45)" font-family="JetBrains Mono" font-size="9">shares</text>
+            <text x="450" y="423" text-anchor="middle" fill="rgba(6,182,212,0.45)" font-family="JetBrains Mono" font-size="9">shares</text>
+
+            <!-- ── MINERS (bottom) ── -->
+            <!-- Miner 1: x=34 -->
+            <g transform="translate(34,438)">
+                <rect width="112" height="52" rx="7"
+                      fill="rgba(6,182,212,0.07)" stroke="rgba(6,182,212,0.4)" stroke-width="1.5"/>
+                <rect x="14" y="9" width="84" height="34" rx="4"
+                      fill="none" stroke="rgba(6,182,212,0.18)" stroke-width="1"/>
+                <text x="56" y="31" text-anchor="middle"
+                      fill="rgba(6,182,212,0.9)" font-family="JetBrains Mono" font-size="11" font-weight="bold">MINER 1</text>
+            </g>
+            <!-- Miner 2: x=214 -->
+            <g transform="translate(214,438)">
+                <rect width="112" height="52" rx="7"
+                      fill="rgba(6,182,212,0.07)" stroke="rgba(6,182,212,0.4)" stroke-width="1.5"/>
+                <rect x="14" y="9" width="84" height="34" rx="4"
+                      fill="none" stroke="rgba(6,182,212,0.18)" stroke-width="1"/>
+                <text x="56" y="31" text-anchor="middle"
+                      fill="rgba(6,182,212,0.9)" font-family="JetBrains Mono" font-size="11" font-weight="bold">MINER 2</text>
+            </g>
+            <!-- Miner 3: x=394 -->
+            <g transform="translate(394,438)">
+                <rect width="112" height="52" rx="7"
+                      fill="rgba(6,182,212,0.07)" stroke="rgba(6,182,212,0.4)" stroke-width="1.5"/>
+                <rect x="14" y="9" width="84" height="34" rx="4"
+                      fill="none" stroke="rgba(6,182,212,0.18)" stroke-width="1"/>
+                <text x="56" y="31" text-anchor="middle"
+                      fill="rgba(6,182,212,0.9)" font-family="JetBrains Mono" font-size="11" font-weight="bold">MINER 3</text>
             </g>
 
-            <!-- ── Vertical collection bus ── -->
-            <!-- Horizontals from miner right-pins to bus at x=190 -->
-            <line x1="135" y1="52"  x2="190" y2="52"  stroke="rgba(6,182,212,0.4)" stroke-width="1.5"/>
-            <line x1="135" y1="176" x2="190" y2="176" stroke="rgba(6,182,212,0.4)" stroke-width="1.5"/>
-            <line x1="135" y1="300" x2="190" y2="300" stroke="rgba(6,182,212,0.4)" stroke-width="1.5"/>
-            <!-- Vertical bus -->
-            <line x1="190" y1="52" x2="190" y2="300" stroke="rgba(6,182,212,0.4)" stroke-width="1.5"/>
-            <!-- "shares" label -->
-            <text x="158" y="46" text-anchor="middle"
-                  fill="rgba(6,182,212,0.45)" font-family="JetBrains Mono" font-size="9">shares</text>
-            <text x="158" y="170" text-anchor="middle"
-                  fill="rgba(6,182,212,0.45)" font-family="JetBrains Mono" font-size="9">shares</text>
-            <text x="158" y="294" text-anchor="middle"
-                  fill="rgba(6,182,212,0.45)" font-family="JetBrains Mono" font-size="9">shares</text>
-
-            <!-- Arrow: bus → pool -->
-            <line x1="190" y1="176" x2="248" y2="176"
-                  stroke="rgba(6,182,212,0.8)" stroke-width="2" marker-end="url(#arr-c)"/>
-
-            <!-- ── POOL circle ── -->
-            <circle cx="305" cy="176" r="56"
-                    fill="rgba(6,182,212,0.09)" stroke="rgba(6,182,212,0.5)" stroke-width="2"/>
-            <text x="305" y="171" text-anchor="middle"
-                  fill="#22d3ee" font-family="JetBrains Mono" font-size="14" font-weight="bold">POOL</text>
-            <text x="305" y="189" text-anchor="middle"
-                  fill="rgba(148,163,184,0.5)" font-family="JetBrains Mono" font-size="9">coordinates</text>
-
-            <!-- Arrow: pool → bitcoin -->
-            <line x1="361" y1="176" x2="412" y2="176"
-                  stroke="rgba(245,158,11,0.75)" stroke-width="2" marker-end="url(#arr-g)"/>
-            <text x="386" y="168" text-anchor="middle"
-                  fill="rgba(245,158,11,0.6)" font-family="JetBrains Mono" font-size="9">block</text>
-
-            <!-- ── BITCOIN circle ── -->
-            <circle cx="455" cy="176" r="42"
-                    fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.4)" stroke-width="2"/>
-            <text x="455" y="185" text-anchor="middle"
-                  fill="#fcd34d" font-family="Space Grotesk" font-size="26" font-weight="900">₿</text>
-
-            <!-- ── Reward dashed arrow: pool → miners ── -->
-            <!-- path goes pool-left → down → left → up to bus at y=300 -->
-            <path d="M248,200 L190,200 L190,300"
-                  stroke="rgba(6,182,212,0.35)" stroke-width="1.5" stroke-dasharray="5,3"
-                  fill="none"/>
-            <!-- small arrowheads pointing left at miner junctions -->
-            <polygon points="190,52 182,48 182,56" fill="rgba(6,182,212,0.35)"/>
-            <polygon points="190,176 182,172 182,180" fill="rgba(6,182,212,0.35)"/>
-            <polygon points="190,300 182,296 182,304" fill="rgba(6,182,212,0.35)"/>
-            <text x="216" y="218" text-anchor="middle"
-                  fill="rgba(6,182,212,0.35)" font-family="JetBrains Mono" font-size="8">reward</text>
+            <!-- ── REWARD dashed: pool sides → down to miners ── -->
+            <path d="M152,248 L90,248 L90,438"
+                  stroke="rgba(6,182,212,0.3)" stroke-width="1.5" stroke-dasharray="5,3"
+                  fill="none" marker-end="url(#ah-r)"/>
+            <path d="M388,248 L450,248 L450,438"
+                  stroke="rgba(6,182,212,0.3)" stroke-width="1.5" stroke-dasharray="5,3"
+                  fill="none" marker-end="url(#ah-r)"/>
+            <text x="68" y="340" text-anchor="middle" fill="rgba(6,182,212,0.3)"
+                  font-family="JetBrains Mono" font-size="9" transform="rotate(-90,68,340)">reward</text>
+            <text x="472" y="340" text-anchor="middle" fill="rgba(6,182,212,0.3)"
+                  font-family="JetBrains Mono" font-size="9" transform="rotate(90,472,340)">reward</text>
         </svg>
-    </div>
-
-    <!-- Vertical divider -->
-    <div style="width:1px; margin:0 28px; align-self:stretch;
-                background: linear-gradient(to bottom, transparent, rgba(6,182,212,0.22), transparent);"></div>
-
-    <!-- ── RIGHT: What is a Share? ─────────────────────── -->
-    <div class="flex-1 flex flex-col justify-center" style="gap: 16px;">
-
-        <p class="mono-font text-xs uppercase tracking-widest" style="color: rgba(6,182,212,0.55);">What is a Share?</p>
-
-        <!-- Intro line -->
-        <p class="text-sm" style="color: rgba(148,163,184,0.65); font-family: 'JetBrains Mono', monospace; line-height: 1.5;">
-            Every hash attempt produces a 256-bit number.<br/>
-            Its value determines what it counts as:
-        </p>
-
-        <!-- Difficulty spectrum bar -->
-        <div>
-            <div class="relative" style="height: 50px; border-radius: 8px; overflow:hidden;">
-                <!-- full bar = invalid -->
-                <div class="absolute inset-0"
-                     style="background: rgba(30,41,59,0.55); border: 1px solid rgba(55,65,81,0.45);"></div>
-                <!-- share zone (~20%) -->
-                <div class="absolute top-0 left-0 h-full"
-                     style="width:20%; background:rgba(6,182,212,0.22);
-                            border-right: 2px dashed rgba(6,182,212,0.7);"></div>
-                <!-- block zone (~2.5%) -->
-                <div class="absolute top-0 left-0 h-full"
-                     style="width:2.5%; background:rgba(245,158,11,0.55);
-                            border-right: 2px solid rgba(245,158,11,0.9);
-                            border-radius: 8px 0 0 8px;"></div>
-                <!-- text labels -->
-                <div class="absolute inset-0 flex items-center" style="padding: 0 12px; gap: 10px;">
-                    <span class="mono-font font-bold" style="font-size:10px; color:#fcd34d; min-width:28px;">BLK</span>
-                    <span class="mono-font" style="font-size:10px; color:#22d3ee;">SHARE</span>
-                    <span class="mono-font ml-auto" style="font-size:10px; color:rgba(100,116,139,0.65);">INVALID — keep hashing</span>
-                </div>
-            </div>
-            <div class="flex justify-between mt-1">
-                <span class="mono-font" style="font-size:9px; color:rgba(100,116,139,0.5);">0x0000…0  (hardest)</span>
-                <span class="mono-font" style="font-size:9px; color:rgba(100,116,139,0.5);">0xFFFF…F  (easiest)</span>
-            </div>
-        </div>
-
-        <!-- Three outcome cards -->
-        <div class="grid grid-cols-3 gap-3">
-
-            <!-- Invalid -->
-            <div class="rounded-lg p-3 text-center"
-                 style="background:rgba(0,0,0,0.4); border:1px solid rgba(55,65,81,0.4);">
-                <div class="w-8 h-8 rounded-full mx-auto mb-2 flex items-center justify-center"
-                     style="background:rgba(55,65,81,0.3);">
-                    <i class="fas fa-times text-sm" style="color:rgba(100,116,139,0.7);"></i>
-                </div>
-                <p class="mono-font font-bold mb-1" style="font-size:10px; color:rgba(100,116,139,0.65);">INVALID</p>
-                <p style="font-size:11px; color:rgba(100,116,139,0.55); line-height:1.4;">
-                    Hash above pool target.<br/>Discard, try next nonce.
-                </p>
-            </div>
-
-            <!-- Share -->
-            <div class="rounded-lg p-3 text-center"
-                 style="background:rgba(6,182,212,0.05); border:1px solid rgba(6,182,212,0.3);
-                        border-top:2px solid #06b6d4;">
-                <div class="w-8 h-8 rounded-full mx-auto mb-2 flex items-center justify-center"
-                     style="background:rgba(6,182,212,0.12);">
-                    <i class="fas fa-check text-sm" style="color:#22d3ee;"></i>
-                </div>
-                <p class="mono-font font-bold mb-1" style="font-size:10px; color:#22d3ee;">SHARE</p>
-                <p style="font-size:11px; color:rgba(148,163,184,0.75); line-height:1.4;">
-                    Below pool target.<br/>Submit — proves work.
-                </p>
-            </div>
-
-            <!-- Block -->
-            <div class="rounded-lg p-3 text-center"
-                 style="background:rgba(245,158,11,0.06); border:1px solid rgba(245,158,11,0.35);
-                        border-top:2px solid #f59e0b;">
-                <div class="w-8 h-8 rounded-full mx-auto mb-2 flex items-center justify-center"
-                     style="background:rgba(245,158,11,0.12);">
-                    <span style="font-size:15px; color:#fcd34d; font-weight:900;
-                                 font-family:'Space Grotesk',sans-serif;">₿</span>
-                </div>
-                <p class="mono-font font-bold mb-1" style="font-size:10px; color:#fcd34d;">BLOCK!</p>
-                <p style="font-size:11px; color:rgba(148,163,184,0.75); line-height:1.4;">
-                    Below network target.<br/>Broadcast — earns reward.
-                </p>
-            </div>
-
-        </div>
-
-        <!-- Key insight -->
-        <div class="rounded-lg px-4 py-3"
-             style="background:rgba(0,0,0,0.4); border:1px solid rgba(6,182,212,0.18);
-                    border-left:3px solid rgba(6,182,212,0.55);">
-            <p style="font-size:12px; color:rgba(211,225,239,0.8); line-height:1.55;">
-                Every block is also a valid share. The pool sets an <span style="color:#22d3ee;">easier target</span>
-                so miners submit shares <em>frequently</em> — proving ongoing work without waiting for a rare block.
-                Share count determines each miner's proportional payout.
-            </p>
-        </div>
-
     </div>
 </main>
 

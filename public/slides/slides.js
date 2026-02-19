@@ -1,5 +1,8 @@
 window.SLIDES = [
     "title-slide.html",
+    "pooled-mining-and-shares.html",
+    "miner-block-assembly.html",
+    "what-is-a-share.html",
     "sv1-architecture.html",
     "connection-setup.html",
     "mining-subscribe.html",
