@@ -79,6 +79,7 @@
     <!-- Pool→Miner arrow -->
     <line x1="858" y1="48" x2="251" y2="48"
           stroke="rgba(6,182,212,0.8)" stroke-width="2" marker-end="url(#arr)"/>
+    <rect x="464" y="20" width="180" height="20" rx="4" fill="rgba(0,0,0,0.75)" stroke="rgba(6,182,212,0.3)" stroke-width="1"/>
     <text x="554" y="34" text-anchor="middle" font-family="'JetBrains Mono',monospace"
           font-size="14" font-weight="bold" fill="#22d3ee">mining.notify</text>
 </svg>
@@ -182,6 +183,21 @@
 </svg>
 </div>
 
+<!-- Step progress bar -->
+<div style="position:absolute;bottom:0;left:0;right:0;z-index:10;height:44px;display:flex;align-items:center;padding:0 80px;gap:7px;background:rgba(0,0,0,0.7);border-top:1px solid rgba(6,182,212,0.12);">
+    <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(6,182,212,0.3);letter-spacing:.15em;margin-right:6px;flex-shrink:0;">FLOW</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:4px 14px;border-radius:999px;flex-shrink:0;background:rgba(6,182,212,0.06);border:1px solid rgba(6,182,212,0.25);color:rgba(6,182,212,0.45);">1 · TCP</span>
+    <span style="color:rgba(6,182,212,0.2);font-size:12px;flex-shrink:0;">›</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:4px 14px;border-radius:999px;flex-shrink:0;background:rgba(6,182,212,0.06);border:1px solid rgba(6,182,212,0.25);color:rgba(6,182,212,0.45);">2 · subscribe</span>
+    <span style="color:rgba(6,182,212,0.2);font-size:12px;flex-shrink:0;">›</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:4px 14px;border-radius:999px;flex-shrink:0;background:rgba(6,182,212,0.06);border:1px solid rgba(6,182,212,0.25);color:rgba(6,182,212,0.45);">3 · authorize</span>
+    <span style="color:rgba(6,182,212,0.2);font-size:12px;flex-shrink:0;">›</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:4px 14px;border-radius:999px;flex-shrink:0;background:rgba(6,182,212,0.06);border:1px solid rgba(6,182,212,0.25);color:rgba(6,182,212,0.45);">4 · set_difficulty</span>
+    <span style="color:rgba(6,182,212,0.2);font-size:12px;flex-shrink:0;">›</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:4px 14px;border-radius:999px;flex-shrink:0;background:rgba(6,182,212,0.2);border:1px solid #22d3ee;color:#22d3ee;">5 · notify</span>
+    <span style="color:rgba(6,182,212,0.2);font-size:12px;flex-shrink:0;">›</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:4px 14px;border-radius:999px;flex-shrink:0;background:transparent;border:1px solid rgba(6,182,212,0.1);color:rgba(6,182,212,0.2);">6 · submit</span>
+</div>
 <script src="slides.js"></script>
 <script src="navigate.js"></script>
 </body>
