@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>3. We Can Encrypt Now!</title>
+<title>5. Data Integrity</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@500;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
@@ -35,43 +35,42 @@
         <div class="flex items-center space-x-3 mb-2">
             <span class="px-2 py-1 text-xs font-bold rounded mono-font"
                   style="background:rgba(6,182,212,0.12); color:#22d3ee; border:1px solid rgba(6,182,212,0.35);">
-                CRYPTO
+                AUTH
             </span>
-            <span class="text-xs mono-font" style="color:rgba(6,182,212,0.5);">// SECURE CHANNEL ESTABLISHED</span>
+            <span class="text-xs mono-font" style="color:rgba(6,182,212,0.5);">// PREVENTING DATA TAMPERING</span>
         </div>
         <h1 class="text-3xl font-black tracking-tight text-white uppercase"
             style="font-family:'Space Grotesk',sans-serif; letter-spacing:-0.02em;">
-            3. We Can <span style="color:#22d3ee;">Encrypt Now!</span>
+            5. Data <span style="color:#22d3ee;">Integrity</span>
         </h1>
     </div>
     <div class="text-right">
         <p class="text-sm mono-font" style="color:rgba(148,163,184,0.7);">
-            Key Exchange · Shared Secret · Encrypted Channel
+            MAC · AEAD · Authentication
         </p>
     </div>
 </div>
 
 <!-- Main Content -->
 <div class="relative z-10 flex-1 px-10 py-3 flex items-center justify-center overflow-hidden" style="min-height:0;">
-    <svg viewBox="0 0 760 248" width="100%" height="100%"
+    <svg viewBox="0 0 760 215" width="100%" height="100%"
          preserveAspectRatio="xMidYMid meet"
          xmlns="http://www.w3.org/2000/svg"
          style="font-family:'JetBrains Mono',monospace; overflow:visible;">
         <defs>
-            <marker id="aC" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-                <path d="M0,0 L8,4 L0,8 Z" fill="rgba(6,182,212,0.65)"/>
-            </marker>
+            <!-- Green arrowhead for encrypted message (pool → miner) -->
             <marker id="aG" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
                 <path d="M0,0 L8,4 L0,8 Z" fill="#4ade80"/>
             </marker>
-            <filter id="cGlow">
-                <feGaussianBlur stdDeviation="3" result="b"/>
-                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
         </defs>
 
-        <!-- ── MINER chip (left) ── -->
-        <g transform="translate(100,70) scale(0.85)">
+        <!-- ── Question (no box, plain italic text at top) ── -->
+        <text x="380" y="22" text-anchor="middle"
+              font-family="'Space Grotesk',sans-serif" font-size="17" font-style="italic"
+              fill="rgba(255,255,255,0.88)">how can miner know data is not being tampered?</text>
+
+        <!-- ── MINER chip (left, y=100) ── -->
+        <g transform="translate(100,100) scale(0.85)">
             <rect x="-70" y="-29" width="140" height="58" rx="8"
                   fill="rgba(6,182,212,0.07)" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
             <line x1="-35" y1="-29" x2="-35" y2="-40" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
@@ -90,57 +89,37 @@
                   font-size="14" font-weight="bold" fill="rgba(6,182,212,0.9)">MINER</text>
         </g>
 
-        <!-- ── POOL cloud (right) ── -->
-        <g transform="translate(660,70) scale(0.85)">
+        <!-- ── POOL cloud (right, y=100) ── -->
+        <g transform="translate(660,100) scale(0.85)">
             <path d="M-81,20 Q-90,-13 -55,-20 Q-46,-48 -18,-41 Q-4,-62 27,-49 Q43,-62 69,-41 Q90,-27 84,4 Q97,14 88,34 Q76,50 50,46 L-50,46 Q-78,46 -81,20 Z"
                   fill="rgba(6,182,212,0.08)" stroke="rgba(6,182,212,0.55)" stroke-width="2"/>
             <text x="0" y="12" text-anchor="middle" font-family="'JetBrains Mono',monospace"
                   font-size="14" font-weight="bold" fill="#22d3ee">POOL</text>
         </g>
 
-        <!-- ── KEY EXCHANGE ARROWS (aligned with chip/cloud midpoint) ── -->
-        <!-- pubkey1: miner → pool -->
-        <line x1="173" y1="63" x2="587" y2="63"
-              stroke="rgba(6,182,212,0.5)" stroke-width="1.8" marker-end="url(#aC)"/>
-        <rect x="280" y="50" width="200" height="14" rx="4" fill="rgba(0,0,0,0.7)"/>
-        <text x="380" y="61" text-anchor="middle" font-size="10.5" fill="#A5F3FC">pubkey1 &#x2192; (public key)</text>
-
-        <!-- pubkey2: pool → miner -->
-        <line x1="587" y1="79" x2="173" y2="79"
-              stroke="rgba(6,182,212,0.5)" stroke-width="1.8" marker-end="url(#aC)"/>
-        <rect x="280" y="81" width="200" height="14" rx="4" fill="rgba(0,0,0,0.7)"/>
-        <text x="380" y="92" text-anchor="middle" font-size="10.5" fill="#A5F3FC">&#x2190; pubkey2 (public key)</text>
-
-        <!-- ── SHARED SECRET BOX — MINER SIDE ── -->
-        <rect x="8" y="115" width="185" height="50" rx="8"
-              fill="rgba(14,79,95,0.35)" stroke="rgba(6,182,212,0.55)" stroke-width="1.8"
-              filter="url(#cGlow)"/>
-        <text x="18" y="138" text-anchor="start" font-size="18">&#x1F511;</text>
-        <text x="100" y="138" text-anchor="middle"
-              font-family="'Space Grotesk',sans-serif" font-size="13" fill="#A5F3FC" font-weight="700">Shared Secret (S)</text>
-        <text x="100" y="157" text-anchor="middle"
-              font-family="'JetBrains Mono',monospace" font-size="10.5" fill="#22d3ee">k1&#xB7;P2</text>
-
-        <!-- ── SHARED SECRET BOX — POOL SIDE ── -->
-        <rect x="567" y="115" width="185" height="50" rx="8"
-              fill="rgba(14,79,95,0.35)" stroke="rgba(6,182,212,0.55)" stroke-width="1.8"
-              filter="url(#cGlow)"/>
-        <text x="577" y="138" text-anchor="start" font-size="18">&#x1F511;</text>
-        <text x="660" y="138" text-anchor="middle"
-              font-family="'Space Grotesk',sans-serif" font-size="13" fill="#A5F3FC" font-weight="700">Shared Secret (S)</text>
-        <text x="660" y="157" text-anchor="middle"
-              font-family="'JetBrains Mono',monospace" font-size="10.5" fill="#22d3ee">k2&#xB7;P1</text>
-
-        <!-- ── ENCRYPTED MESSAGE ARROW ── -->
-        <line x1="173" y1="222" x2="587" y2="222"
+        <!-- ── ARROW: pool → miner ── -->
+        <line x1="587" y1="160" x2="173" y2="160"
               stroke="rgba(74,222,128,0.65)" stroke-width="2.2" marker-end="url(#aG)"/>
-        <!-- Encrypted message badge -->
-        <rect x="305" y="208" width="150" height="27" rx="6"
+
+        <!-- ── Green outline box wrapping both inner boxes (drawn first, behind them) ── -->
+        <!-- message box: x=253–385, MAC tag box: x=389–499, both y=146–173 → outline adds 6px padding -->
+        <rect x="247" y="140" width="258" height="39" rx="9"
+              fill="rgba(74,222,128,0.07)" stroke="rgba(74,222,128,0.55)" stroke-width="1.5"/>
+
+        <!-- 🔒 encrypted message box (green) -->
+        <rect x="253" y="146" width="132" height="27" rx="6"
               fill="rgba(5,46,22,0.85)" stroke="rgba(74,222,128,0.6)" stroke-width="1.5"/>
-        <text x="380" y="226" text-anchor="middle" font-size="12" fill="#4ade80">&#x1F512; message</text>
-        <!-- Label below arrow -->
-        <text x="380" y="244" text-anchor="middle" font-size="8.5" fill="rgba(74,222,128,0.5)"
-              font-weight="700" letter-spacing="1">ENCRYPTED WITH SHARED SECRET</text>
+        <text x="319" y="164" text-anchor="middle" font-size="12" fill="#4ade80">&#x1F512; message</text>
+
+        <!-- MAC tag box (amber — appended to message) -->
+        <rect x="389" y="146" width="110" height="27" rx="6"
+              fill="rgba(120,53,15,0.85)" stroke="rgba(251,146,60,0.7)" stroke-width="1.5"/>
+        <text x="444" y="164" text-anchor="middle" font-size="12" fill="#fb923c">MAC tag</text>
+
+        <!-- ── AEAD note (no box, plain italic text at bottom) ── -->
+        <text x="380" y="202" text-anchor="middle"
+              font-family="'Space Grotesk',sans-serif" font-size="17" font-style="italic"
+              fill="rgba(251,146,60,0.88)">MAC tag is generated using AEAD</text>
 
     </svg>
 </div>
