@@ -48,18 +48,30 @@
 
 <!-- Main Content -->
 <div class="relative z-10 flex-1 flex items-center justify-center" style="min-height:0;">
-    <a href="https://shourya742.github.io/cryptography/2025/12/20/intiuting-noise.html"
-       target="_blank"
-       style="font-family:'JetBrains Mono',monospace; font-size:1.5rem; color:#22d3ee;
-              text-decoration:underline; text-underline-offset:6px;
-              padding:1.25rem 2.5rem; border-radius:0.75rem;
-              background:rgba(6,182,212,0.08); border:1px solid rgba(6,182,212,0.35);
-              transition:background 0.2s;">
-        https://shourya742.github.io/cryptography/2025/12/20/intiuting-noise.html
-    </a>
+    <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
+        <div id="qr-noise" style="padding:14px; background:white; border-radius:12px;
+             box-shadow:0 0 40px rgba(6,182,212,0.25);"></div>
+        <a href="https://shourya742.github.io/cryptography/2025/12/20/intiuting-noise.html"
+           target="_blank"
+           style="font-family:'JetBrains Mono',monospace; font-size:1.1rem; color:#22d3ee;
+                  text-decoration:underline; text-underline-offset:6px;
+                  padding:0.75rem 1.75rem; border-radius:0.75rem;
+                  background:rgba(6,182,212,0.08); border:1px solid rgba(6,182,212,0.35);">
+            https://shourya742.github.io/cryptography/2025/12/20/intiuting-noise.html
+        </a>
+    </div>
 </div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+new QRCode(document.getElementById("qr-noise"), {
+    text: "https://shourya742.github.io/cryptography/2025/12/20/intiuting-noise.html",
+    width: 220, height: 220,
+    colorDark: "#000000", colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+});
+</script>
 <script src="slides.js"></script>
 <script src="navigate.js"></script>
 </body>
